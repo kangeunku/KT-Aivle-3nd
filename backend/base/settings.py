@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
-    'corsheaders' # CORS 추가
+    'rest_framework',
+    'corsheaders', # CORS 추가
 ]
 
 MIDDLEWARE = [
