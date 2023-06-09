@@ -30,7 +30,7 @@ function App() {
         >
           Learn React
         </a>
-        <p></p>
+        <div></div>
       </header>
       
     </div>
