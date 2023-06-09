@@ -8,5 +8,9 @@ psycopg2
 django-cors-headers
 djangorestframework
 django-filter
-nodeenv
-axios
+pandas
+numpy
+seaborn
+plotly==5.15.0
+scikit-learn
+tensorflow
