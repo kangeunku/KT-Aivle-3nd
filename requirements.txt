@@ -4,7 +4,6 @@ Django==4.2
 psycopg2==2.9.6
 bcrypt
 nodeenv
-psycopg2
 django-cors-headers
 djangorestframework
 django-filter

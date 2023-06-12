@@ -5,7 +5,7 @@ https://docs.google.com/spreadsheets/d/1-I0aIXAd2Wye8K-R6XHoq3Aj18zZheTxx-nDMknl
 
 # 아나콘다 세팅
 // 파이썬 3.10의 big_project 환경 세팅
- - conda create -n big_project python=3.10
+ - conda create -n big_project python=3.9
 // 환경 실행
  - conda activate big_project
 // 설치해야할것 설치
@@ -16,7 +16,7 @@ https://docs.google.com/spreadsheets/d/1-I0aIXAd2Wye8K-R6XHoq3Aj18zZheTxx-nDMknl
  - nodeenv --node=18.16.0 --npm=9.6.6 -p
  - cd frontend
  - npm update
- - npm install axios
+ - npm install
  // 실행
  - npm start
 

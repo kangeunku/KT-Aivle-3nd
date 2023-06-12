@@ -1,38 +1,27 @@
-import logo from './logo.svg';
-import React, { useState } from "react";
-import axios from "axios";
-import './App.css';
+import React from "react"
+import { Routes, Route, Link } from "react-router-dom";
+
+import { Home, About, Counter , Input , UserList } from "./pages";
 
 function App() {
-  const [text, setText] = useState("없음");
-  
-  const clicked = () => {
-    axios
-      .get("http://127.0.0.1:8000", {
-        params: {
-          abc: "가나다",
-        },
-      })
-      .then((response) => setText(JSON.stringify(response.data)));
-  };
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>{text}</h1>
-        <button onClick={clicked}>클릭</button>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <div></div>
-      </header>
-      
+    <div className='App'>
+      <nav>
+        {/* 리액트 라우터의 링크 */}
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+        <Link to="/counter">Counter</Link>
+        <Link to="/input">input</Link>
+        <Link to="/userlist">userlist</Link>
+      </nav>
+      <Routes>
+        {/* 라우터가 적용될 페이지 */}
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/counter" element={<Counter />} />
+        <Route path="/input" element={<Input />} />
+        <Route path="/userlist" element={<UserList />} />
+      </Routes>
     </div>
   );
 }
