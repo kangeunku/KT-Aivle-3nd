@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'blog',
     'rest_framework',
     'corsheaders', # CORS 추가
+    'ohsori',
 ]
 
 MIDDLEWARE = [

@@ -1,7 +1,7 @@
 import React from "react";
 
-const About = () => {
+const Support = () => {
     return <h1 className="title">어바웃 화면임</h1>
 }
 
-export { About };
+export { Support };

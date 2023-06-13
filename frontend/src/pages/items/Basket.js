@@ -9,7 +9,7 @@ const User = ({userData}) => {
     )
 }
 
-const UserList = () => {
+const Basket = () => {
     const users = [
         {email: 'chrisjyh@naver.com', name: "주은호"},
         {email: 'chrisjyh@naver.com', name: "주은호"},
@@ -27,4 +27,4 @@ const UserList = () => {
     )
 }
 
-export { UserList };
+export { Basket };

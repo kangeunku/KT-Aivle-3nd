@@ -1,26 +1,24 @@
 import React from "react"
 import { Routes, Route, Link } from "react-router-dom";
 
-import { Home, About, Counter , Input , UserList } from "./pages";
+import {  Home, Basket, EditInfo ,Support } from "./pages";
 
 function App() {
   return (
     <div className='App'>
       <nav>
         {/* 리액트 라우터의 링크 */}
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
-        <Link to="/counter">Counter</Link>
-        <Link to="/input">input</Link>
-        <Link to="/userlist">userlist</Link>
+        <Link to="/">검색</Link>
+        <Link to="/basket">찜목록</Link>
+        <Link to="/editinfo">회원정보 수정</Link>
+        <Link to="/support">고객센터</Link>
       </nav>
       <Routes>
         {/* 라우터가 적용될 페이지 */}
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/counter" element={<Counter />} />
-        <Route path="/input" element={<Input />} />
-        <Route path="/userlist" element={<UserList />} />
+        <Route path="/basket" element={<Basket />} />
+        <Route path="/editinfo" element={<EditInfo />} />
+        <Route path="/support" element={<Support />} />
       </Routes>
     </div>
   );

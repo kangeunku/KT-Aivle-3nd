@@ -1,3 +1,26 @@
 @import "./reset.css";
 
+.App,
+.graphpop {width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;}
+.graphpop { position: fixed; top: 0; left: 0; background: rgba(168, 44, 44, 0.15); z-index: 10000; animation: showup 0.3s ease forwards; opacity: 0;}
+.closing {animation: close 0.3s;}
+.graphpop .content {background-color: #262626; padding: 50px; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25); border-radius: 20px; margin-top: 0; animation: showup 0.3s ease forwards; opacity: 0; text-align: center;}
+.graphpop .content img {width: 120px;}
 
+@keyframes close {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes showup {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
