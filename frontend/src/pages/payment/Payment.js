@@ -12,8 +12,8 @@ const Counter = () => {
 
     return (
         <div>
-            <button onClick={plus_one}> + 1 </button>
-            <button onClick={sub_one}> - 1 </button>
+            <button onClick={()=>{plus_one}}> + 1 </button>
+            <button onClick={() => {sub_one}}> - 1 </button>
             <p>{num}</p>
         </div>
     )
