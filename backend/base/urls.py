@@ -5,7 +5,7 @@ from django.shortcuts import render
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/',include('blog.urls')),
-    path('ohsori/',include('ohsori.urls')),
+    path('',include('ohsori.urls')),
 ]
 
 

@@ -3,7 +3,7 @@ from .models import Users, Good, Basket, Faq, Qna, Survey
 
 class UserSerialize(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = User
+        model = Users
         fields = ('user_no', 'user_id', 'nickname', 'use_yn')
         
 class GoodSerialize(serializers.HyperlinkedModelSerializer):

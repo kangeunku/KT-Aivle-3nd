@@ -1,10 +1,33 @@
-// 공통으로 사용될 함수
+import React, { useState } from "react";
+import axios from 'axios';
 
 
+function send(state, data, callback){
+    console.log("111111111111")
+    const csrftoken = document.getElementsByName("csrftoken").value;
+    console.log(csrftoken)
+    axios.get("http://127.0.0.1:8000/", {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        params:{
+            state: state,
+            data: data,
+            callback: callback,
+        }
+    })
+    .then(function (response) {
+        console.log(response);
+        console.log(JSON.stringify(response.data))
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+}
 
-
-
-
+export { send };
 
 
 

@@ -1,6 +1,6 @@
 from django.db import models
  
-class User(models.Model):
+class Users(models.Model):
     user_no = models.AutoField(help_text="사용자 고유번호",primary_key=True)
     user_id = models.CharField(max_length=100, help_text='아이디(이메일)')
     nickname = models.CharField(max_length=50, help_text='별명')
@@ -22,7 +22,7 @@ class Good(models.Model):
         
 class Basket(models.Model):
     basket_no = models.AutoField(help_text="찜하기 고유번호", primary_key=True)
-    user_no = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user_no = models.ForeignKey(Users, on_delete=models.CASCADE, null=True)
     good_no = models.ForeignKey(Good, on_delete=models.CASCADE, null=True)
     reg_date = models.DateTimeField(help_text="등록일자")
     use_yn = models.CharField(max_length=2, help_text="사용여부")
@@ -42,7 +42,7 @@ class Faq(models.Model):
     
 class Qna(models.Model):
     qna_no = models.AutoField(help_text="상품고유번호", primary_key=True)
-    user_no = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user_no = models.ForeignKey(Users, on_delete=models.CASCADE, null=True)
     question = models.CharField(help_text='질문')
     answer = models.TextField (help_text='답변')
     type = models.CharField(help_text='질문유형')
@@ -60,7 +60,7 @@ class Survey(models.Model):
     group = models.CharField (help_text='그룹번호')
     reg_date = models.DateTimeField(help_text="등록일자") 
     use_yn = models.CharField(max_length=2, help_text="사용여부")
-    user_no = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user_no = models.ForeignKey(Users, on_delete=models.CASCADE, null=True)
     class Meta:
         # managed =False
         db_table = 'ohsori_survey'

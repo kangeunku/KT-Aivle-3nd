@@ -6,12 +6,12 @@ from rest_framework import routers
 app_name = 'ohsori'
 
 # default 라우터 설정
-# router = routers.DefaultRouter()
+router = routers.DefaultRouter()
 # 라우터에 등록
-# router.register(r'Post/' , views.postview, basename='postModel')
+router.register(r'users', api_views.userview, basename='userModel')
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('api/', api_views.index, name='api'),
-    path('db/', db_views.index, name='db')
+    path('api/', include(router.urls)),
+    path('db/', db_views.index, name='db'),
 ]

@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Support = () => {
-    return <h1 className="title">어바웃 화면임</h1>
+    const [num, setNumber] = useState(0);
+
+    const btn_one = () => {
+        setNumber(num + 1);
+    }
+    const btn_two = () => {
+        setNumber(num - 1);
+    }
+
+    return (
+        <div>
+            <button onClick={btn_one}> + 1 </button>
+            <button onClick={btn_two}> - 1 </button>
+            <p>{num}</p>
+        </div>
+    )
 }
 
 export { Support };
