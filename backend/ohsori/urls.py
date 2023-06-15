@@ -1,18 +1,18 @@
 # blog/urls.py
 from django.urls import path,include
-from . import views
+from .views import views, api_views, db_views
 from rest_framework import routers
-from .serializers import postSerializer
 
-app_name = 'blog'
+app_name = 'ohsori'
 
 # default 라우터 설정
 router = routers.DefaultRouter()
 # 라우터에 등록
-router.register(r'Post/' , views.postview, basename='postModel')
+router.register('users', api_views.userview, basename='userModel')
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('api/', include(router.urls)),
-    path('db/', views.listFunc, name='listfunc')
+    path('db/', db_views.index, name='db'),
+    path('api2/', api_views.post_api, name='hi'),
 ]

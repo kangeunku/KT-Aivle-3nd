@@ -2,14 +2,14 @@ import React from "react";
 
 const User = ({userData}) => {
     return (
-        <li>
+        <li key={userData.id}>
             <strong>{userData.name}</strong>
             <p>{userData.email}</p>
         </li>
     )
 }
 
-const UserList = () => {
+const Basket = () => {
     const users = [
         {email: 'chrisjyh@naver.com', name: "주은호"},
         {email: 'chrisjyh@naver.com', name: "주은호"},
@@ -27,4 +27,4 @@ const UserList = () => {
     )
 }
 
-export { UserList };
+export { Basket };

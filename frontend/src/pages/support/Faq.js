@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 
-const Counter = () => {
+const Support = () => {
     const [num, setNumber] = useState(0);
 
-    const plus_one = () => {
+    const btn_one = () => {
         setNumber(num + 1);
     }
-    const sub_one = () => {
+    const btn_two = () => {
         setNumber(num - 1);
     }
 
     return (
         <div>
-            <button onClick={()=>{plus_one}}> + 1 </button>
-            <button onClick={() => {sub_one}}> - 1 </button>
+            <button onClick={btn_one}> + 1 </button>
+            <button onClick={btn_two}> - 1 </button>
             <p>{num}</p>
         </div>
     )
 }
 
-export { Counter };
+export { Support };
