@@ -1,29 +1,56 @@
 import React from "react"
 import { Routes, Route, Link } from "react-router-dom";
 
-import { Home, About, Counter , Input , UserList } from "./pages";
+import {  Home, Basket, EditInfo ,Support } from "./pages";
+import {  Header } from "./components";
+
+const Navigate = () => {
+  return (
+    <nav className="nav"> 
+      <ul className="nav_lsit">
+        <li className="active_list">
+          <Link to="/">검색</Link>
+        </li>
+        <li>
+          <Link to="/basket">찜목록</Link>
+        </li>
+        <li>
+          <Link to="/editinfo">회원정보 수정</Link>
+        </li>
+        <li>
+          <Link to="/support">고객센터</Link>
+        </li>
+      </ul>
+    </nav>
+    );
+}
 
 function App() {
   return (
     <div className='App'>
-      <nav>
-        {/* 리액트 라우터의 링크 */}
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
-        <Link to="/counter">Counter</Link>
-        <Link to="/input">input</Link>
-        <Link to="/userlist">userlist</Link>
-      </nav>
-      <Routes>
-        {/* 라우터가 적용될 페이지 */}
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/counter" element={<Counter />} />
-        <Route path="/input" element={<Input />} />
-        <Route path="/userlist" element={<UserList />} />
-      </Routes>
+      <div className="wrap">
+        <div className="side">
+          <h1 className="logo">logo</h1>
+          <Navigate></Navigate>
+        </div>
+        <section className="content">
+          <Header />
+          <div className="container">
+            <Routes>
+              {/* 라우터가 적용될 페이지 */}
+              <Route path="/" element={<Home />} />
+              <Route path="/basket" element={<Basket />} />
+              <Route path="/editinfo" element={<EditInfo />} />
+              <Route path="/support" element={<Support />} />
+            </Routes>
+          </div>
+        </section>
+      </div>
     </div>
   );
 }
+
+
+
 
 export default App;

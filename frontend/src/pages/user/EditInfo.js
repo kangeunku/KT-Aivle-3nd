@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Input = () => {
+const EditInfo = () => {
 
     // 틀만들기
     const [inputs, setInputs] = useState({
@@ -40,4 +40,4 @@ const Input = () => {
 
 // export default Input;
 
-export { Input };
+export { EditInfo };
