@@ -3,23 +3,26 @@ from django.http import HttpResponse,JsonResponse
 from django.db import connection
 from rest_framework import viewsets
 from rest_framework.renderers import JSONRenderer
+from django.middleware.csrf import get_token
 # 모델을 json 타입으로 데이터로 직렬화 시키기위해
 import json
-# from .serializers import postSerializer
 # from ..models import Users, Good, Basket, Faq, Qna, Survey
 from django.views.decorators.csrf import ensure_csrf_cookie
+# CSRF 403에러를 방지,, 그냥 야매로 CSRF 방식제거
+from django.views.decorators.csrf import csrf_exempt
 
-# orm sql
-# https://www.qu3vipon.com/django-orm
-
-@ensure_csrf_cookie
+@csrf_exempt
 def index(request):
+    # csrf_token = get_token(request)
     data = request.GET.get('data','')
     state = request.GET.get('state','')
     callback = request.GET.get('callback','')
-    
+    print("data:",data)
+    print("state:",state)
+    print("callback:",callback)
     # 실행시킬 함수 함수
     func_dic = {
+        '': no_request,
         'first_fun' : first_fun,
         'second_fun': second_fun,
     }
@@ -31,14 +34,14 @@ def index(request):
         'data' : data_return,
         'callback': callback
     }
-    return JsonResponse(restult)    
+    return JsonResponse(restult)
 
 def first_fun(text):
+    print(text)
     return "first_fun"
 
 def second_fun(text):
     return "second_fun"
-#  rest api 사용
-# class postview(viewsets.ModelViewSet):
-#     queryset = Post.objects.all()
-#     serializer_class = postSerializer
+
+def no_request(text):
+    return "no!!!"

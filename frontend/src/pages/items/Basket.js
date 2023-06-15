@@ -2,7 +2,7 @@ import React from "react";
 
 const User = ({userData}) => {
     return (
-        <li>
+        <li key={userData.id}>
             <strong>{userData.name}</strong>
             <p>{userData.email}</p>
         </li>
