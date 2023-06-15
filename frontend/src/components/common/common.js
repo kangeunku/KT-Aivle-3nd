@@ -1,14 +1,14 @@
+import React, { useState } from "react";
 import axios from 'axios';
 
-// state 보낼 함수/ data: 데이터, callback: 돌아올 함수
+
 function send(state, data, callback){
-    // const csrftoken = document.getElementsByName("csrftoken").value;
-    
-    axios.get("http://127.0.0.1:8000", {
+    const csrftoken = document.getElementsByName("csrftoken").value;
+    axios.get("http://127.0.0.1:8000/", {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            // 'X-CSRFToken': csrftoken
+            'X-CSRFToken': csrftoken
         },
         params:{
             state: state,
@@ -24,7 +24,6 @@ function send(state, data, callback){
         console.log(error);
     });
 }
-
 
 export { send };
 

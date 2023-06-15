@@ -13,10 +13,18 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def index(request):
-    # csrf_token = get_token(request)
-    data = request.GET.get('data','')
-    state = request.GET.get('state','')
-    callback = request.GET.get('callback','')
+    if request.method == 'POST':
+        print(request.POST)
+        data = request.POST.get('data','')
+        state = request.POST.get('state','')
+        callback = request.POST.get('callback','')
+        
+    if request.method == 'GET':
+        data = request.GET.get('data','')
+        state = request.GET.get('state','')
+        callback = request.GET.get('callback','')
+    
+    
     print("data:",data)
     print("state:",state)
     print("callback:",callback)
@@ -44,4 +52,5 @@ def second_fun(text):
     return "second_fun"
 
 def no_request(text):
+    print ("text:"+ text)
     return "no!!!"
