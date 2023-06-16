@@ -1,8 +1,0 @@
-* Google Cloud
-CLIENT_ID = 521696163395-h2q9gei6fnclc9c7rq4t2m6jrragbi2c.apps.googleusercontent.com
-CLIENT_SECRET = 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
-API_KEY = AIzaSyARITPNy9NmS32jRPqp997dnxUkQ6QNNlE
-
-* Naver CLOVA
-CLIENT_ID = vtb0g8hvo4
-CLIENT_SECRET = kyhMcROp4PKYTnGJU2KEe1VSemBsatbsoOqCAKuG
