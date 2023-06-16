@@ -15,3 +15,4 @@ scikit-learn
 tensorflow
 google-cloud-speech
 google-cloud-vision
+psycopg2-binary
