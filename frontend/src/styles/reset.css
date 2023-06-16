@@ -1,0 +1,82 @@
+@charset "utf-8";
+
+/* fontface */
+@font-face{
+	font-family:"koddiUD";
+	font-style:normal;
+	font-weight:normal;
+	src:url("../assets/OTF/KoddiUDOnGothic-Regular.otf");
+}
+
+@font-face{
+	font-family:"koddiUD-bold";
+	font-style:bold;
+	font-weight:bold;
+	src:url("../assets/OTF/KoddiUDOnGothic-Bold.otf");
+}
+
+/* #################### reset css #################### */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video{margin: 0; padding: 0; box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	font-family:"koddiUD";
+}
+html, body, input, textarea, select, button, table, li, dd, p, b, span, em, strong{-webkit-text-size-adjust: none;}
+html{font-size: 16px; font-weight: 400; line-height: 1.1; color: var(--color-black);}
+body{-webkit-text-size-adjust: none;}
+html, body{width: 100%; height: 100%;}
+h1, h2, h3, h4, h5, h6{font-size: 1.6rem;}
+table{border-collapse: collapse; border-spacing: 0;}
+table, fieldset, th, td, img{border: none 0;}
+td{word-break: break-all;}
+ul, ol, menu{list-style: none;}
+address, em{font-style: normal;}
+a, a:link, a:visited, a:hover, a:active, a:focus{text-decoration: none;}
+input, select, textarea{vertical-align: middle;}
+img, fieldset{border: 0;}
+img{font-size: 0; line-height: 0; vertical-align: top;}
+caption{visibility: hidden; overflow: hidden; width: 0; height: 0; font-size: 0; line-height: 0;}
+label{cursor: pointer;}
+pre{white-space: pre-wrap; word-wrap: break-word;}
+button{display: inline-block; margin: 0; padding: 0; border: 0; background: none; box-shadow: none; text-align: center; cursor: pointer; vertical-align: middle;}
+button::-moz-focus-inner{margin: 0; padding: 0; border: 0;}
+
+
+/* #################### html5 ####################*/
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section{display: block;}
+
+
+/* #################### color #################### */
+:root{
+	--background-green:#285a43;
+} 
+/* #################### display #################### */
+/* ---------- overflow ---------- */
+.x_hidden{overflow-x: hidden;}
+.y_hidden{overflow-y: hidden;}
+.scroll{overflow: scroll;}
+.scroll_off{position: fixed; overflow: hidden; height: 100%;}
+
+/* ---------- display ---------- */
+.show{display: block !important;}
+.hide{display: none !important;}
+
+/* #################### float #################### */
+/* ---------- float ---------- */
+.float_right{float: right;}
+.float_left{float: left;}
+.float_none{float: none;}
+
+/* ---------- clear ---------- */
+.clearfix{zoom: 1;}
+.clearfix::after{display: block; clear: both; content: ""; height: 0; visibility: hidden;}
+
+/* #################### font #################### */
+.ellipsis{display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+
+
+@media screen and (min-width: 901px) {
+	.pc{display: block !important;}
+	.tablet{display: block !important;}
+	.mobile{display: none !important;}
+}
