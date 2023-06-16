@@ -17,3 +17,4 @@ google-cloud-speech
 google-cloud-vision
 selenium
 requests
+psycopg2-binary
