@@ -39,3 +39,5 @@ db 관리자에 등록 admin.py
  - OAuth_big0519 -> .git과 동일한 위치
  - .gitignore -> .git과 동일한 위치
 3. 파일들이 제 위치에 없다면 직접 이동시키거나, 다운로드 받아서 이동시키세요.
+4. .env 파일의 변수이름 = '값' 구조에서 띄어쓰기를 제거하세요
+    ex) example_api = '1wedxads3' -> example_api='1wedxads3'
