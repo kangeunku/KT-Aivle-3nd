@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-const TextToSpeech = (inputText) => {
+const TextToSpeech = (props) => {
+    var input = props.body;
     const [ audioSource, setAudioSource ] = useState('');
 
     useEffect(() => {
-        requestTTS();
+        requestTTS(input);
     }, []);
 
     const reqTTS = (inputText) => {
@@ -38,15 +39,13 @@ const TextToSpeech = (inputText) => {
             });
     }
 
-    const requestTTS = async () => {
-        
+    const requestTTS = async (input) => {
         var text = '';
         
-        await reqTTS()
+        await reqTTS(input)
             .then(data => {
                 text = data
             });
-        
         var binary_string = window.atob(text);
         var len = binary_string.length;
         var bytes = new Uint8Array(len);
@@ -63,7 +62,7 @@ const TextToSpeech = (inputText) => {
         source.buffer = audioBuffer;
         source.connect(audioContext.destination);
         source.start();
-        console.log('source : ', source)
+        // console.log('source : ', source)
         setAudioSource(source)
     }
     
@@ -79,8 +78,9 @@ const TextToSpeech = (inputText) => {
                 event.preventDefault();
                 props.onChangeMode();
             }}>{props.title} */}
-            <audio><source type = "audio/mpeg" src={audioSource}/></audio>
+            {/* <audio autoplay><source type = "audio/mpeg" src={audioSource}/></audio> */}
         </div>
+        
     )
 }
 

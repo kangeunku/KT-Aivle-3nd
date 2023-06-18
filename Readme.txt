@@ -39,6 +39,4 @@ db 관리자에 등록 admin.py
  - OAuth_big0519 -> .git과 동일한 위치
  - .gitignore -> .git과 동일한 위치
 3. 파일들이 제 위치에 없다면 직접 이동시키거나, 다운로드 받아서 이동시키세요.
-4. frontend의 경우 google cloud api 받아오는 방법은
- - frontend 폴더에 .env 파일을 생성하세요.
- - REACT_APP_GOOGLE_API_KEY라는 변수에다 google cloud 용 api를 넣으세요.
+4. frontend에서는 위 과정에서 추가했던 .env파일 내부에 REACT_APP_으로 시작하는 key가 포함돼 있어야 합니다.
