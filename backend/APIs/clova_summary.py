@@ -1,9 +1,22 @@
-import sys
 import requests
 import json
+from os import path
+import environ
 
-CLIENT_ID = 'vtb0g8hvo4'
-CLIENT_SECRET = 'kyhMcROp4PKYTnGJU2KEe1VSemBsatbsoOqCAKuG'
+if __name__=='__main__':
+    import sys
+    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+    from base.settings import BASE_DIR
+else:
+    from ..base.settings import BASE_DIR
+
+env = environ.Env(DEBUG=(bool, True))
+environ.Env.read_env(
+    env_file=path.join(BASE_DIR, '.env')
+)
+
+CLIENT_ID = env('CLOVA_CLIENT_ID')
+CLIENT_SECRET = env('CLOVA_CLIENT_SECRET')
 URL = 'https://naveropenapi.apigw.ntruss.com/text-summary/v1/summarize'
 
 header = {
@@ -21,7 +34,7 @@ def request_summary(text):
             'language': 'ko',
             'model': 'general',
             'tone': 2,
-            'summaryCount': 1
+            'summaryCount': 2
         }
     }
 
@@ -32,4 +45,5 @@ def request_summary(text):
         print(response.text)
     else:
         print('Error: ' + response.text)
-        
+
+    # return -> {"summary":"text"}
