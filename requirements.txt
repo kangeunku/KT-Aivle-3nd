@@ -19,3 +19,4 @@ selenium
 requests
 psycopg2-binary
 django-environ
+beautifulsoup4
