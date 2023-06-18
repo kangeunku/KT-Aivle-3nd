@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const TextToSpeech = (props) => {
+const TextToSpeech = (inputText) => {
     const [ audioSource, setAudioSource ] = useState('');
 
     useEffect(() => {
@@ -8,7 +8,7 @@ const TextToSpeech = (props) => {
     }, []);
 
     const reqTTS = (inputText) => {
-        const url = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${API_KEY}`;
+        const url = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${process.env.REACT_APP_GOOGLE_API_KEY}`;
         const data = {
             input: {
                 text: inputText, // 원하는 텍스트를 입력
@@ -75,13 +75,11 @@ const TextToSpeech = (props) => {
 
     return(
         <div>
-            <h1><a href="/" onClick={(event) => {
+            {/* <h1><a href="/" onClick={(event) => {
                 event.preventDefault();
                 props.onChangeMode();
-            }}>{props.title}<audio controls>
-            <source type = "audio/mpeg" src={audioSource}/>
-        </audio></a></h1>
-            
+            }}>{props.title} */}
+            <audio><source type = "audio/mpeg" src={audioSource}/></audio>
         </div>
     )
 }
