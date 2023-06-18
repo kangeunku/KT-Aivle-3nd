@@ -25,6 +25,10 @@ function send(state, data, callback){
     });
 }
 
+function stt_common(){
+    
+}
+
 export { send };
 
 
