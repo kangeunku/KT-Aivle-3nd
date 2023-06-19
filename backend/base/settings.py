@@ -14,6 +14,8 @@ from pathlib import Path
 import os
 import environ
 
+AUTH_USER_MODEL = 'users.User'
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -86,13 +88,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'base.wsgi.application'
 
 
+
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql', # 사용할 dbms
-        'NAME': 'postgres', # db 이름
+        'NAME': 'big', # db 이름
         'USER': 'postgres', # 사용자 이름
         'PASSWORD': '1234', # 비밀번호
         'HOST': 'localhost', # 서버 주소
