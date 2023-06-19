@@ -1,0 +1,37 @@
+.page2main {
+    position: relative;
+    top:30px;
+    left:50px;
+}
+
+.page2main1{
+    font-size: 32px;
+    font-weight: 700;
+    margin-Bottom: 30px;
+}
+
+.page2main2{
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.page2box{
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    top: 100px;
+    left : 50%-500px;
+    width: 1000px;
+    height: 380px;
+    
+}
+
+.page2box2{
+    width: 320px;
+    height: 380px;
+    background-color: floralwhite;
+    margin-left:25px;
+    margin-right:25px;
+    box-shadow: 8px 8px 8px rgba(40, 90, 67, 0.05);
+    border-radius: 12px;
+}

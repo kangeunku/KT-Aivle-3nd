@@ -41,3 +41,4 @@ db 관리자에 등록 admin.py
 3. 파일들이 제 위치에 없다면 직접 이동시키거나, 다운로드 받아서 이동시키세요.
 4. .env 파일의 변수이름 = '값' 구조에서 띄어쓰기를 제거하세요
     ex) example_api = '1wedxads3' -> example_api='1wedxads3'
+5. frontend에서는 위 과정에서 추가했던 .env파일 내부에 REACT_APP_으로 시작하는 key가 포함돼 있어야 합니다.
