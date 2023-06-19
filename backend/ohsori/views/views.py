@@ -28,7 +28,7 @@ def index(request):
     print("data:",data)
     print("state:",state)
     print("callback:",callback)
-    # 실행시킬 함수 함수
+    # 실행시킬 함수 딕셔너리
     func_dic = {
         '': no_request,
         'first_fun' : first_fun,
@@ -38,11 +38,11 @@ def index(request):
     data_return = func_dic[state](data)
     
     # 전송될 데이터 형식 
-    restult = {
+    result = {
         'data' : data_return,
         'callback': callback
     }
-    return JsonResponse(restult)
+    return JsonResponse(result)
 
 def first_fun(text):
     print(text)
