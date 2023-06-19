@@ -5,8 +5,8 @@ import { Header } from "./app/header";
 
 import { CSRFToken } from "./common/csrftoken";
 
-import { send } from "./common/common";
+import { Send, Stt_common, Hotkey_start } from "./common/common";
 
 // import { Home } from "./app/modeal";
 
-export { Header, CSRFToken, send}
+export { Header, CSRFToken, Send, Stt_common, Hotkey_start}

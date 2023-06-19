@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {send} from "../../components";
+import {Send} from "../../components";
 
 const Home = () => {
     const [currentPage, setCurrentPage] = useState('first');

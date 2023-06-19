@@ -1,15 +1,8 @@
-import React from "react";
+import React from 'react';
+import { Stt_common, Hotkey_start } from '../../components';
 // import styles from "./Basket.module.css";
 import styles from "../../styles/Basket.module.css";
 
-const User = ({userData}) => {
-    return (
-        <li>
-            <strong>{userData.name}</strong>
-            <p>{userData.email}</p>
-        </li>
-    )
-}
 
 function BasketBoxes() {
     return (
@@ -36,8 +29,7 @@ function BasketBoxes() {
 
 const Basket = () => {
     const users = [
-        // 받아올 정보 db모음
-        {zzim_name: 'chrisjyh@naver.com', zzim_img: "123.png" ,zzim_date: "주은호"},
+        {email: 'chrisjyh@naver.com', name: "주은호"},
         {email: 'chrisjyh@naver.com', name: "주은호"},
         {email: 'chrisjyh@naver.com', name: "주은호"},
         {email: 'chrisjyh@naver.com', name: "주은호"},
@@ -45,11 +37,10 @@ const Basket = () => {
     ];
 
     return (
-        <div className>
-            <div className={styles.bklist_main}>(v)  찜한 상품입니다.</div>
-            <BasketBoxes/>
-            <BasketBoxes/>
-            <BasketBoxes/>         
+        <div>
+            <ul>
+                {users.map(user => <User userData={user} />)}
+            </ul>
         </div>
 
 

@@ -1,6 +1,6 @@
 @import "./reset.css";
 
-.App {width: 100vw; height: 100vh; background: url(../assets/img/background.png) no-repeat var(--background-green); }
+.App {width: 100vw; height: 100vh; background: url(../assets/img/background.svg) no-repeat var(--background-green); }
 .graphpop {width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;}
 .graphpop { position: fixed; top: 0; left: 0; background: rgba(168, 44, 44, 0.15); z-index: 10000; animation: showup 0.3s ease forwards; opacity: 0;}
 .closing {animation: close 0.3s;}
@@ -12,17 +12,24 @@
 .wrap .content{display: flex; flex-grow: 1; flex-direction: column; background-color: #fff; border-radius: 50px 0 0 50px;}
 .logo {padding: 20px; font-size: 83px; color:#ffff }
 .nav_lsit {padding: 40px 0 0 60px;}
-.nav_lsit > li {position: relative; margin-bottom: 40px; padding: 0 0 0 65px;}
-.nav_lsit > li::after {position: absolute; top: 9px; left: 12px; display: block; content: ''; width: 32px; height: 32px; ; background: pink;}
+.nav_lsit > li {position: relative; margin-bottom: 40px; padding: 20px 20px 0 65px;}
+.nav_lsit > li::after {position: absolute; top: 9px; left: 12px; display: block; content: ''; width: 32px; height: 32px; background-size: 32px;}
+.nav_lsit > li:nth-child(1)::after {background: url(../assets/img/nav_search_off.png);}
+.nav_lsit > li:nth-child(2)::after {background: url(../assets/img/nav_basket_off.png);}
+.nav_lsit > li:nth-child(3)::after {background: url(../assets/img/nav_user_off.png);}
+.nav_lsit > li:nth-child(4)::after {background: url(../assets/img/nav_support_off.png);}
 .nav_lsit > li > a {font-size: 2rem; color: #fff; line-height: 1.5;}
-.active_list {background-color: #fff; border-radius: 50px 0 0 50px;}
+li.active_list {background: url(../assets/img/nav_selected_li.svg); background-size: 361px 272px; background-position: 0;}
 li.active_list > a {color: var(--background-green)}
 
 .header {flex-grow: 0; width: 100%; height: 100px;}
 .header::after {display: block; clear: both; content: '';}
 .header .welcome_txt {float: right; font-weight: bold; line-height: 90px;}
 .header .head_btn_box {float: right; padding: 25px 30px 0 70px;}
-.header .head_btn_box .btn {margin-left: 30px; width: 52px; height: 52px; background: pink;}
+.header .head_btn_box .btn {margin-left: 30px; width: 52px; height: 52px;}
+.header .head_btn_box .btn:nth-child(1) {background: url(../assets/img/header_bulb.svg); background-size: 52px;}
+.header .head_btn_box .btn:nth-child(2) {background: url(../assets/img/header_speak_off.svg); background-size: 52px;}
+.header .head_btn_box .btn:nth-child(3) {background: url(../assets/img/header_mic.svg); background-size: 52px;}
 .content .container {flex-grow: 1; overflow: auto;}
 
 
