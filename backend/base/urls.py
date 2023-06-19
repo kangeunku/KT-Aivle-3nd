@@ -4,14 +4,13 @@ from django.shortcuts import render
 
 from django.conf import settings
 from django.conf.urls.static import static
-
-
-    
+   
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/',include('blog.urls')),
     path('',include('ohsori.urls')),
-    path("users/", include('users.urls')),
+    path('account/', include('account.urls')),
+    
     
 ]
 if settings.DEBUG:
