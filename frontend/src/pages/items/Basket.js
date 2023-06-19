@@ -1,27 +1,14 @@
 import React from 'react';
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { Stt_common, Hotkey_start } from '../../components';
+
 
 const Basket = () => {
-    const {
-        transcript,
-        listening,
-        resetTranscript,
-        browserSupportsSpeechRecognition
-    } = useSpeechRecognition();
-
-    if (!browserSupportsSpeechRecognition) {
-        return <span>Browser doesn't support speech recognition.</span>;
-    }
-
-    return (
+        return (
         <div>
-        <p>Microphone: {listening ? 'on' : 'off'}</p>
-        <button onClick={SpeechRecognition.startListening}>Start</button>
-        <button onClick={SpeechRecognition.stopListening}>Stop</button>
-        <button onClick={resetTranscript}>Reset</button>
-        <p>{transcript}</p>
+            <Stt_common />
+            <Hotkey_start />
         </div>
-    );
-};
+    )
+}
 
 export { Basket };
