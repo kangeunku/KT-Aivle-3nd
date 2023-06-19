@@ -13,9 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import environ
-
-AUTH_USER_MODEL = 'users.User'
-
+AUTH_USER_MODEL = 'account.CustomUser'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -52,7 +50,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders', # CORS 추가
     'ohsori',
-    'users',
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -96,7 +94,7 @@ WSGI_APPLICATION = 'base.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql', # 사용할 dbms
-        'NAME': 'big', # db 이름
+        'NAME': 'exam', # db 이름
         'USER': 'postgres', # 사용자 이름
         'PASSWORD': '1234', # 비밀번호
         'HOST': 'localhost', # 서버 주소
@@ -126,9 +124,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -200,3 +198,6 @@ CORS_ALLOWED_ORIGINS = [
 # 서버올리면 필히 수정 필요
 # https://docs.djangoproject.com/en/4.0/ref/settings/#std-setting-CSRF_TRUSTED_ORIGINS
 CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000", "http://127.0.0.1:8000", "http://localhost:3000",]
+
+# 로그인 성공후 이동하는 URL
+# LOGIN_REDIRECT_URL = '/'
