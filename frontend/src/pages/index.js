@@ -9,5 +9,8 @@ import { Support } from "./support/Faq";
 
 // 
 import { EditInfo } from "./user/EditInfo";
+import { Choicelogin } from "./user/choicelogin";
+import { Join } from "./user/join";
+import { Login } from "./user/login";
 
-export { Home, Basket, EditInfo ,Support}
+export { Home, Basket, EditInfo ,Support, Choicelogin, Join, Login}
