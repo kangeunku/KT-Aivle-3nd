@@ -1,24 +1,27 @@
-import React from "react"
+import React, { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 
 import {  Home, Basket, EditInfo ,Support } from "./pages";
 import {  Header } from "./components";
 
+
 const Navigate = () => {
+  const [navState, setnavState] = useState("home");
+
   return (
     <nav className="nav"> 
       <ul className="nav_lsit">
-        <li className="active_list">
-          <Link to="/">검색</Link>
+        <li className={navState === "home" ? "active_list" : null}>
+          <Link to="/" onClick={() => setnavState("home")}>검색</Link>
         </li>
-        <li>
-          <Link to="/basket">찜목록</Link>
+        <li className={navState === "basket" ? "active_list" : null}>
+          <Link to="/basket" onClick={() => setnavState("basket")}>찜목록</Link>
         </li>
-        <li>
-          <Link to="/editinfo">회원정보 수정</Link>
+        <li className={navState === "editinfo" ? "active_list" : null}>
+          <Link to="/editinfo" onClick={() => setnavState("editinfo")}>회원정보 수정</Link>
         </li>
-        <li>
-          <Link to="/support">고객센터</Link>
+        <li className={navState === "support" ? "active_list" : null}>
+          <Link to="/support" onClick={() => setnavState("support")}>고객센터</Link>
         </li>
       </ul>
     </nav>
