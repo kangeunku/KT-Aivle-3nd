@@ -46,10 +46,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
     'blog',
     'rest_framework',
     'corsheaders', # CORS 추가
     'ohsori',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -98,7 +100,6 @@ DATABASES = {
         'PORT': 5432, # 포트
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
