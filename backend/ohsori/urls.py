@@ -14,6 +14,8 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('api/', include(router.urls)),
     path('db/', db_views.index, name='db'),
+    path('db/basket', db_views.BasketAPI.as_view(), name ='basket'),
+    path('db/test', db_views.TestAPI.as_view(), name ='basket'),
     path('api2/', api_views.post_api, name='hi'),
     path('test/', test_views.index, name='test'),
     path('test/send', test_views.send, name='test_send'),
