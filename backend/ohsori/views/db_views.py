@@ -39,7 +39,7 @@ def listFunc():
     # return data
     
 class GoodAPI(APIView): # 상품 정보 API
-    def get(self, request, url):
+    def get(self, request):
         try:
             good = Good.objects.get(url = url) # 상품 정보 모두 불러오기
             good = Good.objects.all()
@@ -48,22 +48,22 @@ class GoodAPI(APIView): # 상품 정보 API
         except ObjectDoesNotExist:
             
             # ml을 통해 내용 요약 생성 및 저장 모델 -
+            good.save()
             return response('일단 암거나')
 
-class BasketAPI(APIView):
-    def post(self, request):
-        # good_no = Good.objects.get(url = url).good_no
-        # serializer = BasketSerialize()
-        # serializer.basket_no = 123
-        # serializer.user_no = user_no
-        # serializer.good_no = good_no
-        # serializer.user_yn = 'Y'
-        # serializer.reg_date = datetime.now()
-        # return Response(serializer.data)
-        # good = Good.objects.get(url = url)
-        # data = {'url' : url, 'user_no' : user_no }
-        # serializer = BasketSerialize
-
+# class BasketAPI(APIView):
+#     def post(self, request):
+#         # good_no = Good.objects.get(url = url).good_no
+#         # serializer = BasketSerialize()
+#         # serializer.basket_no = 123
+#         # serializer.user_no = user_no
+#         # serializer.good_no = good_no
+#         # serializer.user_yn = 'Y'
+#         # serializer.reg_date = datetime.now()
+#         # return Response(serializer.data)
+#         # good = Good.objects.get(url = url)
+#         # data = {'url' : url, 'user_no' : user_no }
+#         # serializer = BasketSerialize
 
 class TestAPI(APIView):
     def post(self, request):
