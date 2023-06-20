@@ -3,119 +3,53 @@ import React, { useState } from "react";
 import styles from "../../styles/EditInfo.module.css";
 
 const EditInfo = () => {
-    const [currentPage, setCurrentPage] = useState('first');
-    const goToSecondPage = async () => {
-        setCurrentPage('second');
-    };
-    const goToThirdPage = async () => {
-        setCurrentPage('third');
-    };
-    const goToFourthPage = async () => {
-        setCurrentPage('fourth');
-    };
+    const [suportState, setsuportState] = useState("Support");
 
-    const goToFifthPage = async () => {
-        setCurrentPage('fifth');
-    };
-
-    return (
-        <div>
-            {currentPage === 'first' && <FirstPage goToSecondPage={goToSecondPage} />}
-            {currentPage === 'second' && <SecondPage goToThirdPage={goToThirdPage} />}
-            {currentPage === 'third' && <ThirdPage goToFourthPage={goToFourthPage} />}
-            {currentPage === 'fourth' && <FourthPage goToFifthPage={goToFifthPage} />}
-            {currentPage === 'fifth' && <FifthPage />}
-        </div>
-    );
-};
-
-
-
-const FirstPage = ({goToSecondPage}) => {
-
-    // 틀만들기
-    const [inputs, setInputs] = useState({
-        name: "",
-        email: "",
-    });
-
-    // return에서 인풋내용들을 사용할수있게 변수저장
-    const {name, email} = inputs;
-
-    // 변경사항 저장
-    const onChange = (e) => {
-        const value = e.target.value;
-        const name = e.target.name;
-
-        setInputs({
-            ...inputs,
-            [name]: value
-        });
-    }
-    
-    return (
-        <div>
-            <div>
-                <label>이름</label>
-                <input type="text" name="name" value={name} onChange={onChange}/>
+    if(suportState == 'Support'){
+        return (
+            <div className="index_content">
+                <div className="choice_tab">
+                    <h2 className="welcome">
+                        고객센터
+                    </h2>
+                    <p className="index_txt">로그인 혹은 회원가입을 선택해주세요<br/>
+                        <b>1번</b>을 누르면 <b>회원가입</b>으로, 
+                        <b>2번</b>을 누르면 <b>로그인</b>으로 이동합니다.
+                    </p>
+                </div>
+                <div className="choice_container">
+                    <a className="choice_box" onClick={() => setsuportState("nickname")}>
+                        <p className="choice_a_txt">
+                            <strong>별명 변경</strong>
+                            처음 오소리를 이용하신다면 회원가입을 통해 다양한 서비스를 이용해보세요
+                        </p>
+                    </a>
+                    <a className="choice_box" onClick={() => setsuportState("password")} >
+                        <p className="choice_a_txt">
+                            <strong>비밀번호 변경</strong>
+                            한번 오소리를 이용해보았다면 로그인 후 서비스를 이용해보세요!
+                        </p>
+                    </a>
+                    <a className="choice_box" onClick={() => setsuportState("out")} >
+                        <p className="choice_a_txt">
+                            <strong>회원 탈퇴</strong>
+                            한번 오소리를 이용해보았다면 로그인 후 서비스를 이용해보세요!
+                        </p>
+                    </a>
+                </div>
             </div>
-            <div>
-                <label>이메일</label>
-                <input type="text" name="email" value={email} onChange={onChange}/>
+        );
+    }
+    else if(suportState == 'password'){
+        return(
+            <div className="index_content">
+                password
             </div>
             <p>name : {name}</p>
             <p>email  : {email}</p>
-            <button onClick={goToSecondPage} src={'../../assets/img/search_bg.png'} >다음</button>
         </div>
-    )};
-
-const SecondPage = ({goToThirdPage}) => {
-    return(
-        <div>
-            <div className={styles.page2main}>
-                <div className={styles.page2main1}>회원정보 수정</div>
-                <div className={styles.page2main2}>원하시는 버튼을 클릭해주세요</div>
-            </div>
-            <div className={styles.page2box}>
-                <div className={styles.page2box2}>왼쪽 박스</div>
-                <div className={styles.page2box2}>가운데 박스</div>
-                <div className={styles.page2box2}>오른쪽 박스</div>
-            </div>
-            <button onClick={goToThirdPage} src={'../../assets/img/search_bg.png'} >다음</button>
-        </div>
-    );
-};
-
-const ThirdPage = ({goToFourthPage}) => {
-    return(
-        <div>
-            <div>
-                <div>회원정보 수정</div>
-                <div>원하시는 버튼을 클릭해주세요</div>
-            </div>
-            <div>별명변경</div>
-            <button onClick={goToFourthPage} src={'../../assets/img/search_bg.png'} >다음</button>
-        </div>
-    );
-};
-
-const FourthPage = ({goToFifthPage}) => {
-    return(
-        <div>
-            <div>비밀번호 변경</div>
-        </div>
-    );
-
-};
-const FifthPage = () => {
-    return(
-        <div>
-            <div>별명변경</div>
-            <div>비밀번호 변경</div>
-            <div>회원 탈퇴</div>
-        </div>
-    );
-};
+    )
+}
 
 // export default Input;
 

@@ -1,6 +1,6 @@
 # blog/urls.py
 from django.urls import path,include
-from .views import views, api_views, db_views, test_views, main_views
+from .views import views, api_views, db_views, test_views, main_views, items_views
 from rest_framework import routers
 
 app_name = 'ohsori'
@@ -14,10 +14,14 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('api/', include(router.urls)),
     path('db/', db_views.index, name='db'),
+    # path('db/basket', db_views.BasketAPI.as_view(), name ='basket'),
+    path('db/test', db_views.TestAPI.as_view(), name ='test'),
     path('api2/', api_views.post_api, name='hi'),
     path('test/', test_views.index, name='test'),
     path('test/send', test_views.send, name='test_send'),
     path('main/', main_views.index, name='main'),
     path('main/search1/', main_views.first_search, name='main_first_search'),
     path('main/search2/', main_views.second_search, name='main_second_search'),
+    path('items/', items_views.index, name='items'),
+    path('items/test/', items_views.get_imgs, name='items_get_img'),
 ]
