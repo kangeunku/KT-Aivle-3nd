@@ -23,5 +23,5 @@ urlpatterns = [
     path('main/search1/', main_views.first_search, name='main_first_search'),
     path('main/search2/', main_views.second_search, name='main_second_search'),
     path('goods/', goods_views.index, name='goods'),
-    path('goods/test/', goods_views.get_imgs, name='goods_get_img'),
+    path('goods/test/', goods_views.get_details, name='goods_get_details'),
 ]
