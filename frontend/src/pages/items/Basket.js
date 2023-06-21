@@ -1,10 +1,8 @@
 import React from 'react';
 import { Stt_common, Hotkey_start } from '../../components';
-// import styles from "./Basket.module.css";
 import styles from "../../styles/Basket.module.css";
 
-
-function Basket() {
+function BasketBoxes() {
     return (
         <div className={styles.bk_body}>
         <div className={styles.bklist}>
@@ -26,4 +24,18 @@ function Basket() {
     </div>
     );
 }
+
+const Basket = () => {
+    
+    return (
+        <div>
+            <div className={styles.bklist_main}>(v)  찜한 상품입니다.</div>
+            <BasketBoxes/>
+            <BasketBoxes/>
+            <BasketBoxes/>         
+        </div>
+
+
+    );
+};
 export { Basket };
