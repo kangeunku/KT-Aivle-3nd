@@ -5,10 +5,6 @@ import './styles/style.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {CSRFToken, Modal} from "./components";
-import axios from 'axios';
-
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

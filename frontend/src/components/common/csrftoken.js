@@ -19,7 +19,7 @@ const CSRFToken = () => {
     const csrftoken = getCookie('csrftoken');
     // console.log(csrftoken)
     return(
-        <input type="hidden" name="csrfmiddlewaretoken"value={csrftoken || ''}/>
+        <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken || ''}/>
     )
 };
 

@@ -42,12 +42,12 @@ li.active_list > a {color: var(--background-green)}
 .choice_tab .welcome {margin-bottom: 10px; padding-left: 45px; background: url(../assets/img/bear_foot.png) no-repeat; background-size: 40px; background-position: 0; font-size: 32px; line-height: 1.5;}
 .choice_tab .index_txt {font-size: 18px; line-height: 1.8;}
 .choice_container {display: flex; justify-content: space-evenly; cursor: pointer;}
-.choice_container .choice_box{padding-top: 15%; max-width: 360px; width: 30%; border-radius: 20px; background: url(../assets/img/img_join.png) no-repeat; background-size: 107% 60%; background-position: 60% -5%; box-shadow: 5px 5px 5px #767676;}
-.choice_container .choice_box:nth-child(2){background: url(../assets/img/img_login.png) no-repeat; background-size: 107% 60%; background-position: 60% -5%; }
+.choice_container .choice_box{padding-top: 25%; max-width: 360px; width: 30%; border-radius: 20px; background: url(../assets/img/img_join.png) no-repeat; background-size: 107% 65%; background-position: 60% -5%; box-shadow: 5px 5px 5px #767676;}
+.choice_container .choice_box:nth-child(2){background: url(../assets/img/img_login.png) no-repeat; background-size: 107% 65%; background-position: 60% -5%; }
 .choice_container .choice_box .choice_a_txt{padding: 30px 20px; font-size: 1rem; line-height: 1.5;}
 .choice_container .choice_box .choice_a_txt strong {display: block; font-size: 24px; line-height: 1.2;}
 /* ===================================================================================== */
-.terms_list {display: block; max-width: 850px; margin: 0 auto; font-size: 24px;}
+.terms_list {display: block; max-width: 850px; margin: 0 auto; padding: 0 20px; font-size: 24px;}
 .terms_list li {position: relative; margin-bottom: 20px; padding: 15px 200px 15px 56px; line-height: 1.5;}
 .terms_list li::after {position: absolute; left: 0; bottom: 0; display: block; width: 100%; height: 2px; background-color: #262626; content: '';}
 .terms_list li:last-child::after {height: 0;}
@@ -56,8 +56,8 @@ li.active_list > a {color: var(--background-green)}
 .index_content .next_step_btn{position: absolute; right: 50px; bottom: 100px; width: 200px; height: 43px; border-radius: 10px; font-size: 24px;  background-color: #285a43; color: #fff;}
 
 .step_two_form {display: flex; flex-direction: column; margin: 0 auto; max-width: 395px; font-size: 18px; }
-.step_two_form.login_step {margin: 30px auto;}
-.step_two_form .input_form {display: block; margin: 10px 0 20px; padding: 8px 20px; border-radius: 5px; width: 100%; font-size: 18px; background-color: #B4E0A0; border: 0;}
+.step_two_form.login_step {margin: 10% auto;}
+.step_two_form .input_form {display: block; margin: 10px 0 20px; padding: 15px 20px; border-radius: 5px; width: 85%; font-size: 18px; background-color: #B4E0A0; border: 0;}
 
 
 

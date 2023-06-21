@@ -3,6 +3,8 @@ import axios from 'axios';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 // useHotkeys 훅은 여러 개의 키나 조합된 키, 화살표 키, 기능 키 등을 처리
 import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
 // 장고 전송 함수, state  
 const Send = (state, data, callback) => {
@@ -11,7 +13,6 @@ const Send = (state, data, callback) => {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            // 'X-CSRFToken': csrftoken
         },
         params:{
             state: state,
