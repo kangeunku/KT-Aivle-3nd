@@ -73,4 +73,20 @@ class BasketDelAPI(APIView):
         basket.save()
         return Response(status=status.HTTP_200_OK)
             
-        
+class SurveyAPI(APIView):
+    def post(self, request):
+        survey = Survey()
+        survey.user_no = Users.objects.get(user_no = request.data.get('user_no')) # 세션에서 유저정보 담아서 어떻게어떻게 하기
+        survey.score = 5      #체크박스로 점수 해두기 ex : 5
+        survey.answer = '도움이 많이 됩니당'               # 건의사항에 대한 답변 받기
+        return Response('감사함늬다')
+
+class QnaAPI(APIView):
+    def post(self, request):
+        qna = Qna()
+        qna.user_no = Users.objects.get(user_no = request.data.get('user_no')) # 세션에서 유저정보 담아서 어떻게어떻게 하기
+        qna.question = '집에 가고 싶은데 어떻게 해야 하나요' # 질문 받기
+        # qna.answer = '우리가 답변 하기' # 추후에 관리자가 답변 수정
+        qna.type = '사이트 문의' # 선택으로 type 설정
+        # qna.img_url = 'asdfasdf.jpg'  # if문으로 img가 있으면 넣기 null = True라 공백 가능
+        qna.use_yn = 'Y'
