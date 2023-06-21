@@ -44,7 +44,6 @@ const EditInfo = () => {
                 password
             </div>
         )
-
     }
     else if(suportState == 'out'){
         return(

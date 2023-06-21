@@ -4,9 +4,9 @@ import { Modal } from "../../components";
 const Login = () => {
     return (
         <>
-            <h2 className="subtitle_join">
+            {/* <h2 className="subtitle_join">
                 <a>로그인</a>
-            </h2>
+            </h2> */}
             <div className="choice_tab">
                 <h3 className="welcome">
                     로그인
