@@ -20,9 +20,9 @@ urlpatterns = [
     # path('api2/', api_views.post_api, name='hi'),
     # path('test/', test_views.index, name='test'),
     # path('test/send', test_views.send, name='test_send'),
-    # path('main/', main_views.index, name='main'),
-    # path('main/search1/', main_views.first_search, name='main_first_search'),
-    # path('main/search2/', main_views.second_search, name='main_second_search'),
+    path('main/', main_views.index, name='main'),
+    path('main/search1/', main_views.first_search, name='main_first_search'),
+    path('main/search2/', main_views.second_search, name='main_second_search'),
     path('goods/', goods_views.index, name='goods'),
     path('goods/test/', goods_views.get_details, name='goods_get_details'),
 ]
