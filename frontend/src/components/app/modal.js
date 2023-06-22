@@ -17,9 +17,8 @@ const Popup = ({ handleClose }) => {
   return (
     <div ref={modalRef} className="graphpop">
       <div className="content">
-        <img src="./ico.png" alt="" />
         <h2>안녕하세요 주은호입니다</h2>
-        <button onClick={closeWithAnimation}>Close</button>
+        <button onClick={closeWithAnimation}>시작하기</button>
       </div>
     </div>
   );

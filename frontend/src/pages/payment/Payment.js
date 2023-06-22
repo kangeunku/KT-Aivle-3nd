@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Counter = () => {
+const Test = () => {
     const [num, setNumber] = useState(0);
 
     const plus_one = () => {
@@ -12,11 +12,12 @@ const Counter = () => {
 
     return (
         <div>
-            <button onClick={()=>{plus_one}}> + 1 </button>
-            <button onClick={() => {sub_one}}> - 1 </button>
+            <button onClick={() => {plus_one()}}> + 1 </button>
+            <button onClick={() => {sub_one()}}> - 1 </button>
+            <div> test</div>
             <p>{num}</p>
         </div>
     )
 }
 
-export { Counter };
+export { Test };
