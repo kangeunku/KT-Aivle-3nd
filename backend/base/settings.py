@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'base.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql', # 사용할 dbms
-        'NAME': 'exam', # db 이름
+        'NAME': 'ohsori', # db 이름
         'USER': 'postgres', # 사용자 이름
         'PASSWORD': '1234', # 비밀번호
         'HOST': 'localhost', # 서버 주소
