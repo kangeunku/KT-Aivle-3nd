@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import Users, Goods, Baskets, Faq, Qna, Survey, Test
-User = get_user_model() # 기존의 user 모델
+from .models import Users, Goods, Baskets, Faq, Qna, Survey
+# User = get_user_model() # 기존의 user 모델
 
 from account.models import CustomUser # 닉네임을 추가한 상속모델
 
