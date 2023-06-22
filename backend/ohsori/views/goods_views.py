@@ -4,16 +4,18 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from django.http import HttpResponse, JsonResponse
+from django.conf import settings
+
+from ..APIs.google_Vision import ocr
 
 import requests
+import os, glob, io
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
-
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-
 
 def index(request):
     return HttpResponse('I am goods.index')
@@ -21,15 +23,27 @@ def index(request):
 @api_view(['GET', 'POST'])
 def get_details(request):
     if request.method == 'GET':
-        return Response({'status' : 200})
+        return Response({'status' : settings.IMAGE_PATH})
     else:
         goods_url = request.data.get('goods_url')
         result = {'detail_img_urls' : get_goods_imglink(goods_url),
-                  'detail_options' : get_goods_options(goods_url),
+                #   'detail_options' : get_goods_options(goods_url),
                   }
     
     return Response(result)
 
+
+@api_view(['GET', 'POST'])
+def img_preprocess(request):
+    if request.method == 'GET':
+        return Response({'status' : '이미지 파일이 전처리 되는 로직의 입구입니다.'})
+    else:
+        product_id = request.data.get('product_id')
+        result = {'result' : ocr2summary(product_id)}
+        return Response(result)
+# {"product_id":"5811396719"}
+
+#######################################################
 
 
 def get_goods_imglink(goods_url):
@@ -52,20 +66,39 @@ def get_goods_imglink(goods_url):
         images = div_element.find_elements(By.TAG_NAME, 'img')
         visual_elements.extend(images)
 
+    # 이미지 링크를 담을 리스트
     image_elements = []
+    
+    # 이미지 파일이 저장될 디렉토리 생성 및 지정
+    root_path = settings.IMAGE_PATH
+    product_id = goods_url.split('/products/')[-1]
+    image_path = os.path.join(root_path, product_id)
+    os.makedirs(image_path, exist_ok=True)
+    
+    # 상품 상세 이미지 인덱싱
+    cnt = 1
     for idx, element in enumerate(visual_elements):
-
         src = element.get_attribute('data-src')
 
+        # 이미지 데이터만 접근
         if src[-3:] == 'jpg' or src[-4:] == 'w860':
             response = requests.get(src)
 
+            # 유효한 이미지 데이터만 분류
             if response.status_code == 200:
+                
+                # case 1 : 상품 상세 이미지 링크 담기
                 image_elements.append(src)
+                
+                # case 2 : 상품 상세 이미지를 장고 서버에 저장하기
+                filename = os.path.join(image_path, f'test{cnt}.jpg')
+                cnt += 1
+                with open(filename, 'wb') as f:
+                    f.write(response.content)
             else:
-                print(f'유효하지 않은 이미지 링크입니다: {src}')
+                print(f'{idx+1} 번째 링크는 유효하지 않습니다: {src}')
         else:
-            print(f'jpg 형식의 이미지 데이터가 아닙니다: {src}')
+            print(f'{idx+1} 번째 데이터는 jpg 형식이 아닙니다: {src}')
     
     driver.close()
     print('상세 이미지 추출 완료')
@@ -196,4 +229,31 @@ def dfs_get_item_opt(current, max_depth, category_button, driver):
 
 
     # 현재 depth에서 접근가능한 모든 정보를 추출완료
-    return temp_dict    
+    return temp_dict
+
+
+# 특정 상품의 상세 이미지에 대해서 OCR에서 텍스트 요약까지 이루어지는 파이프라인
+def ocr2summary(product_id):
+    
+    # 상세 이미지 경로 접근
+    image_root = settings.IMAGE_PATH
+    image_dir = os.path.join(image_root, str(product_id))
+    img_pathes = glob.glob(os.path.join(image_dir, '*'))
+    
+    # OCR
+    text_lst = []
+    for filepath in img_pathes:
+        text_lst.append(text_extraction(filepath))
+    
+    return {'img_pathes':img_pathes,
+            'text_lst' : text_lst,
+            }
+    
+# 각 이미지 파일에 대한 OCR
+def text_extraction(filepath):
+    
+    with io.open(filepath, 'rb') as image_file:
+        content = image_file.read()
+    text = ocr(content)
+        
+    return text

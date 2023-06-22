@@ -3,16 +3,11 @@ import json
 from os import path
 import environ
 
-if __name__=='__main__':
-    import sys
-    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
-    from base.settings import BASE_DIR
-else:
-    from ..base.settings import BASE_DIR
+from django.conf import settings
 
 env = environ.Env(DEBUG=(bool, True))
 environ.Env.read_env(
-    env_file=path.join(BASE_DIR, '.env')
+    env_file=path.join(settings.BASE_DIR, '.env')
 )
 
 CLIENT_ID = env('CLOVA_CLIENT_ID')
