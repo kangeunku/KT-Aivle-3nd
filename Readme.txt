@@ -42,3 +42,10 @@ db 관리자에 등록 admin.py
 4. .env 파일의 변수이름 = '값' 구조에서 띄어쓰기를 제거하세요
     ex) example_api = '1wedxads3' -> example_api='1wedxads3'
 5. frontend에서는 위 과정에서 추가했던 .env파일 내부에 REACT_APP_으로 시작하는 key가 포함돼 있어야 합니다.
+
+
+## DB 관리
+    # 백엔드 파일에서 python manage.py runserver를 실행하기 전에
+    # 항상 .env 파일에 존재하는 DB_NAME과 동일한 DB가 pgAdmin4에 존재하는지 확인해야 합니다.
+    # 없다면, 직접 만들어 주시고
+    # python manage.py makemigrations 와 python manage.py migrate 를 각각 실행 해주세요.
