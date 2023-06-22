@@ -1,7 +1,8 @@
 # blog/urls.py
 from django.urls import path,include
-from .views import views, api_views, db_views, test_views, main_views, items_views
+from .views import views, api_views, db_views, test_views, main_views, items_views, login_views
 from rest_framework import routers
+from knox import views as knox_views
 
 app_name = 'ohsori'
 
@@ -24,4 +25,9 @@ urlpatterns = [
     path('main/search2/', main_views.second_search, name='main_second_search'),
     path('items/', items_views.index, name='items'),
     path('items/test/', items_views.get_imgs, name='items_get_img'),
+    path('register/', login_views.RegisterAPI.as_view(), name='register'), # knox 회원가입 api
+    path('login/', login_views.LoginAPI.as_view(), name='login'),
+    path('logout/', knox_views.LogoutView.as_view(), name='logout'),
+    path('logoutall/', knox_views.LogoutAllView.as_view(), name='logoutall'),
+    path('user/', login_views.UserDetailView.as_view(), name='user') #user정보
 ]
