@@ -1,24 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "./Faq.module.css";
-
-// const Support = () => {
-//     const [num, setNumber] = useState(0);
-
-//     const btn_one = () => {
-//         setNumber(num + 1);
-//     }
-//     const btn_two = () => {
-//         setNumber(num - 1);
-//     }
-
-//     return (
-//         <div>
-//             <button onClick={btn_one}> + 1 </button>
-//             <button onClick={btn_two}> - 1 </button>
-//             <p>{num}</p>
-//         </div>
-//     )
-// }
+import styles from "../../styles/Faq.module.css";
 
 const faqData = [
     { index: 0, subject: '환불이 안돼요', answer: '환불에 대한\n자세한 안내입니다.' },

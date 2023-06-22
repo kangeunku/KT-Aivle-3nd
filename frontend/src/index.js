@@ -4,11 +4,7 @@ import {BrowserRouter} from 'react-router-dom';
 import './styles/style.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {CSRFToken} from "./components";
-import axios from 'axios';
-
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
+import {CSRFToken, Modal} from "./components";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -16,7 +12,7 @@ root.render(
     <CSRFToken />
     {/* 라우터 사용하기위함 */}
     <BrowserRouter>
-    <App />
+      <App />
     </BrowserRouter>
   </React.StrictMode>
 );

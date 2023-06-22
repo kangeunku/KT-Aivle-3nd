@@ -19,3 +19,7 @@ selenium
 requests
 psycopg2-binary
 django-environ
+beautifulsoup4
+webdriver-manager
+django-rest-knox
+Pillow

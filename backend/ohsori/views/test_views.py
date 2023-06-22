@@ -17,7 +17,7 @@ def send(request):
     state = request.POST.get('state','')
     callback = request.POST.get('callback','')
     
-    # 실행시킬 함수 함수
+    # 실행시킬 함수 딕셔너리
     func_dic = {
         'test_result' : test_result,
     }
@@ -25,11 +25,11 @@ def send(request):
     data_return = func_dic[state](data)
     
     # 전송될 데이터 형식 
-    restult = {
+    result = {
         'data' : data_return,
         'callback': callback
     }
-    return JsonResponse(restult)
+    return JsonResponse(result)
 
 def test_result(request):
     prompt = "하하이것은 거짓이다"
