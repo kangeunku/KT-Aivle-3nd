@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Users, Goods, Baskets, Faq, Qna, Survey
+from .models import Users, Good, Basket, Faq, Qna, Survey, Test
 
 class UserSerialize(serializers.ModelSerializer):
     class Meta:

@@ -38,9 +38,9 @@ const Join = () => {
 const Joinstepone = () => {
     return (
         <>
-            <h2 className="subtitle_join">
+            {/* <h2 className="subtitle_join">
                 <a>회원가입</a>
-            </h2>
+            </h2> */}
             <div className="choice_tab">
                 <h3 className="welcome">
                     이용 약관 동의
@@ -72,9 +72,9 @@ const Joinstepone = () => {
 const Joinsteptwo = () => {
     return (
         <>
-            <h2 className="subtitle_join">
+            {/* <h2 className="subtitle_join">
                 <a>회원가입</a>
-            </h2>
+            </h2> */}
             <div className="choice_tab">
                 <h3 className="welcome">
                     개인정보 입력

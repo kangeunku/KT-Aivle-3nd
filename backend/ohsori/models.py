@@ -1,5 +1,16 @@
 from django.db import models
 from account.models import CustomUser # 커스텀 유저 모델 불러오기
+from django.contrib.auth import get_user_model # 기본 유저모델을 가져오면 error 발생
+User = get_user_model()
+
+from knox.models import AuthToken
+
+# 사용자 정보와 토큰키를 같이  받기위한 모델
+class CustomToken(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    token = models.CharField(max_length=500) 
+
+
 
 class Users(models.Model):
     user_no = models.AutoField(help_text="사용자 고유번호",primary_key=True)
