@@ -1,32 +1,62 @@
 from rest_framework import serializers
-from .models import Users, Good, Basket, Faq, Qna, Survey
+from .models import Users, Goods, Baskets, Faq, Qna, Survey
 
-class UserSerialize(serializers.HyperlinkedModelSerializer):
+# User Serializer
+class UsersSerialize(serializers.ModelSerializer):
+    class Meta:
+        model = Users 
+        fields = ('id', 'username','nickname','date_joined')
+
+# Register Serializer
+class RegisterSerialize(serializers.ModelSerializer):
+    password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    
     class Meta:
         model = Users
-        fields = ('user_no', 'user_id', 'nickname', 'use_yn')
+        fields = ('id', 'username','password','password2','nickname')
+        extra_kwargs = {'password': {'write_only': True}}
         
-class GoodSerialize(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Good
-        fields = ('good_no', 'url', 'good_name', 'good_info', 'reg_date', 'use_yn')
+    def validate_username(self, value):
+        if Users.objects.filter(username=value).exists():
+            raise serializers.ValidationError("이미 사용 중인 ID입니다.")
+        return value
 
-class BasketSerialize(serializers.HyperlinkedModelSerializer):
+    def validate(self, data):
+        password = data.get('password')
+        password2 = data.pop('password2')
+
+        if password != password2:
+            raise serializers.ValidationError("비밀번호가 일치하지 않습니다.")
+        return data
+
+    def create(self, validated_data):
+        user = Users.objects.create_user(
+            username=validated_data['username'],
+            password=validated_data['password'],
+            nickname=validated_data.get('nickname', None))  # nickname 추가
+        return user
+            
+class GoodsSerialize(serializers.ModelSerializer):
     class Meta:
-        model = Basket
-        fields = ('basket_no', 'user_no', 'good_no', 'use_yn', 'reg_date')
+        model = Goods
+        fields = "__all__"
+
+class BasketsSerialize(serializers.ModelSerializer):
+    class Meta:
+        model = Baskets
+        fields = "__all__"
         
-class FaqSerialize(serializers.HyperlinkedModelSerializer):
+class FaqSerialize(serializers.ModelSerializer):
     class Meta:
         model = Faq
-        fields = ('question', 'answer', 'reg_date', 'use_yn')
+        fields = "__all__"
         
-class QnaSerialize(serializers.HyperlinkedModelSerializer):
+class QnaSerialize(serializers.ModelSerializer):
     class Meta:
         model = Qna
-        fields = ('qna_no', 'user_no', 'question', 'answer', 'type', 'img_url', 'reg_date', 'use_yn')
+        fields = "__all__"
 
-class SurveySerialize(serializers.HyperlinkedModelSerializer):
+class SurveySerialize(serializers.ModelSerializer):
     class Meta:
         model = Survey
-        fields = ('survey_id', 'question', 'answer', 'group', 'reg_date', 'use_yn', 'user_no')
+        fields = "__all__"
