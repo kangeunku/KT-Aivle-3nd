@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import environ
-AUTH_USER_MODEL = 'account.CustomUser'
+AUTH_USER_MODEL = 'ohsori.Users'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,11 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework.authtoken',
-    'blog',
     'rest_framework',
     'corsheaders', # CORS 추가
     'ohsori',
-    'account',
     'knox',
 ]
 
@@ -95,12 +93,12 @@ WSGI_APPLICATION = 'base.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql', # 사용할 dbms
-        'NAME': 'ohsori', # db 이름
-        'USER': 'postgres', # 사용자 이름
-        'PASSWORD': '1234', # 비밀번호
-        'HOST': 'localhost', # 서버 주소
-        'PORT': 5432, # 포트
+        'ENGINE': env('DB_ENGINE'), # 사용할 dbms
+        'NAME': env('DB_NAME'), # db 이름
+        'USER': env('DB_USER'), # 사용자 이름
+        'PASSWORD': env('DB_PASSWORD'), # 비밀번호
+        'HOST': env('DB_HOST'), # 서버 주소
+        'PORT': env('DB_PORT'), # 포트
     }
 }
 

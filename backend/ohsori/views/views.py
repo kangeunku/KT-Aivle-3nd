@@ -1,3 +1,5 @@
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
 from django.db import connection
@@ -11,38 +13,18 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 # CSRF 403에러를 방지,, 그냥 야매로 CSRF 방식제거
 from django.views.decorators.csrf import csrf_exempt
 
-@csrf_exempt
-def index(request):
-    if request.method == 'POST':
-        print(request.POST)
-        data = request.POST.get('data','')
-        state = request.POST.get('state','')
-        callback = request.POST.get('callback','')
+class IndexAPI(APIView):    
+    def post(self, request):
+        print(request.data)
+        data = request.data.get('data')
+        state = request.data.get('state')
+        callback = request.data.get('callback')
         
-    if request.method == 'GET':
-        data = request.GET.get('data','')
-        state = request.GET.get('state','')
-        callback = request.GET.get('callback','')
-    
-    
-    print("data:",data)
-    print("state:",state)
-    print("callback:",callback)
-    # 실행시킬 함수 딕셔너리
-    func_dic = {
-        '': no_request,
-        'first_fun' : first_fun,
-        'second_fun': second_fun,
-    }
-    # 등록된 함수 실행
-    data_return = func_dic[state](data)
-    
-    # 전송될 데이터 형식 
-    result = {
-        'data' : data_return,
-        'callback': callback
-    }
-    return JsonResponse(result)
+        print("data:", data)
+        print("state:", state)
+        print("callback:", callback)
+
+        return Response(request.data)
 
 def first_fun(text):
     print(text)
