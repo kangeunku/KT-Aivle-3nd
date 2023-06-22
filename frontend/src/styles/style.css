@@ -25,6 +25,29 @@ li.active_list > a {color: var(--background-green)}
 .header .head_btn_box .btn {margin-left: 30px; width: 52px; height: 52px; background: pink;}
 .content .container {flex-grow: 1; overflow: auto;}
 
+.Home .search_desc {
+    font-size:30px;
+}
+
+.Home .search_container {
+    position: relative;
+  }
+  
+ .Home .search_overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 10px;
+  }
+
+.Home .search_box {width: '100px';
+                height: '100px';
+                background-color: 'blue';
+                z-index:'9999';
+    }
+
 
 @keyframes close {
     from {
