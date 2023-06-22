@@ -31,4 +31,5 @@ def login_view(request):
                 form.add_error(None, 'Invalid username or password.')
     else:
         form = LoginForm()
+    print(request)
     return render(request, 'registration/login.html', {'form': form})
