@@ -1,32 +1,32 @@
 from rest_framework import serializers
-from .models import Users, Good, Basket, Faq, Qna, Survey
+from .models import Users, Goods, Baskets, Faq, Qna, Survey
 
-class UserSerialize(serializers.HyperlinkedModelSerializer):
+class UserSerialize(serializers.ModelSerializer):
     class Meta:
         model = Users
-        fields = ('user_no', 'user_id', 'nickname', 'use_yn')
+        fields = "__all__"
         
-class GoodSerialize(serializers.HyperlinkedModelSerializer):
+class GoodsSerialize(serializers.ModelSerializer):
     class Meta:
-        model = Good
-        fields = ('good_no', 'url', 'good_name', 'good_info', 'reg_date', 'use_yn')
+        model = Goods
+        fields = "__all__"
 
-class BasketSerialize(serializers.HyperlinkedModelSerializer):
+class BasketsSerialize(serializers.ModelSerializer):
     class Meta:
-        model = Basket
-        fields = ('basket_no', 'user_no', 'good_no', 'use_yn', 'reg_date')
+        model = Baskets
+        fields = "__all__"
         
-class FaqSerialize(serializers.HyperlinkedModelSerializer):
+class FaqSerialize(serializers.ModelSerializer):
     class Meta:
         model = Faq
-        fields = ('question', 'answer', 'reg_date', 'use_yn')
+        fields = "__all__"
         
-class QnaSerialize(serializers.HyperlinkedModelSerializer):
+class QnaSerialize(serializers.ModelSerializer):
     class Meta:
         model = Qna
-        fields = ('qna_no', 'user_no', 'question', 'answer', 'type', 'img_url', 'reg_date', 'use_yn')
+        fields = "__all__"
 
-class SurveySerialize(serializers.HyperlinkedModelSerializer):
+class SurveySerialize(serializers.ModelSerializer):
     class Meta:
         model = Survey
-        fields = ('survey_id', 'question', 'answer', 'group', 'reg_date', 'use_yn', 'user_no')
+        fields = "__all__"

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.db import connection
 from ..serializers import UserSerialize
-from ..models import Users, Good, Basket, Faq, Qna, Survey
+from ..models import Users, Goods, Baskets, Faq, Qna, Survey
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework import status

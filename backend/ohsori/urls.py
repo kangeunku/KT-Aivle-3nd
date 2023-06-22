@@ -1,6 +1,6 @@
 # blog/urls.py
 from django.urls import path,include
-from .views import views, api_views, db_views, test_views, main_views
+from .views import goods_views, views, api_views, db_views, test_views, main_views
 from rest_framework import routers
 
 app_name = 'ohsori'
@@ -11,13 +11,18 @@ router = routers.DefaultRouter()
 router.register('users', api_views.userview, basename='userModel')
 
 urlpatterns = [
-    path('', views.index, name='index'),
     path('api/', include(router.urls)),
-    path('db/', db_views.index, name='db'),
-    path('api2/', api_views.post_api, name='hi'),
-    path('test/', test_views.index, name='test'),
-    path('test/send', test_views.send, name='test_send'),
+    path('db/goods/', db_views.GoodsAPI.as_view(), name ='goods'),
+    path('db/goods/<int:goods_no>/', db_views.GoodsAPI.as_view(), name ='goods'),
+    path('db/basket/<int:user_no>/', db_views.BasketsAPI.as_view(), name='basket_info'),
+    path('db/basketadd/', db_views.BasketsAddAPI.as_view(), name='basket_add'),
+    path('db/basketdel/<int:basket_no>/', db_views.BasketsDelAPI.as_view(), name='basket_del'),
+    # path('api2/', api_views.post_api, name='hi'),
+    # path('test/', test_views.index, name='test'),
+    # path('test/send', test_views.send, name='test_send'),
     path('main/', main_views.index, name='main'),
     path('main/search1/', main_views.first_search, name='main_first_search'),
     path('main/search2/', main_views.second_search, name='main_second_search'),
+    path('goods/', goods_views.index, name='goods'),
+    path('goods/test/', goods_views.get_details, name='goods_get_details'),
 ]
