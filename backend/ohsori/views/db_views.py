@@ -9,25 +9,6 @@ from rest_framework.generics import get_object_or_404
 from ..serializers import UsersSerialize, GoodsSerialize, BasketsSerialize, FaqSerialize, QnaSerialize, SurveySerialize
 from ..models import Users, Goods, Baskets, Faq, Qna, Survey
 
-# db 사용
-def listFunc():
-    datas = Users.objects.all()
-    data = UsersSerialize(datas, many=True)
-    print("xxxxxxxxxxxxxxxxxxxx")
-    print(data.data)
-    print("xxxxxxxxxxxxxxxxxxxx")
-    return data
-
-def sqljoin():
-    sql = ""
-    # sql = "select * from osori_user"
-    # cursor = connection.cursor()
-    # # sql 반영
-    # cursor.execute(sql)
-    # # 배열 형식으로 받아옴
-    # datas = cursor.fetchall()
-    # data = UserSerialize(datas, many=True)
-    # return data
     
 class GoodsAPI(APIView): # 상품 정보 API 1
     def get(self, request, goods_no): # 
@@ -90,3 +71,13 @@ class QnaAPI(APIView):
         qna.type = '사이트 문의' # 선택으로 type 설정
         # qna.img_url = 'asdfasdf.jpg'  # if문으로 img가 있으면 넣기 null = True라 공백 가능
         qna.use_yn = 'Y'
+
+class Test(APIView):
+    def get(self, request):
+        print(request)
+        print(request.user)
+        print(request.data)
+        print(request.session)
+        print(request.user.is_authenticated)
+        print(request.user.username)
+        return Response('Good')

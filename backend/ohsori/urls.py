@@ -10,7 +10,7 @@ app_name = 'ohsori'
 router = routers.DefaultRouter()
 # 라우터에 등록
 urlpatterns = [
-    path('test/', views.IndexAPI.as_view(), name='hi'),
+    path('test/', db_views.Test.as_view(), name='hi'),
     path('api/', include(router.urls)),
     path('db/goods/', db_views.GoodsAPI.as_view(), name ='goods'),
     path('db/goods/<int:goods_no>/', db_views.GoodsAPI.as_view(), name ='goods'),
