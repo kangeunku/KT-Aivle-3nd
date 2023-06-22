@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React from 'react';
 
+// https://devdojo.com/ketonemaniac/doing-spring-securitys-csrf-tokens-the-right-way-with-react
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {

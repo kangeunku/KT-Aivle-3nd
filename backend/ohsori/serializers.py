@@ -1,6 +1,10 @@
 from rest_framework import serializers
 from .models import Users, Goods, Baskets, Faq, Qna, Survey
-# User = get_user_model() # 기존의 user 모델
+=========
+from .models import Users, Good, Basket, Faq, Qna, Survey, Test
+from django.contrib.auth import get_user_model
+
+User = get_user_model() # 기존의 user 모델
 
 from account.models import CustomUser # 닉네임을 추가한 상속모델
 
@@ -38,6 +42,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             password=validated_data['password'],
             nickname=validated_data.get('nickname', None))  # nickname 추가
         return user
+>>>>>>>>> Temporary merge branch 2
+
 class UserSerialize(serializers.ModelSerializer):
     class Meta:
         model = Users

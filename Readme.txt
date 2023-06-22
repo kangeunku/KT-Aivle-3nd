@@ -10,6 +10,8 @@ https://docs.google.com/spreadsheets/d/1-I0aIXAd2Wye8K-R6XHoq3Aj18zZheTxx-nDMknl
  - conda activate big_project
 // 설치해야할것 설치
  - pip install -r requirements.txt
+ - (linux의 경우) 패키지 설치 안 될 시 수동으로 설치
+
 
 
 # 리액트 세팅
@@ -17,6 +19,7 @@ https://docs.google.com/spreadsheets/d/1-I0aIXAd2Wye8K-R6XHoq3Aj18zZheTxx-nDMknl
  - cd frontend
  - npm update
  - npm install
+ - (linux 일 때) sudo apt-get install xdg-utils
  // 실행
  - npm start
 
