@@ -6,13 +6,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import get_object_or_404
 
-from ..serializers import UserSerialize, GoodsSerialize, BasketsSerialize, FaqSerialize, QnaSerialize, SurveySerialize
+from ..serializers import UsersSerialize, GoodsSerialize, BasketsSerialize, FaqSerialize, QnaSerialize, SurveySerialize
 from ..models import Users, Goods, Baskets, Faq, Qna, Survey
 
 # db 사용
 def listFunc():
     datas = Users.objects.all()
-    data = UserSerialize(datas, many=True)
+    data = UsersSerialize(datas, many=True)
     print("xxxxxxxxxxxxxxxxxxxx")
     print(data.data)
     print("xxxxxxxxxxxxxxxxxxxx")

@@ -1,26 +1,15 @@
 from django.db import models
-from account.models import CustomUser # 커스텀 유저 모델 불러오기
-from django.contrib.auth import get_user_model # 기본 유저모델을 가져오면 error 발생
-User = get_user_model()
+from django.contrib.auth.models import AbstractUser
 
-# from knox.models import AuthToken
+class Users(AbstractUser):
+    nickname = models.TextField()
+    use_yn = models.CharField(max_length=2, help_text="사용여부") # y, n,
+    pass
 
-# 사용자 정보와 토큰키를 같이  받기위한 모델
 class CustomToken(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    token = models.CharField(max_length=500) 
+    user = models.OneToOneField(Users, on_delete=models.CASCADE)
+    token = models.CharField(max_length=500)
 
-
-class Users(models.Model):
-    user_no = models.AutoField(help_text="사용자 고유번호",primary_key=True)
-    user_id = models.CharField(max_length=100, help_text='아이디(이메일)')
-    nickname = models.CharField(max_length=50, help_text='별명')
-    user_yn = models.CharField(max_length=2, help_text="사용여부") # y, n,
-    
-    class Meta:
-        # managed = False
-        db_table = 'ohsori_user'
-    
 class Goods(models.Model):
     goods_no = models.AutoField(help_text="상품고유번호", primary_key=True)
     goods_url = models.URLField (help_text="상품url") 
@@ -28,7 +17,6 @@ class Goods(models.Model):
     goods_info = models.TextField (help_text='상품정보')
     reg_date = models.DateTimeField(auto_now_add = True, help_text="등록일자")
     use_yn = models.CharField(max_length=2, help_text="사용여부", null= True)
-    
     
     class Meta:
         # managed =False
