@@ -183,3 +183,97 @@
     margin: 0 5px;
     margin-left: 20px;
 }
+
+
+/* 아래 수정 */
+.RecommendBox {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px 10vw;
+    width: 50vw;
+    border:3px solid white; 
+}
+
+.GoodsBox {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    width: 40vw;
+    height: 300px;
+    border: 2px solid #285a43;
+    margin: 10px 10px;
+    overflow: auto;
+    border-radius:5px;
+}
+
+.Goods_img1 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-right: 2px;
+    position: relative;
+    height:96%;
+    width:50%;
+    transition: all 0.5s linear;
+    border:1.5px solid #B4E0A0;
+    background-image: url(../assets/img/apple_sample.JPG);
+}
+
+.GoodsInfo {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-right: 2px;
+    position: relative;
+    height:96%;
+    width:50%;
+    transition: all 0.5s linear;
+    overflow: auto;
+    padding:10px;
+}
+.InfoText {
+    margin-top: 50px;
+    margin-left: 40px;
+    position: relative;
+    height:30%;
+    width:95%;
+    transition: all 0.5s linear;
+    text-align: center;
+    font-size: 45px;
+    border: none;
+
+}
+
+.Resultpopup {
+    position: fixed;
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 5px;
+    width:1500px;
+    height:1000px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+}
+
+.buy_button1 {
+    position: absolute;
+    left:50%;
+    top:200px;
+    background-color : white;
+    width : 180px;
+    height: 40px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    color:white;
+    font-size:20px;
+    font-weight:700;
+    text-align: center;
+    padding:10px;
+    border:3px solid #285a43;
+    color : #285a43
+}
