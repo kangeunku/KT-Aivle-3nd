@@ -13,4 +13,6 @@ import { Choicelogin } from "./user/choicelogin";
 import { Join } from "./user/join";
 import { Login } from "./user/login";
 
-export { Home, Basket, EditInfo ,Support, Choicelogin, Join, Login}
+import { Test } from "./payment/Payment";
+
+export { Home, Basket, EditInfo ,Support, Choicelogin, Join, Login, Test}
