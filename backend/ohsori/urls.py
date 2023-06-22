@@ -13,11 +13,8 @@ urlpatterns = [
     path('test/', db_views.Test.as_view(), name='hi'),
     path('api/', include(router.urls)),
     path('db/goods/', db_views.GoodsAPI.as_view(), name ='goods'),
-    path('db/goods/<int:goods_no>/', db_views.GoodsAPI.as_view(), name ='goods'),
-    path('db/basket/<int:user_no>/', db_views.BasketsAPI.as_view(), name='basket_info'),
-    path('db/basketadd/', db_views.BasketsAddAPI.as_view(), name='basket_add'),
-    path('db/basketdel/<int:basket_no>/', db_views.BasketsDelAPI.as_view(), name='basket_del'),
-    # 
+    path('db/basket/', db_views.BasketsAPI.as_view(), name='basket'),
+
     # path('test/', test_views.index, name='test'),
     # path('test/send', test_views.send, name='test_send'),
     path('main/', main_views.index, name='main'),

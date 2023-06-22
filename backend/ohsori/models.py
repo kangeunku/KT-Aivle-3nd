@@ -12,7 +12,7 @@ class CustomToken(models.Model):
 
 class Goods(models.Model):
     goods_no = models.AutoField(help_text="상품고유번호", primary_key=True)
-    goods_url = models.URLField (help_text="상품url") 
+    goods_url = models.URLField (help_text="상품url", unique = True) 
     goods_name = models.CharField(max_length=200, help_text='상품이름')
     goods_info = models.TextField (help_text='상품정보')
     reg_date = models.DateTimeField(auto_now_add = True, help_text="등록일자")

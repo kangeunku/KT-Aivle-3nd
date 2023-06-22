@@ -8,51 +8,48 @@ from rest_framework.generics import get_object_or_404
 
 from ..serializers import UsersSerialize, GoodsSerialize, BasketsSerialize, FaqSerialize, QnaSerialize, SurveySerialize
 from ..models import Users, Goods, Baskets, Faq, Qna, Survey
-
+from .goods_views import *
     
 class GoodsAPI(APIView): # 상품 정보 API 1
-    def get(self, request, goods_no): # 
+    def get(self, request): # 상품 정보 요청 // good_url
         try:
-            goods = Goods.objects.get(goods_no = goods_no)
-            # good = Good.objects.get(good_no = request.data.get('good_no'))
+            good_url = request.data.get('good_url')
+            goods = Goods.objects.get(good_url = good_url)
             serializer = GoodsSerialize(goods)
-            return Response(serializer.data, status = status.HTTP_200_OK)
+            return Response(serializer.data, status = status.HTTP_200_OK) # 상품 정보 회신
         except Goods.DoesNotExist:
             goods = Goods()
-            goods.goods_info = "오전 11시455분" # 모델을 통해 넣을 정보들 
-            goods.goods_url = "https://www.235432n142av.com/322534/"
-            goods.goods_name = "졸려어155134541"
+            goods.goods_info = "상품 정보 요약 모델" # 함수로 처리 
+            goods.goods_url = good_url
+            goods.goods_name = "상품 이름 추출"
             goods.use_yn = "Y"
             goods.save()
-            return Response('정보가 없네요, 정보 저장했습니다')
+            serializer = GoodsSerialize(goods)
+            return Response(serializer.data, status = status.HTTP_200_OK) # 상품 정보 저장 후 회신
 
  # 정참조 users = Users.objects.get(name='뽀삐') /n  Users_basket = users.basket.all()
 class BasketsAPI(APIView):
-    def get(self, request, user_no):
-        users = Users.objects.get(user_no = user_no)
+    def get(self, request): # 장바구니 페이지 GET 요청시 장바구니에 있는 상품 전달
+        users = Users.objects.get(username = request.user)
         user_baskets = users.baskets.filter(basket_yn = 'Y')
         serializer = BasketsSerialize(user_baskets, many = True)
         return Response(serializer.data, status = status.HTTP_200_OK)
-
-
-class BasketsAddAPI(APIView): 
-    def post(self, request): # basket_yn True or False // 요청 params : url
+    
+    def post(self, request): # basket_yn True or False // 요청 params : goods_url
         goods= Goods.objects.get(goods_url = request.data.get('goods_url'))
         baskets = Baskets()
         baskets.goods_no = goods
-        baskets.user_no = Users.objects.get(user_no = request.data.get('user_no'))
+        baskets.user_no = Users.objects.get(username = request.user)
         baskets.use_yn = 'Y'
         serializer = BasketsSerialize(baskets)
         baskets.save()
-        print(baskets)
-        return Response(serializer.data)
+        return Response(serializer.data) # 데이터 회신은 필요없음
     
-class BasketsDelAPI(APIView):
-    def get(self, request, basket_no):
-        basket = Baskets.objects.get(basket_no = basket_no)
+    def put(self, request): # param : basket_no
+        basket = Baskets.objects.get(basket_no = request.data.get('basket_no'))
         basket.basket_yn = "N"
         basket.save()
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)    
             
 class SurveyAPI(APIView):
     def post(self, request):
