@@ -1,15 +1,14 @@
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.authtoken.serializers import AuthTokenSerializer
-
+from django.shortcuts import render, redirect
 from knox.models import AuthToken
-from knox.views import LoginView as KnoxLoginView
 
 from ..serializers import UsersSerialize, RegisterSerialize
-from ..models import CustomToken
 
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 
+from..forms import LoginForm
 
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerialize
@@ -26,28 +25,21 @@ class RegisterAPI(generics.GenericAPIView):
 
 # 회원가입할때의 토큰을 저장하니깐 로그아웃한 후 다시 로그인했을때 db에 저장되어있는 토큰으로는 정보조회, 로그아웃을 못한다
 # 그래서 로그인할때마다 토큰을 저장하고 다시 로그인하면 다시 새로운 토큰으로 저장되게 하기
-class LoginAPI(KnoxLoginView):
-    permission_classes = (permissions.AllowAny,)
-
-    def post(self, request, format=None):
-        serializer = AuthTokenSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        login(request, user)
-
-        # Call KnoxLoginView post method
-        response = super().post(request, format=None)
-
-        # Get the token from the response
-        token = response.data['token']
-
-        # Delete existing token if exists
-        CustomToken.objects.filter(user=user).delete()
-
-        # Save the new token in CustomToken
-        CustomToken.objects.create(user=user, token=token)
-
-        return response
+def login_view(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('templates/success.html')  # Replace 'home' with the URL name of your home page
+            else:
+                form.add_error(None, 'Invalid username or password.')
+    else:
+        form = LoginForm()
+    return render(request, 'login.html', {'form': form})
     
 # 유저 정보: id, username, nickname, date_joined
 class UserDetailView(generics.RetrieveAPIView):
