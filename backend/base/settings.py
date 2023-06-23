@@ -102,6 +102,13 @@ DATABASES = {
     }
 }
 
+# Media path
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+DATA_PATH = os.path.join(MEDIA_ROOT, 'data')
+AUDIO_PATH = os.path.join(DATA_PATH, 'audio')
+IMAGE_PATH = os.path.join(DATA_PATH, 'images')
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
