@@ -18,6 +18,11 @@ AUTH_USER_MODEL = 'ohsori.Users'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# 환경변수를 불러올 수 있는 상태로 세팅
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
 # Take environment variables from .env file
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
