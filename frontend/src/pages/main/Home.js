@@ -3,12 +3,11 @@ import {Send} from "../../components";
 import styles from "../../styles/Home.module.css";
 import Slider from "../Slider";
 
-
 const Home = () => {
     const [currentPage, setCurrentPage] = useState('first');
+    const [inputValue, setInputValue] = useState('');
 
     const goToSecondPage = async () => {
-        await new Promise(resolve => setTimeout(resolve, 30));
         setCurrentPage('second');
     };
 
@@ -18,41 +17,49 @@ const Home = () => {
 
     const goToForthPage = () => {
         setCurrentPage('forth');
-    }
+    };
+
+    const handleInputChange= (event) => {
+        setInputValue(event.target.value);
+    };
+
+    const handleButtonClick = () => {
+        goToSecondPage();
+    };
 
     return(
         <div>
-        {currentPage === 'first' && <FirstPage goToSecondPage={goToSecondPage} />}
-        {currentPage === 'second' && <SecondPage goToThirdPage={goToThirdPage}/>}
+        {currentPage === 'first' && <FirstPage inputValue={inputValue} handleInputChange={handleInputChange} handleButtonClick={handleButtonClick} />}
+        {currentPage === 'second' && <SecondPage inputValue={inputValue} goToThirdPage={goToThirdPage}/>}
         {currentPage === 'third' && <ThirdPage  goToForthPage={goToForthPage}/>}
         {currentPage === 'forth' && <ForthPage/>}
       </div>
     );
 };
 
-const FirstPage = ({goToSecondPage}) => {
-    const data = ['hi','hi','hi','hi','hi']
+const FirstPage = ({inputValue, handleInputChange, handleButtonClick}) => {
+
     return (
         <div className={styles.home_container}>
             <div className={styles.home_img1}>
                 <div className={styles.home_desc_big}>상품을 검색하세요</div>
                 <div className={styles.home_search_box1}>
-                    <div className={styles.home_overlay_main}>Search</div>
-                    <div className={styles.home_button1} onClick={goToSecondPage} alt="상세검색으로 이동하는 버튼"/>
+                    <input className={styles.home_overlay_main} placeholder="입력해주세요" value={inputValue} onChange={handleInputChange}/>
+                    <div className={styles.home_button1} onClick={handleButtonClick} alt="상세검색으로 이동하는 버튼"/>
                 </div>
             </div>
         </div>
     );
 };
 
-const SecondPage = ({goToThirdPage}) => {
+const SecondPage = ({ inputValue, goToThirdPage}) => {
     return (
         <div className={styles.home_container2}>
-            <div class={styles.home_search_contained}>
+            <div className={styles.home_search_contained}>
                 <p className={styles.home_main_guide}>상품을 검색하세요</p>
                 <div className={styles.home_search_box2} >
                     <div className={styles.home_img2} alt="웹 페이지 이미지"/>
-                    <div className={styles.home_search_box2_txt}>사과</div>
+                    <div className={styles.home_search_box2_txt}>{inputValue}</div>
                 </div>
             </div>
             <div>
@@ -105,22 +112,22 @@ const ThirdPage = ({goToForthPage}) => {
 
     return(
         <div className={styles.home_container2}>
-            <div class={styles.home_search_contained}>
+            <div className={styles.home_search_contained}>
                 <p className={styles.home_main_guide}>추천 상품</p>
                 
             </div>
-                <div class={styles.RecommendBox}>
-                    <div class={styles.GoodsBox}>
+                <div className={styles.RecommendBox}>
+                    <div className={styles.GoodsBox}>
                         <div className={styles.Goods_img1} alt="추천 상품 이미지1"/>
-                        <div class={styles.GoodsInfo}>
-                            <label class={styles.InfoText}
+                        <div className={styles.GoodsInfo}>
+                            <label className={styles.InfoText}
                                 style={{
                                     fontWeight: "bold",
                                     marginTop: "50px"
                                 }}
                             ><b>소리소리오소리</b></label>
                             <br></br>
-                            <label class={styles.InfoText}
+                            <label className={styles.InfoText}
                                 style={{
                                     fontSize: 25,
                                     marginLeft: 150,
@@ -140,17 +147,17 @@ const ThirdPage = ({goToForthPage}) => {
                             )} */}
                         </div>
                     </div>
-                    <div class={styles.GoodsBox}>
+                    <div className={styles.GoodsBox}>
                         <div className={styles.Goods_img1} alt="추천 상품 이미지1"/>
-                        <div class={styles.GoodsInfo}>
-                            <label class={styles.InfoText}
+                        <div className={styles.GoodsInfo}>
+                            <label className={styles.InfoText}
                                 style={{
                                     fontWeight: "bold",
                                     marginTop: "50px"
                                 }}
                             ><b>소리소리오소리</b></label>
                             <br></br>
-                            <label class={styles.InfoText}
+                            <label className={styles.InfoText}
                                 style={{
                                     fontSize: 25,
                                     marginLeft: 150,
@@ -181,8 +188,25 @@ const ForthPage = () => {
     return(
         <Slider/>
     )
-}
+    
+};
 
+function CategoryBoxes() {
+    return (
+        <div className={styles.catebox_body}>
+            {detail_category.map((item, index) => (
+                <div className={styles.catebox_box1} key={item.category}>
+                    <div className={styles.catebox_index1}>{index + 1}. 사과의 '{item.category}'를 추천해주세요(0을 누를 시 생략)</div>
+                    <div className={styles.catebox_index2}>
+                        {item.car_index.map((index) => (
+                            <div className={styles.catebox_index3} key={index}>{index}</div>
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+}
 
 const detail_category = [
     {
@@ -206,22 +230,5 @@ const detail_category = [
         car_index: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사과"],
     },
 ];
-
-function CategoryBoxes() {
-    return (
-        <div className={styles.catebox_body}>
-            {detail_category.map((item, index) => (
-                <div className={styles.catebox_box1} key={item.category}>
-                    <div className={styles.catebox_index1}>{index + 1}. 사과의 '{item.category}'를 추천해주세요(0을 누를 시 생략)</div>
-                    <div className={styles.catebox_index2}>
-                        {item.car_index.map((index) => (
-                            <div className={styles.catebox_index3} key={index}>{index}</div>
-                        ))}
-                    </div>
-                </div>
-            ))}
-        </div>
-    );
-}
 
 export { Home };

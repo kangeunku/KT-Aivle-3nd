@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "../../styles/EditInfo.module.css";
+import styles from "./EditInfo.module.css";
 
 const EditInfo = () => {
     const [currentPage, setCurrentPage] = useState('first');
