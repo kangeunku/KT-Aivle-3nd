@@ -7,9 +7,11 @@ from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 
 from ..APIs.google_Vision import ocr
+from ..APIs.clova_summary import request_summary
 
 import requests
 import os, glob, io
+from PIL import Image
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -20,34 +22,44 @@ from webdriver_manager.chrome import ChromeDriverManager
 def index(request):
     return HttpResponse('I am goods.index')
 
+
 @api_view(['GET', 'POST'])
 def get_details(request):
     if request.method == 'GET':
-        return Response({'status' : settings.IMAGE_PATH})
+        return Response({'status' : '사용자가 상품의 상세 페이지에 접근할때, DB에 상품이 존재하지 않는다는 것이 확정된 후, 접근하는 것이 올바른 경로입니다.'})
     else:
         goods_url = request.data.get('goods_url')
-        result = {'detail_img_urls' : get_goods_imglink(goods_url),
-                #   'detail_options' : get_goods_options(goods_url),
+        # 상세 이미지 저장 후 product_id 가져오기
+        product_id = save_goods_imgs(goods_url)
+        
+        result = {'detail_options' : get_goods_options(goods_url),
+                  'output' : ocr2summary(product_id)
                   }
     
     return Response(result)
+# {"goods_url":""}
 
 
-@api_view(['GET', 'POST'])
-def img_preprocess(request):
-    if request.method == 'GET':
-        return Response({'status' : '이미지 파일이 전처리 되는 로직의 입구입니다.'})
-    else:
-        product_id = request.data.get('product_id')
-        result = {'result' : ocr2summary(product_id)}
-        return Response(result)
+# @api_view(['GET', 'POST'])
+# def img_preprocess(request):
+#     if request.method == 'GET':
+#         return Response({'status' : '''이미지 파일이 전처리 되어 텍스트로 요약 되기까지의 로직의 입구입니다. 찜 목록에서 접근하는 것이 올바른 경로입니다.'''})
+#     else:
+#         product_id = request.data.get('product_id')
+        
+#         # Goods 테이블 에서 정보를 얻어 와서 담아주어야 할 수도 있다.
+#         result = {'output' : ocr2summary(product_id)}
+#         return Response(result)
 # {"product_id":"5811396719"}
+
 
 #######################################################
 
-
-def get_goods_imglink(goods_url):
-    
+def save_goods_imgs(goods_url):
+    '''네이버 쇼핑몰 페이지에서 상품에 대한 상세 이미지 링크를 추출해 media > data > images > product_id 아래에
+    3자리 숫자로 인덱싱에 저장하는 함수 입니다. 그후, 이미지 파일이 저장된 디렉토리에 접근하기 위한 product_id를 반환합니다.
+    %주의% 이 함수는 Goods 테이블에 존재하지 않는 상품에 접근할때 사용되어야 합니다.
+    '''
     options = Options()
     options.add_argument("--remote-debugging-port=9222")
     options.add_argument('--headless') # 랜더링 없이 브라우저를 컨트롤
@@ -59,7 +71,7 @@ def get_goods_imglink(goods_url):
     driver.get(goods_url)
     driver.implicitly_wait(4)
 
-    div_elements = driver.find_elements(By.CLASS_NAME, '_9F9CWn02VE')
+    div_elements = driver.find_elements(By.CLASS_NAME, 'se-image')
 
     visual_elements = []
     for div_element in div_elements:
@@ -76,7 +88,7 @@ def get_goods_imglink(goods_url):
     os.makedirs(image_path, exist_ok=True)
     
     # 상품 상세 이미지 인덱싱
-    cnt = 1
+    cnt = 0
     for idx, element in enumerate(visual_elements):
         src = element.get_attribute('data-src')
 
@@ -90,24 +102,71 @@ def get_goods_imglink(goods_url):
                 # case 1 : 상품 상세 이미지 링크 담기
                 image_elements.append(src)
                 
-                # case 2 : 상품 상세 이미지를 장고 서버에 저장하기
-                filename = os.path.join(image_path, f'test{cnt}.jpg')
-                cnt += 1
-                with open(filename, 'wb') as f:
-                    f.write(response.content)
+                # # case 2 : 상품 상세 이미지를 장고 서버에 저장하기
+                # filename = os.path.join(image_path, f'test{cnt}.jpg')
+                # cnt += 1
+                # with open(filename, 'wb') as f:
+                #     f.write(response.content)
+                
+                # case 2-2 : 이미지 분할 가능성 체크하고 MEDIA 파일에 저장하기
+                cnt = img_split2save(response.content, image_path, cnt)
+                
             else:
                 print(f'{idx+1} 번째 링크는 유효하지 않습니다: {src}')
         else:
-            print(f'{idx+1} 번째 데이터는 jpg 형식이 아닙니다: {src}')
+            print(f'{idx+1} 번째 링크 속 데이터는 jpg 형식이 아닙니다: {src}')
+            
+        print(f'{idx+1} 번째 링크 처리 완료')
     
     driver.close()
     print('상세 이미지 추출 완료')
     
-    return image_elements
+    return product_id
+
+
+def img_split2save(img_content, save_path, idx, front_width=6, front_height=5):
+    '''save_goods_imgs에 내부 로직에 사용되는 함수입니다. 이미지 소스 링크를 받아서 크기를 확인 후,
+    frontend에서 보여질 가로 세로 비율을 이용한 분할 기준으로 분할한 뒤,
+    media > data > images > product_id 경로에 저장합니다. 모든 과정이 끝나면 인덱스 번호를 갱신하여 반환합니다.
+    '''
+    raw_image = Image.open(io.BytesIO(img_content))
+    raw_width, raw_height = raw_image.size
+    
+    # 현재 이미지 인덱스
+    current = idx
+    # 원본 이미지와 프론트엔드 이미지 창의 비율
+    scaler = raw_width // front_width
+    # 비율에 맞게 분할할 크기 지정
+    cutter = front_height * scaler
+    # 확정 분할 횟수
+    split_times = raw_height // cutter
+    # 분할 후 마지막 이미지의 높이
+    leftover_height = raw_height % cutter
+    
+    for start in range(split_times + 1):
+        # 파일이 저장될 경로
+        filepath = os.path.join(save_path, f'{current:03d}.jpg')
+        start_h = start * cutter
+        
+        # 분할 후 남은 이미지 데이터 처리 후 저장
+        if split_times == start:
+            if leftover_height > scaler:
+                raw_image.crop((0, start_h, raw_width, raw_height)).save(filepath)
+                current += 1
+                
+        # 이미지 분할 후 저장
+        else:
+            end_h = start_h + cutter
+            raw_image.crop((0, start_h, raw_width, end_h)).save(filepath)
+            current += 1
+             
+    return current
 
 
 def get_goods_options(goods_url):
-    
+    '''Selenium과 webdriver_manager를 이용해
+    네이버 쇼핑몰 페이지에서 각종 정보들을 얻어서 딕셔너리 형식으로 반환하는 함수입니다. 
+    '''
     options = Options()
     options.add_argument("--remote-debugging-port=9222")
     options.add_argument('--headless') # 랜더링 없이 브라우저를 컨트롤
@@ -122,8 +181,21 @@ def get_goods_options(goods_url):
     
     option_info = {}
     
-    # 상품 상세 옵션에 대한 정보를 담고 있는 엘리먼트
+    # 상품 대표 이미지
+    thumbnail_element = driver.find_element(By.CLASS_NAME, '_2tT_gkmAOr')
+    goods_thumb = thumbnail_element.find_element(By.TAG_NAME, 'img').get_attribute('data-src')
+    option_info['goods_thumb'] = goods_thumb
+    
+    # 상품 별점
+    reviews = driver.find_elements(By.CLASS_NAME, '_2Q0vrZJNK1')
+    goods_star_element = reviews[1].find_element(By.CLASS_NAME, '_2pgHN-ntx6')
+    goods_star = goods_star_element.text.replace('\n', '')
+    option_info['goods_star'] = goods_star
+    
+    # 상품 가격 및 상세 옵션에 대한 정보를 담고 있는 엘리먼트
     fieldset_element = driver.find_element(By.CLASS_NAME, '_10hph879os')
+    
+    # 상품 가격
     
     # 배송지 옵션 카테고리 로직
     is_delivary_opt = fieldset_element.find_elements(By.CLASS_NAME, 'bd_3tzwm')
@@ -148,8 +220,11 @@ def get_goods_options(goods_url):
             
             
     # 필수 옵션 카테고리 로직
-    necessary_opt_field = fieldset_element.find_element(By.CLASS_NAME, 'bd_2dy3Y')
-    is_necessary_opt = necessary_opt_field.find_elements(By.CLASS_NAME, 'bd_3hLoi')
+    try:
+        necessary_opt_field = fieldset_element.find_element(By.CLASS_NAME, 'bd_2dy3Y')
+        is_necessary_opt = necessary_opt_field.find_elements(By.CLASS_NAME, 'bd_3hLoi')
+    except:
+        is_necessary_opt = []
     
     if len(is_necessary_opt) == 0:
         print('필수 옵션 카테고리가 없습니다.')
@@ -186,7 +261,9 @@ def get_goods_options(goods_url):
     
     
 def dfs_get_item_opt(current, max_depth, category_button, driver):
-    
+    '''get_goods_options의 내부 로직에 사용되는 함수이며,
+    계층적으로 구조가 이루어진 필수 옵션 카테고리가 가진 정보에 접근 및 추출하기 위한 dfs 함수 입니다. 
+    '''
     if current == max_depth - 1:
         # 현재 depth가 가진 정보에 접근
         category = category_button[current]
@@ -232,25 +309,56 @@ def dfs_get_item_opt(current, max_depth, category_button, driver):
     return temp_dict
 
 
-# 특정 상품의 상세 이미지에 대해서 OCR에서 텍스트 요약까지 이루어지는 파이프라인
 def ocr2summary(product_id):
-    
+    '''특정 상품의 product_id를 받아 images 디렉토리에 저장된 상품 상세 이미지 파일에 접근 한 후,
+    OCR, 텍스트 요약, 사용 이미지 선별, 전체 텍스트 요약까지의 과정을 이어주는 hub함수입니다.
+    '''
     # 상세 이미지 경로 접근
     image_root = settings.IMAGE_PATH
     image_dir = os.path.join(image_root, str(product_id))
     img_pathes = glob.glob(os.path.join(image_dir, '*'))
-    
+
     # OCR
-    text_lst = []
+    sentence_lst = []
     for filepath in img_pathes:
-        text_lst.append(text_extraction(filepath))
+        sentence_lst.append(text_extraction(filepath))
     
-    return {'img_pathes':img_pathes,
-            'text_lst' : text_lst,
+    # 텍스트 요약 - APIs/clova_summary.request_summary
+    summary_lst = []
+    # 요약 정보의 유무에 따라서 사용할 이미지 선별
+    is_show = []
+    for sentence in sentence_lst:
+        if sentence:
+            summary = request_summary(sentence.replace('\n', ' '), 1)
+            summary_lst.append(summary)
+            if summary:
+                # 정상적으로 요약이 성공한 경우
+                is_show.append(1)
+            else:
+                # 이미지에서 추출된 텍스트 데이터가 너무 적은 경우
+                is_show.append(0)
+        else:
+            print('해당 이미지에는 추출할 텍스트가 없습니다.')
+            summary_lst.append(sentence)
+            is_show.append(0)
+            
+    
+    whole_summary = ' '.join(summary_lst)
+    final_summary = request_summary(whole_summary, 3)
+    
+    return {
+            # 'img_pathes' : img_pathes, # 처리 순서 확인용
+            'text_lst' : sentence_lst, # 분할된 이미지에서 추출된 텍스트
+            'summary_lst' : summary_lst, # 분할된 이미지별 요약 텍스트
+            'is_show' : is_show, # 요약 텍스트 유무에 따른 사용 여부 결정 리스트
+            'final_summary' : final_summary, # 전체 이미지에 대한 요약 텍스트
             }
-    
-# 각 이미지 파일에 대한 OCR
+
+ 
 def text_extraction(filepath):
+    '''ocr2summary 함수의 내부 로직에 이용되는 함수입니다.
+    각 이미지 파일에 대한 OCR 작업을 처리 후 추출된 텍스트를 반환합니다.
+    '''
     
     with io.open(filepath, 'rb') as image_file:
         content = image_file.read()

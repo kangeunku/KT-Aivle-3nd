@@ -26,7 +26,6 @@ urlpatterns = [
     path('main/search2/', main_views.second_search, name='main_second_search'),
     path('goods/', goods_views.index, name='goods'),
     path('goods/detail/', goods_views.get_details, name='goods_get_details'),
-    path('goods/preprocess/', goods_views.img_preprocess, name='goods_img_preprocess'),
     path('register/', login_views.RegisterAPI.as_view(), name='register'), # knox 회원가입 api
     path('login/', login_views.LoginAPI.as_view(), name='login'),
     path('logout/', knox_views.LogoutView.as_view(), name='logout'),
