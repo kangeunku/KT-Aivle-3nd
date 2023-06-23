@@ -32,8 +32,9 @@ const Basket = () => {
             <div className={styles.bklist_main}>(v)  찜한 상품입니다.</div>
             <BasketBoxes/>
             <BasketBoxes/>
-            <BasketBoxes/>            
+            <BasketBoxes/>         
         </div>
+
 
     );
 };

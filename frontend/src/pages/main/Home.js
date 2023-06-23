@@ -181,25 +181,8 @@ const ForthPage = () => {
     return(
         <Slider/>
     )
-    
-};
-
-function CategoryBoxes() {
-    return (
-        <div className={styles.catebox_body}>
-            {detail_category.map((item, index) => (
-                <div className={styles.catebox_box1} key={item.category}>
-                    <div className={styles.catebox_index1}>{index + 1}. 사과의 '{item.category}'를 추천해주세요(0을 누를 시 생략)</div>
-                    <div className={styles.catebox_index2}>
-                        {item.car_index.map((index) => (
-                            <div className={styles.catebox_index3} key={index}>{index}</div>
-                        ))}
-                    </div>
-                </div>
-            ))}
-        </div>
-    );
 }
+
 
 const detail_category = [
     {
@@ -223,5 +206,22 @@ const detail_category = [
         car_index: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사과"],
     },
 ];
+
+function CategoryBoxes() {
+    return (
+        <div className={styles.catebox_body}>
+            {detail_category.map((item, index) => (
+                <div className={styles.catebox_box1} key={item.category}>
+                    <div className={styles.catebox_index1}>{index + 1}. 사과의 '{item.category}'를 추천해주세요(0을 누를 시 생략)</div>
+                    <div className={styles.catebox_index2}>
+                        {item.car_index.map((index) => (
+                            <div className={styles.catebox_index3} key={index}>{index}</div>
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+}
 
 export { Home };
