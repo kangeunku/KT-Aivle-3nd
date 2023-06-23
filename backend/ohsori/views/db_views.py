@@ -16,7 +16,7 @@ from .goods_views import *
 
 
 class GoodsAPI(APIView): # 상품 정보 API 1
-    def get(self, request): # 상품 정보 요청 // good_url
+    def get(self, request): # 상품 정보 요청 // goods_url
         try:
             goods_url = request.data.get('goods_url')
             goods = Goods.objects.get(goods_url = goods_url)
@@ -41,19 +41,16 @@ class BasketsAPI(APIView):
     def get(self, request): # 장바구니 페이지 GET 요청시 장바구니에 있는 모든 상품 전달
         print(request.user.username)
         print(request.user)
-        try:
-            users = Users.objects.get(username = request.user.username)
-            print("***")
-            user_baskets = users.baskets.filter(use_yn = 'Y')
-            print("****")
-            serializer = BasketsSerialize(user_baskets, many = True)
+        users = Users.objects.get(username = request.user.username)
+        print("***")
+        user_baskets = users.baskets.filter(use_yn = 'Y')
+        print("****")
+        serializer = BasketsSerialize(user_baskets, many = True)
+        return Response(serializer.data)
+        
  
-            return Response(serializer.data)
-
-        except:
-            print("***")
-            return JsonResponse({'빔' : 'o'})
-    
+@method_decorator(csrf_exempt, name = "dispatch")
+class Baskets_Add_DelAPI(View):    
     def post(self, request): # basket_yn True or False // 요청 params : goods_url
         print(request.user.username)
         print(request.user)
@@ -63,21 +60,19 @@ class BasketsAPI(APIView):
         # goods= Goods.objects.get(goods_url = request.POST.get('goods_url'))
         baskets = Baskets()
         baskets.goods_url = Goods.objects.get(goods_url = data['goods_url'])
-        print("------2------")
         baskets.username = Users.objects.get(username = request.user.username)
-        print("------3------")
         baskets.use_yn = 'Y'
         serializer = BasketsSerialize(baskets)
-        print("-------4-----")
         baskets.save()
         return JsonResponse(serializer.data) # 데이터 회신은 필요없음
     
     def put(self, request): # param : basket_no // 미완
-        basket = Baskets.objects.get(basket_no = request.data.get('basket_no'))
-        basket.basket_yn = "N"
+        data = json.loads(request.body)
+        basket = Baskets.objects.get(goods_url = data['goods_url'])
+        basket.use_yn = "N"
         basket.save()
-        serializer = BasketsSerialize(baskets)
-        return Response(serializer.data)    
+        serializer = BasketsSerialize(basket)
+        return JsonResponse({"good" : "OK"})
 
           
 class SurveyAPI(APIView):

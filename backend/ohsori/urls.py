@@ -13,6 +13,7 @@ router = routers.DefaultRouter()
 urlpatterns = [
     path('db/good/', db_views.GoodsAPI.as_view(), name ='goods'),
     path('db/basket/', db_views.BasketsAPI.as_view(), name='basket'),
+    path('db/basket2/', db_views.Baskets_Add_DelAPI.as_view(), name='basket2'),
     path("db/survey/", db_views.SurveyAPI.as_view(), name="survey"),
     path("db/qna/", db_views.QnaAPI.as_view(), name="qna"),
     path("db/faq/", db_views.SurveyAPI.as_view(), name="faq"),
