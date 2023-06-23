@@ -11,13 +11,11 @@ router = routers.DefaultRouter()
 
 # 라우터에 등록
 urlpatterns = [
-    path('test/', db_views.Test.as_view(), name='hi'),
-    path('api/', include(router.urls)),
     path('db/goods/', db_views.GoodsAPI.as_view(), name ='goods'),
     path('db/basket/', db_views.BasketsAPI.as_view(), name='basket'),
-
-    # path('test/', test_views.index, name='test'),
-    # path('test/send', test_views.send, name='test_send'),
+    path("db/survey/", db_views.SurveyAPI.as_view(), name="survey"),
+    path("db/qna/", db_views.QnaAPI.as_view(), name="qna"),
+    path("db/faq/", db_views.SurveyAPI.as_view(), name="faq"),
     path('main/', main_views.index, name='main'),
     path('main/search1/', main_views.first_search, name='main_first_search'),
     path('main/search2/', main_views.second_search, name='main_second_search'),
