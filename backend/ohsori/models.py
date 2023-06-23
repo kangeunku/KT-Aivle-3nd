@@ -27,8 +27,8 @@ class Goods(models.Model):
 
 class Baskets(models.Model):
     basket_no = models.AutoField(help_text="찜하기 고유번호", primary_key = True)
-    username = models.ForeignKey(Users, on_delete=models.CASCADE, related_name="basket") # 정참조 users = Users.objects.get(name='뽀삐') /n  Users_basket = users.basket.all()
-    goods_no = models.ForeignKey(Goods,  on_delete=models.CASCADE, related_name="user")                         
+    username = models.ForeignKey(Users, on_delete=models.CASCADE, related_name="baskets") # 정참조 users = Users.objects.get(name='뽀삐') /n  Users_basket = users.basket.all()
+    goods_url = models.ForeignKey(Goods,  on_delete=models.CASCADE, related_name="user")                         
     reg_date = models.DateTimeField(auto_now_add = True, help_text="찜한날짜")
     use_yn = models.CharField(max_length=2, help_text="사용여부")
     class Meta:
