@@ -31,6 +31,8 @@ def second_search(request):
     result = get_item_link(get_filtered_items(**params))
     return Response(result)
 
+#############################################################
+
 def get_filtering_info(query):
 
     params = {

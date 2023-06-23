@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import environ
+AUTH_USER_MODEL = 'ohsori.Users'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,10 +46,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog',
+    'rest_framework.authtoken',
     'rest_framework',
     'corsheaders', # CORS 추가
     'ohsori',
+    'knox',
 ]
 
 MIDDLEWARE = [
@@ -84,20 +86,28 @@ TEMPLATES = [
 WSGI_APPLICATION = 'base.wsgi.application'
 
 
+
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql', # 사용할 dbms
-        'NAME': 'postgres', # db 이름
-        'USER': 'postgres', # 사용자 이름
-        'PASSWORD': '1234', # 비밀번호
-        'HOST': 'localhost', # 서버 주소
-        'PORT': 5432, # 포트
+        'ENGINE': env('DB_ENGINE'), # 사용할 dbms
+        'NAME': env('DB_NAME'), # db 이름
+        'USER': env('DB_USER'), # 사용자 이름
+        'PASSWORD': env('DB_PASSWORD'), # 비밀번호
+        'HOST': env('DB_HOST'), # 서버 주소
+        'PORT': env('DB_PORT'), # 포트
     }
 }
 
+# Media path
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+DATA_PATH = os.path.join(MEDIA_ROOT, 'data')
+AUDIO_PATH = os.path.join(DATA_PATH, 'audio')
+IMAGE_PATH = os.path.join(DATA_PATH, 'images')
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -118,12 +128,13 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -174,8 +185,9 @@ CORS_ALLOW_HEADERS = (
 # rest_api
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-    	'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+    	#'rest_framework.authentication.SessionAuthentication',
+        #'rest_framework.authentication.TokenAuthentication',
+        'knox.auth.TokenAuthentication',
 	],
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
@@ -195,3 +207,6 @@ CORS_ALLOWED_ORIGINS = [
 # 서버올리면 필히 수정 필요
 # https://docs.djangoproject.com/en/4.0/ref/settings/#std-setting-CSRF_TRUSTED_ORIGINS
 CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000", "http://127.0.0.1:8000", "http://localhost:3000",]
+
+# 로그인 성공후 이동하는 URL
+# LOGIN_REDIRECT_URL = '/'
