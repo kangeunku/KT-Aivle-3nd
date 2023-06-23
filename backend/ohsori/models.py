@@ -27,7 +27,7 @@ class Goods(models.Model):
 
 class Baskets(models.Model):
     basket_no = models.AutoField(help_text="찜하기 고유번호", primary_key = True)
-    user_no = models.ForeignKey(Users, on_delete=models.CASCADE, related_name="basket") # 정참조 users = Users.objects.get(name='뽀삐') /n  Users_basket = users.basket.all()
+    username = models.ForeignKey(Users, on_delete=models.CASCADE, related_name="basket") # 정참조 users = Users.objects.get(name='뽀삐') /n  Users_basket = users.basket.all()
     goods_no = models.ForeignKey(Goods,  on_delete=models.CASCADE, related_name="user")                         
     reg_date = models.DateTimeField(auto_now_add = True, help_text="찜한날짜")
     use_yn = models.CharField(max_length=2, help_text="사용여부")
@@ -57,7 +57,7 @@ class Qna(models.Model):
  
 class Survey(models.Model):
     survey_id = models.AutoField(help_text="설문아이디", primary_key=True)
-    user_no = models.ForeignKey(Users, on_delete=models.CASCADE) # 사용자가 null=True는 제외
+    username = models.ForeignKey(Users, on_delete=models.CASCADE) # 사용자가 null=True는 제외
     group = models.TextField(help_text ="그륩번호")
     score = models.IntegerField(help_text='점수') # 1 ~ 5점
     answer = models.TextField (help_text='건의사항', blank=True)
