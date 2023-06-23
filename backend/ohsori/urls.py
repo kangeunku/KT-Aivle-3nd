@@ -1,10 +1,12 @@
 # blog/urls.py
 from django.urls import path,include
-from .views import goods_views, views,db_views, test_views, main_views, login_views
+from .views import goods_views, views,db_views, test_views, main_views, login_views, test_request
 from rest_framework import routers
 from knox import views as knox_views
 
 app_name = 'ohsori'
+
+
 
 # default 라우터 설정
 router = routers.DefaultRouter()
@@ -14,7 +16,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('db/goods/', db_views.GoodsAPI.as_view(), name ='goods'),
     path('db/goods/<int:goods_no>/', db_views.GoodsAPI.as_view(), name ='goods'),
-    path('db/basket/<int:user_no>/', db_views.BasketsAPI.as_view(), name='basket_info'),
+    path('db/basket/<int:id>/', db_views.BasketsAPI.as_view(), name='basket_info'),
     path('db/basketadd/', db_views.BasketsAddAPI.as_view(), name='basket_add'),
     path('db/basketdel/<int:basket_no>/', db_views.BasketsDelAPI.as_view(), name='basket_del'),
     # 
@@ -29,5 +31,7 @@ urlpatterns = [
     path('login/', login_views.LoginAPI.as_view(), name='login'),
     path('logout/', knox_views.LogoutView.as_view(), name='logout'),
     path('logoutall/', knox_views.LogoutAllView.as_view(), name='logoutall'),
-    path('user/', login_views.UserDetailView.as_view(), name='user') #user정보
+    path('user/', login_views.UserDetailView.as_view(), name='user'), #user정보
+    path('test_request/', test_request.Test.as_view(), name='test_request'),
+
 ]

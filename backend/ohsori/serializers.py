@@ -5,7 +5,7 @@ from .models import Users, Goods, Baskets, Faq, Qna, Survey
 class UsersSerialize(serializers.ModelSerializer):
     class Meta:
         model = Users 
-        fields = ('id', 'username','nickname','date_joined')
+        fields = ('username','nickname','date_joined')
 
 # Register Serializer
 class RegisterSerialize(serializers.ModelSerializer):
@@ -13,7 +13,7 @@ class RegisterSerialize(serializers.ModelSerializer):
     
     class Meta:
         model = Users
-        fields = ('id', 'username','password','password2','nickname')
+        fields = ('username','password','password2','nickname')
         extra_kwargs = {'password': {'write_only': True}}
         
     def validate_username(self, value):

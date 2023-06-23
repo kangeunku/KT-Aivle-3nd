@@ -30,9 +30,9 @@ def sqljoin():
     # return data
     
 class GoodsAPI(APIView): # 상품 정보 API 1
-    def get(self, request, goods_no): # 
+    def get(self, request, goods_url): # 
         try:
-            goods = Goods.objects.get(goods_no = goods_no)
+            goods = Goods.objects.get(goods_url)
             # good = Good.objects.get(good_no = request.data.get('good_no'))
             serializer = GoodsSerialize(goods)
             return Response(serializer.data, status = status.HTTP_200_OK)
@@ -47,8 +47,8 @@ class GoodsAPI(APIView): # 상품 정보 API 1
 
  # 정참조 users = Users.objects.get(name='뽀삐') /n  Users_basket = users.basket.all()
 class BasketsAPI(APIView):
-    def get(self, request, user_no):
-        users = Users.objects.get(user_no = user_no)
+    def get(self, request, username):
+        users = Users.objects.get(username = request.user.username)
         user_baskets = users.baskets.filter(basket_yn = 'Y')
         serializer = BasketsSerialize(user_baskets, many = True)
         return Response(serializer.data, status = status.HTTP_200_OK)
@@ -59,7 +59,7 @@ class BasketsAddAPI(APIView):
         goods= Goods.objects.get(goods_url = request.data.get('goods_url'))
         baskets = Baskets()
         baskets.goods_no = goods
-        baskets.user_no = Users.objects.get(user_no = request.data.get('user_no'))
+        baskets.username = Users.objects.get(username = request.data.get('username'))
         baskets.use_yn = 'Y'
         serializer = BasketsSerialize(baskets)
         baskets.save()
