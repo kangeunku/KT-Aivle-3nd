@@ -63,6 +63,7 @@ li.active_list > a {color: var(--background-green)}
 .step_two_form.login_step {margin: 10% auto;}
 .step_two_form .input_form {display: block; margin: 10px 0 20px; padding: 15px 20px; border-radius: 5px; width: 85%; font-size: 18px; background-color: #B4E0A0; border: 0;}
 
+.test_btn {display: block; margin: 20px; width: 200px; font-size: 32px; line-height: 1.8; background-color: #285a43;}
 
 
 @keyframes close {
