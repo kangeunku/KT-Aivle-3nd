@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class Users(AbstractUser):
+    username = models.CharField(max_length=50, primary_key=True)
     nickname = models.TextField()
     use_yn = models.CharField(max_length=2, help_text="사용여부") # y, n,
     pass
@@ -11,8 +12,8 @@ class CustomToken(models.Model):
     token = models.CharField(max_length=500)
 
 class Goods(models.Model):
-    goods_no = models.AutoField(help_text="상품고유번호", primary_key=True)
-    goods_url = models.URLField (help_text="상품url", unique = True) 
+    # goods_no = models.AutoField(help_text="상품고유번호")
+    goods_url = models.URLField (help_text="상품url", unique = True, primary_key=True) 
     goods_name = models.CharField(max_length=200, help_text='상품이름')
     goods_info = models.TextField (help_text='상품정보')
     reg_date = models.DateTimeField(auto_now_add = True, help_text="등록일자")
@@ -27,8 +28,8 @@ class Goods(models.Model):
 
 class Baskets(models.Model):
     basket_no = models.AutoField(help_text="찜하기 고유번호", primary_key = True)
-    username = models.ForeignKey(Users, on_delete=models.CASCADE, related_name="baskets") # 정참조 users = Users.objects.get(name='뽀삐') /n  Users_basket = users.basket.all()
-    goods_url = models.ForeignKey(Goods,  on_delete=models.CASCADE, related_name="user")                         
+    username = models.ForeignKey(Users, on_delete=models.CASCADE, related_name="baskets",db_column="username") # 정참조 users = Users.objects.get(name='뽀삐') /n  Users_basket = users.basket.all()
+    goods_url = models.ForeignKey(Goods, on_delete=models.CASCADE, related_name="user", db_column="goods_url")                         
     reg_date = models.DateTimeField(auto_now_add = True, help_text="찜한날짜")
     use_yn = models.CharField(max_length=2, help_text="사용여부")
     class Meta:

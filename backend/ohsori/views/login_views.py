@@ -28,7 +28,7 @@ class RegisterAPI(generics.GenericAPIView):
 
 # 회원가입할때의 토큰을 저장하니깐 로그아웃한 후 다시 로그인했을때 db에 저장되어있는 토큰으로는 정보조회, 로그아웃을 못한다
 # 그래서 로그인할때마다 토큰을 저장하고 다시 로그인하면 다시 새로운 토큰으로 저장되게 하기
-@method_decorator(csrf_exempt, name = "dispatch")
+# @method_decorator(csrf_exempt, name = "dispatch")
 class LoginAPI(KnoxLoginView):
     permission_classes = (permissions.AllowAny,)
 

@@ -1,10 +1,14 @@
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
+from django.http import JsonResponse
 from rest_framework.views import APIView
+from rest_framework.renderers import JSONRenderer
+
 import json
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+
 
 from ..serializers import UsersSerialize, GoodsSerialize, BasketsSerialize, FaqSerialize, QnaSerialize, SurveySerialize
 from ..models import Users, Goods, Baskets, Faq, Qna, Survey
@@ -20,6 +24,7 @@ class GoodsAPI(APIView): # 상품 정보 API 1
             return Response(serializer.data, status = status.HTTP_200_OK) # 상품 정보 회신
         except Goods.DoesNotExist:
             goods_url = request.data.get('goods_url')
+            print(goods_url)
             goods = Goods()
             goods.goods_info = "상품 정보 요약 모델" # 함수로 처리 
             goods.goods_url = goods_url
@@ -31,18 +36,23 @@ class GoodsAPI(APIView): # 상품 정보 API 1
 
  # 정참조 users = Users.objects.get(name='뽀삐') /n  Users_basket = users.basket.all()
  
-# @method_decorator(csrf_exempt, name = "dispatch")
-class BasketsAPI(View):
+@method_decorator(csrf_exempt, name = "dispatch")
+class BasketsAPI(APIView):
     def get(self, request): # 장바구니 페이지 GET 요청시 장바구니에 있는 모든 상품 전달
         print(request.user.username)
         print(request.user)
         try:
             users = Users.objects.get(username = request.user.username)
-            user_baskets = users.baskets.filter(basket_yn = 'Y')
+            print("***")
+            user_baskets = users.baskets.filter(use_yn = 'Y')
+            print("****")
             serializer = BasketsSerialize(user_baskets, many = True)
-            return Response(serializer.data, status = status.HTTP_200_OK)
+ 
+            return Response(serializer.data)
+
         except:
-            return Response('비어있습니다')
+            print("***")
+            return JsonResponse({'빔' : 'o'})
     
     def post(self, request): # basket_yn True or False // 요청 params : goods_url
         print(request.user.username)
@@ -60,9 +70,9 @@ class BasketsAPI(View):
         serializer = BasketsSerialize(baskets)
         print("-------4-----")
         baskets.save()
-        return Response(serializer.data) # 데이터 회신은 필요없음
+        return JsonResponse(serializer.data) # 데이터 회신은 필요없음
     
-    def put(self, request): # param : basket_no
+    def put(self, request): # param : basket_no // 미완
         basket = Baskets.objects.get(basket_no = request.data.get('basket_no'))
         basket.basket_yn = "N"
         basket.save()
