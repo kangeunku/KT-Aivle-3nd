@@ -66,6 +66,7 @@ class QnaAPI(APIView):
         qna.type = '사이트 문의' # 선택으로 type 설정
         # qna.img_url = 'asdfasdf.jpg'  # if문으로 img가 있으면 넣기 null = True라 공백 가능
         qna.use_yn = 'Y'
+        
 class FaqAPI(APIView):
     def get(self, request):
         faq = Faq.objects.all()
