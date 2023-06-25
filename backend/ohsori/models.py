@@ -29,6 +29,7 @@ class Goods(models.Model):
     goods_info = models.TextField (help_text='상품정보')
     reg_date = models.DateTimeField(auto_now_add = True, help_text="등록일자")
     use_yn = models.CharField(max_length=2, help_text="사용여부", null= True)
+    goods_json = models.JSONField(default=dict) # goods_views의 get_detail에서 얻어온 정보를 저장 가능한지 확인용
     
     
     class Meta:
