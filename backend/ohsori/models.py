@@ -17,10 +17,9 @@ class Goods(models.Model):
     goods_name = models.CharField(max_length=200, help_text='상품이름')
     goods_info = models.TextField (help_text='상품정보')
     reg_date = models.DateTimeField(auto_now_add = True, help_text="등록일자")
-    goods_thumb = models.ImageField(help_text='상품대표이미지', upload_to=None, height_field=None, width_field=None, max_length=None, null=True)
-    goods_price = models.IntegerField(help_text = "상품가격", null=True)
-    goods_point = models.FloatField(help_text = "상품별점", null=True)
-    use_yn = models.CharField(max_length=2, help_text="사용여부", null=True)
+    use_yn = models.CharField(max_length=2, help_text="사용여부", null= True)
+    goods_json = models.JSONField(default=dict) # goods_views의 get_detail에서 얻어온 정보를 저장 가능한지 확인용
+    
     
     class Meta:
         db_table = 'ohsori_good'

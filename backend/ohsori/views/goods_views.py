@@ -12,12 +12,18 @@ from ..APIs.clova_summary import request_summary
 import requests
 import os, glob, io
 from PIL import Image
+from concurrent.futures import ThreadPoolExecutor
+import time
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+
+from ..models import Goods
+from ..serializers import GoodsSerialize
 
 def index(request):
     return HttpResponse('I am goods.index')
@@ -30,13 +36,22 @@ def get_details(request):
     else:
         goods_url = request.data.get('goods_url')
         # 상세 이미지 저장 후 product_id 가져오기
-        product_id = save_goods_imgs(goods_url)
+        product_id = save_goods_imgs_premium(goods_url)
         
         result = {'detail_options' : get_goods_options(goods_url),
-                  'output' : ocr2summary(product_id)
+                  'output' : ocr2summary_premium(product_id)
                   }
+
+    # DB로 가기
+    goods = Goods()
+    goods.goods_info = "오전 11시455분" # 모델을 통해 넣을 정보들 
+    goods.goods_url = "https://www.235432n142av.com/322534/"
+    goods.goods_name = "졸려어155134541"
+    goods.use_yn = "Y"
+    goods.goods_json = result
+    goods.save()
     
-    return Response(result)
+    return Response(result) # 프론트로가기
 # {"goods_url":""}
 
 
@@ -94,7 +109,7 @@ def save_goods_imgs(goods_url):
 
         # 이미지 데이터만 접근
         if src[-3:] == 'jpg' or src[-4:] == 'w860':
-            response = requests.get(src)
+            response = requests.get(src) # -> 멀티 스레드 적용
 
             # 유효한 이미지 데이터만 분류
             if response.status_code == 200:
@@ -119,7 +134,65 @@ def save_goods_imgs(goods_url):
         print(f'{idx+1} 번째 링크 처리 완료')
     
     driver.close()
-    print('상세 이미지 추출 완료')
+    print(f'상세 이미지 추출 완료')
+    
+    return product_id
+
+
+def save_goods_imgs_premium(goods_url):
+    '''save_goods_imgs 함수에 병렬 스레드를 적용한 VIP 회원 및 시각장애인들을 위한
+    프리미엄 함수입니다. 스레드의 갯수를 뜻하는 max_workers는 사용 가능한 CPU 수 + 4로
+    설정하는 것이 일반적으로 좋습니다.
+    '''
+    options = Options()
+    options.add_argument("--remote-debugging-port=9222")
+    options.add_argument('--headless') # 랜더링 없이 브라우저를 컨트롤
+    options.add_argument("--disable-gpu") # 랜더링이 없으면 gpu를 쓸일이 없으므로 비활성화
+    options.add_argument('--no-sandbox')
+    options.add_argument("--single-process")
+    options.add_argument("--disable-dev-shm-usage")
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    driver.get(goods_url)
+    driver.implicitly_wait(4)
+
+    div_elements = driver.find_elements(By.CLASS_NAME, 'se-image')
+
+    # 상품 상세 이미지에 대한 링크가 담긴 엘리먼트 리스트
+    visual_elements = []
+    for div_element in div_elements:
+        images = div_element.find_elements(By.TAG_NAME, 'img')
+        visual_elements.extend(images)
+
+    
+    # 이미지 파일이 저장될 디렉토리 생성 및 지정
+    root_path = settings.IMAGE_PATH
+    product_id = goods_url.split('/products/')[-1]
+    image_path = os.path.join(root_path, product_id)
+    os.makedirs(image_path, exist_ok=True)
+    
+    start_time = time.time()
+    # 상품 상세 이미지 링크를 담을 리스트
+    src_lst = []
+    for idx, element in enumerate(visual_elements):
+        src = element.get_attribute("data-src")
+        if src[-3:] == 'jpg' or src[-4:]=='w860':
+            src_lst.append(src)
+            
+            
+    driver.close()
+    # 상품 상세 이미지 링크에 대한 유효성 검증에 병렬 스레드 적용
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        responses = list(pool.map(requests.get, src_lst))
+    
+    # 상품 상세 이미지 인덱싱
+    cnt = 0
+    for src, response in zip(src_lst, responses):
+        if response.status_code == 200:
+            cnt = img_split2save(response.content, image_path, cnt)
+    
+    end_time = time.time()
+    
+    print(f'상세 이미지 추출 완료 : {end_time - start_time}초')
     
     return product_id
 
@@ -196,6 +269,9 @@ def get_goods_options(goods_url):
     fieldset_element = driver.find_element(By.CLASS_NAME, '_10hph879os')
     
     # 상품 가격
+    goods_price_element = fieldset_element.find_elements(By.CLASS_NAME, '_1LY7DqCnwR')
+    goods_price = goods_price_element[-1].text
+    option_info['goods_price'] = goods_price
     
     # 배송지 옵션 카테고리 로직
     is_delivary_opt = fieldset_element.find_elements(By.CLASS_NAME, 'bd_3tzwm')
@@ -318,12 +394,16 @@ def ocr2summary(product_id):
     image_dir = os.path.join(image_root, str(product_id))
     img_pathes = glob.glob(os.path.join(image_dir, '*'))
 
-    # OCR
+    # OCR -> 병렬 스레드 전 - 144.28
+    start_time = time.time()
     sentence_lst = []
     for filepath in img_pathes:
         sentence_lst.append(text_extraction(filepath))
+    end_time = time.time()
+    print(f'OCR 작업 완료 : {end_time - start_time}')
     
-    # 텍스트 요약 - APIs/clova_summary.request_summary
+    start_time = time.time()
+    # 텍스트 요약 - APIs/clova_summary.request_summary -> 병렬 스레드화
     summary_lst = []
     # 요약 정보의 유무에 따라서 사용할 이미지 선별
     is_show = []
@@ -341,7 +421,8 @@ def ocr2summary(product_id):
             print('해당 이미지에는 추출할 텍스트가 없습니다.')
             summary_lst.append(sentence)
             is_show.append(0)
-            
+    end_time = time.time()
+    print(f'텐스트 요약 작업 완료 : {end_time - start_time}')
     
     whole_summary = ' '.join(summary_lst)
     final_summary = request_summary(whole_summary, 3)
@@ -354,7 +435,55 @@ def ocr2summary(product_id):
             'final_summary' : final_summary, # 전체 이미지에 대한 요약 텍스트
             }
 
- 
+
+def ocr2summary_premium(product_id):
+    '''특정 상품의 product_id를 받아 images 디렉토리에 저장된 상품 상세 이미지 파일에 접근 한 후,
+    OCR, 텍스트 요약, 사용 이미지 선별, 전체 텍스트 요약까지의 과정을 이어주는 hub함수입니다.
+    '''
+    # 상세 이미지 경로 접근
+    image_root = settings.IMAGE_PATH
+    image_dir = os.path.join(image_root, str(product_id))
+    img_pathes = glob.glob(os.path.join(image_dir, '*'))
+
+    # OCR -> 16.7 ~ 19.03
+    start_time = time.time()
+    
+    img_content_lst = []
+    for filepath in img_pathes:
+        img_content_lst.append(get_img_content(filepath))
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        sentence_lst = list(pool.map(ocr, img_content_lst))
+        
+    end_time = time.time()
+    print(f'OCR 작업 완료 : {end_time - start_time}')
+    
+    # 텍스트 요약
+    # 요약 정보의 유무에 따라서 사용할 이미지 선별
+    start_time = time.time()
+    
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        summary_lst = list(pool.map(summarization, sentence_lst))
+        
+    is_show = [1 if summary!='' else 0 for summary in summary_lst]
+    
+    end_time = time.time()
+    print(f'텍스트 요약 작업 완료 : {end_time - start_time}')
+    
+    # 전체 텍스트 요약
+    whole_summary = ' '.join([summary_lst[idx] for idx, value in enumerate(is_show) if value == 1])
+    print(whole_summary)
+    final_summary = request_summary(whole_summary, 3)
+    
+    return {
+            # 'img_pathes' : img_pathes, # 처리 순서 확인용
+            'text_lst' : sentence_lst, # 분할된 이미지에서 추출된 텍스트
+            'summary_lst' : summary_lst, # 분할된 이미지별 요약 텍스트
+            'is_show' : is_show, # 요약 텍스트 유무에 따른 사용 여부 결정 리스트
+            'final_summary' : final_summary, # 전체 이미지에 대한 요약 텍스트
+            }
+
+
 def text_extraction(filepath):
     '''ocr2summary 함수의 내부 로직에 이용되는 함수입니다.
     각 이미지 파일에 대한 OCR 작업을 처리 후 추출된 텍스트를 반환합니다.
@@ -365,3 +494,25 @@ def text_extraction(filepath):
     text = ocr(content)
         
     return text
+
+
+def get_img_content(filepath):
+    '''ocr2summary_premium 함수의 내부 로직에 이용되는 함수입니다.
+    입력으로 받아온 경로에 존재하는 이미지 파일을 읽어옵니다.
+    '''
+    
+    with io.open(filepath, 'rb') as image_file:
+        content = image_file.read()
+    
+    return content
+
+
+def summarization(sentence):
+    if sentence:
+        summary = request_summary(sentence.replace('\n', ' '), 1)
+
+    else:
+        summary = sentence
+    
+    return summary
+    
