@@ -1,10 +1,12 @@
 # blog/urls.py
 from django.urls import path,include
-from .views import goods_views, views,db_views, test_views, main_views, login_views
+from .views import goods_views, views,db_views, test_views, main_views, login_views, test_request
 from rest_framework import routers
 from knox import views as knox_views
 from django.views.decorators.csrf import csrf_exempt
 app_name = 'ohsori'
+
+
 
 # default 라우터 설정
 router = routers.DefaultRouter()
@@ -26,5 +28,7 @@ urlpatterns = [
     path('login/', login_views.LoginAPI.as_view(), name='login'),
     path('logout/', knox_views.LogoutView.as_view(), name='logout'),
     path('logoutall/', knox_views.LogoutAllView.as_view(), name='logoutall'),
-    path('user/', login_views.UserDetailView.as_view(), name='user') #user정보
+    path('user/', login_views.UserDetailView.as_view(), name='user'), #user정보
+    path('test_request/', test_request.Test.as_view(), name='test_request'),
+
 ]
