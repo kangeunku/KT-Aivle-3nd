@@ -5,6 +5,7 @@ from django.http import JsonResponse
 
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
+from rest_framework.permissions import IsAuthenticated
 
 import json
 from django.views import View
@@ -15,7 +16,7 @@ from ..serializers import UsersSerialize, GoodsSerialize, BasketsSerialize, FaqS
 from ..models import Users, Goods, Baskets, Faq, Qna, Survey
 from .goods_views import *
 
-
+@permission_classes([IsAuthenticated])
 class GoodsAPI(APIView): # 상품 정보 API 1
     def get(self, request): # 상품 정보 요청 // goods_url
         try:
@@ -35,7 +36,8 @@ class GoodsAPI(APIView): # 상품 정보 API 1
             return Response(serializer.data, status = status.HTTP_200_OK) # 상품 정보 저장 후 회신
 
  # 정참조 users = Users.objects.get(name='뽀삐') /n  Users_basket = users.basket.all()
- 
+
+@permission_classes([IsAuthenticated]) 
 @method_decorator(csrf_exempt, name = "dispatch")
 class BasketsAPI(APIView):
     def get(self, request): # 장바구니 페이지 GET 요청시 장바구니에 있는 모든 상품 전달
@@ -44,7 +46,8 @@ class BasketsAPI(APIView):
         serializer = BasketsSerialize(user_baskets, many = True)
         return Response(serializer.data)
         
- 
+        
+@permission_classes([IsAuthenticated]) 
 @method_decorator(csrf_exempt, name = "dispatch")
 class Baskets_Add_DelAPI(View):    
     def post(self, request): # basket_yn True or False // 요청 params : goods_url
@@ -75,6 +78,7 @@ class SurveyAPI(APIView):
         survey.answer = '도움이 많이 됩니당'               # 건의사항에 대한 답변 받기
         return Response('감사함늬다')
 
+@permission_classes([IsAuthenticated])
 class QnaAPI(APIView):
     def post(self, request):
         qna = Qna()
