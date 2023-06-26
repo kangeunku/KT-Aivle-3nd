@@ -25,25 +25,6 @@ const Home = () => {
     };
 
     const handleButtonClick = () => {
-        // // 요청할 url
-        // const url = "http://127.0.0.1:8000/main/search2/"
-        // // 보낼 데이터 확인후 적용 필요
-        // const data = {
-        //     "query":'"'+ inputValue +'"',
-        //     "display":"3",
-        //     "start":"1",
-        //     "sort":"sim"
-        // }
-    
-        // axios.post(url, data)
-        // .then(function (response) {
-        //     console.log(response);
-        //     console.log(JSON.stringify(response.data))
-        // })
-        // .catch(function (error) {
-        //     console.log(error);
-        // });
-
         goToSecondPage();
     };
 
@@ -73,6 +54,23 @@ const FirstPage = ({inputValue, handleInputChange, handleButtonClick}) => {
 };
 
 const SecondPage = ({ inputValue, goToThirdPage}) => {
+    const [result, setResult] = useState([]);
+    
+    useEffect(() => {
+        const url = "http://127.0.0.1:8000/main/search1/"
+        // let result = []
+        let data = {
+            "query": '"'+ inputValue +'"'
+        }   
+        axios.post(url, data)
+        .then(function (response) {
+            setResult(JSON.stringify(response.data))
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }, []);
+
     return (
         <div className={styles.home_container2}>
             <div className={styles.home_search_contained}>
@@ -85,7 +83,7 @@ const SecondPage = ({ inputValue, goToThirdPage}) => {
             <div>
             <div className={styles.home_mainguide}>상세 검색을 위해 카테고리를 불러오겠습니다.</div>
                 <div className={styles.home_search_box3}>
-                    <CategoryBoxes query = {inputValue}/>
+                    <CategoryBoxes result = {result}/>
                 </div>
             </div>
             <div>
@@ -211,23 +209,10 @@ const ForthPage = () => {
     
 };
 
-function CategoryBoxes(props) {
-    const url = "http://127.0.0.1:8000/main/search1/"
-    let result = []
-    let data = {
-        "query": '"'+ props.query +'"'
-    }    
-    axios.post(url, data)
-    .then(function (response) {
-        result = JSON.stringify(response.data)
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
-    
+const CategoryBoxes = ({ result })=> {   
     return (
         <div className={styles.catebox_body}>
-            {result.map((item, index) => (
+            {result && result.map((item, index) => (
                 <div className={styles.catebox_box1} key={item}>
                     <div className={styles.catebox_index1}>{index + 1}. 사과의 '{item}'를 추천해주세요(0을 누를 시 생략)</div>
                     <div className={styles.catebox_index2}>
