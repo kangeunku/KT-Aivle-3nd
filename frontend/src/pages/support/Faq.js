@@ -58,40 +58,43 @@ const FirstPage = ({goToSecondPage}) => {
     const handleQuestionClick = (index) => {
       setActiveIndex(activeIndex === index ? null : index);
     };
-
     return (
         <div className={styles.faq_container1}>
             <div className={styles.faq_main1}>
-                <div className={styles.foot} alt="오소리그림"></div>
-                <p>1대1 문의하기</p>
+                <div className={styles.page2logo2} ></div>
+                <div className={styles.faqbox11}>자주 묻는 질문</div>
             </div>
             <div className={styles.faq_box}>
                 <div className={styles.faq_container}>
                     {faqData.map((faq, index) => (
-                        <div className={styles.faq_container_box} key={index}>
-                            <div className={styles.faq_container_title} onClick={() => {handleQuestionClick(index)}}>
-                                <strong>[{categories[faq.index]}]</strong> {faq.subject}
-                                {activeIndex === index ? (
-                                    <div className={styles.faq_upbutton} alt="내리기"/>
-                                ) : (
-                                    <div className={styles.faq_downbutton} alt="이미지 설명"><TextToSpeech id='tts' value='stop'/></div>
+                        <div>
+                            <div className={styles.faq_container_box} key={index}>
+                                <div className={styles.faq_container_title} onClick={() => {handleQuestionClick(index)}}>
+                                    <strong>[{categories[faq.index]}]</strong> {faq.subject}
+                                    {activeIndex === index ? (
+                                        <div className={styles.faq_upbutton} alt="내리기"/>
+                                    ) : (
+                                        <div className={styles.faq_downbutton} alt="이미지 설명"></div>
+                                    )}
+                                </div>
+                                
+                                {activeIndex === index && (
+                                    <div className={styles.faq_container_image}>
+                                        <hr className={styles.faq_container_hr} />
+                                        <div className={styles.faq_answer}>
+                                            {faq.answer.split('\n').map((line, lineIndex) => (
+                                                <div key={lineIndex}>
+                                                    {line}
+                                                    {/* <TextToSpeech id='tts' value={faq.answer}>{}</TextToSpeech> */}
+                                                    <audio id="tts"><source id="src-tts" src=""/></audio>
+                                                    {/* {console.log(faq.answer)} */}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
                                 )}
                             </div>
-                            <hr className={styles.faq_container_hr} />
-                            {activeIndex === index && (
-                                <div className={styles.faq_container_image}>
-                                    <div className={styles.faq_answer}>
-                                        {faq.answer.split('\n').map((line, lineIndex) => (
-                                            <div key={lineIndex}>
-                                                {line}
-                                                {/* <TextToSpeech id='tts' value={faq.answer}>{}</TextToSpeech> */}
-                                                <audio id="tts"><source id="src-tts" src=""/></audio>
-                                                {/* {console.log(faq.answer)} */}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
+                            <hr className={styles.faq_container_hr2} />
                         </div>
                     ))}
                 </div>
@@ -115,8 +118,8 @@ const SecondPage = ({goToThirdPage}) => {
     return (
         <div className={styles.faq_container1}>
             <div className={styles.faq_main1}>
-                <div className={styles.foot} alt="오소리그림"></div>
-                <p>내 문의 내역</p>
+                <div className={styles.page2logo2} ></div>
+                <div className={styles.faqbox11}>내 문의 내역</div>
             </div>
             <div className={styles.faq_box}>
                 <div className={styles.faq_container}>
@@ -124,37 +127,40 @@ const SecondPage = ({goToThirdPage}) => {
                         <div className={styles.faq_container_title}>내 문의 내역이 없습니다.</div>
                     ) : (
                         myfaqData.map((faq, index) => (
-                            <div className={styles.faq_container_box} key={index}>
-                                <div className={styles.faq_container_title} onClick={() => handleQuestionClick(index)}>
-                                    [{categories[faq.index]}] {faq.subject}
+                            <div>
+                                <div className={styles.faq_container_box} key={index}>
+                                    <div className={styles.faq_container_title} onClick={() => handleQuestionClick(index)}>
+                                        [{categories[faq.index]}] {faq.subject}
+                                        {faq.answer ? (
+                                            <div>
+                                                <span className={styles.myfaq_ans}> [답변 완료] </span>
+                                                {activeIndex === index ? (
+                                                    <div className={styles.faq_upbutton} alt="내리기"/>
+                                                ) : (
+                                                    <div className={styles.faq_downbutton} alt="이미지 설명"/>
+                                                )}
+                                            </div>
+                                        ): null}
+                                    </div>
                                     {faq.answer ? (
                                         <div>
-                                            <span className={styles.myfaq_ans}> [답변 완료] </span>
-                                            {activeIndex === index ? (
-                                                <div className={styles.faq_upbutton} alt="내리기"/>
-                                            ) : (
-                                                <div className={styles.faq_downbutton} alt="이미지 설명"/>
+                                            {activeIndex === index && (
+                                                <div className={styles.faq_container_image}>
+                                                    <hr className={styles.faq_container_hr1}></hr>
+                                                    <div className={styles.faq_answer}>
+                                                        <strong>Q.</strong> {faq.question.split('\n').map((line, lineIndex) => (
+                                                            <div key={lineIndex}>{line}</div>
+                                                        ))}
+                                                        <strong>A.</strong> {faq.answer.split('\n').map((line, lineIndex) => (
+                                                            <div key={lineIndex}>{line}</div>
+                                                        ))}
+                                                    </div>
+                                                </div>
                                             )}
                                         </div>
                                     ): null}
                                 </div>
-                                <hr className={styles.faq_container_hr} />
-                                {faq.answer ? (
-                                    <div>
-                                        {activeIndex === index && (
-                                            <div className={styles.faq_container_image}>
-                                                <div className={styles.faq_answer}>
-                                                    <strong>Q.</strong> {faq.question.split('\n').map((line, lineIndex) => (
-                                                        <div key={lineIndex}>{line}</div>
-                                                    ))}
-                                                    <strong>A.</strong> {faq.answer.split('\n').map((line, lineIndex) => (
-                                                        <div key={lineIndex}>{line}</div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                ): null}
+                                <hr className={styles.faq_container_hr2} />
                             </div>
                         ))
                     )}
@@ -164,6 +170,8 @@ const SecondPage = ({goToThirdPage}) => {
                 <button className={styles.button_faq} onClick={goToThirdPage}>
                     <div>문의 작성하기</div>
                 </button>
+            </div>
+            <div>
             </div>
         </div>
     );
@@ -200,14 +208,13 @@ const ThirdPage = () => {
     return (
         <div className={styles.faq_container3}>
             <div className={styles.faq_main1}>
-                <div className={styles.foot} alt="오소리그림"></div>
-                <p>내 문의 내역</p>
-                <></>
+                <div className={styles.page2logo2} ></div>
+                <div className={styles.faqbox11}>문의하기</div>
             </div>
             <div className={styles.faq3_container}>
-                <div className={styles.faq3_row1}>
+                {/* <div className={styles.faq3_row1}>
                     <div className={styles.faq3_c1}>상세 항목 입력</div>
-                </div>
+                </div> */}
                 <div className={styles.faq3_row2}>
                     <div className={styles.faq_row11}>문의 유형</div>
                     <select className={styles.faq_selectbox}

@@ -29,7 +29,7 @@ const Home = () => {
 
     return(
         <div>
-        {currentPage === 'first' && <FirstPage inputValue={inputValue} handleInputChange={handleInputChange} handleButtonClick={handleButtonClick} />}
+        {currentPage === 'first' && (<FirstPage inputValue={inputValue} handleInputChange={handleInputChange} handleButtonClick={handleButtonClick} />)}
         {currentPage === 'second' && <SecondPage inputValue={inputValue} goToThirdPage={goToThirdPage}/>}
         {currentPage === 'third' && <ThirdPage  goToForthPage={goToForthPage}/>}
         {currentPage === 'forth' && <ForthPage/>}
@@ -41,18 +41,26 @@ const FirstPage = ({inputValue, handleInputChange, handleButtonClick}) => {
 
     return (
         <div className={styles.home_container}>
-            <div className={styles.home_img1}>
-                <div className={styles.home_desc_big}>상품을 검색하세요</div>
-                <div className={styles.home_search_box1}>
-                    <input className={styles.home_overlay_main} placeholder="입력해주세요" value={inputValue} onChange={handleInputChange}/>
-                    <div className={styles.home_button1} onClick={handleButtonClick} alt="상세검색으로 이동하는 버튼"/>
-                </div>
+            <div className={styles.homebox1}>
+                <div className={styles.page2logo2} ></div>
+                <div className={styles.homebox11}>상품 검색</div>
+            </div>
+            <div className={styles.home_search_box1}>
+                <input className={styles.home_overlay_main} placeholder="입력해주세요" value={inputValue} onChange={handleInputChange}/>
+                <div className={styles.home_button1} onClick={handleButtonClick} alt="상세검색으로 이동하는 버튼"/>
             </div>
         </div>
     );
 };
 
-const SecondPage = ({ inputValue, goToThirdPage}) => {
+const SecondPage = ({goToThirdPage, inputValue}) => {
+    const [selectedItems, setSelectedItems] = useState([]);
+
+    const handleItemClick = (category, value) => {
+        const newItem = {category, value};
+        setSelectedItems((prevItems) => [...prevItems, newItem]);
+    };
+
     return (
         <div className={styles.home_container2}>
             <div className={styles.home_search_contained}>
@@ -65,7 +73,7 @@ const SecondPage = ({ inputValue, goToThirdPage}) => {
             <div>
             <div className={styles.home_mainguide}>상세 검색을 위해 카테고리를 불러오겠습니다.</div>
                 <div className={styles.home_search_box3}>
-                    <CategoryBoxes/>
+                    <CategoryBoxes onItemSelect={handleItemClick}/>
                 </div>
             </div>
             <div>
@@ -75,7 +83,6 @@ const SecondPage = ({ inputValue, goToThirdPage}) => {
             </div>
         </div>
     )
-    
 };
 
 const Popup = ({ onClose, message }) => {
@@ -191,15 +198,23 @@ const ForthPage = () => {
     
 };
 
-function CategoryBoxes() {
+function CategoryBoxes({onItemSelect, selectedItems}) {
     return (
         <div className={styles.catebox_body}>
             {detail_category.map((item, index) => (
                 <div className={styles.catebox_box1} key={item.category}>
                     <div className={styles.catebox_index1}>{index + 1}. 사과의 '{item.category}'를 추천해주세요(0을 누를 시 생략)</div>
                     <div className={styles.catebox_index2}>
-                        {item.car_index.map((index) => (
-                            <div className={styles.catebox_index3} key={index}>{index}</div>
+                        {item.car_index.map((value) => (
+                            <div
+                                className={`${styles.catebox_index3} ${
+                                    selectedItems.some((selectedItem) => selectedItem === value) ? styles.selected : ''
+                                }`}
+                                key={value}
+                                onClick={() => onItemSelect(value)}
+                            >
+                                {value}
+                            </div>
                         ))}
                     </div>
                 </div>

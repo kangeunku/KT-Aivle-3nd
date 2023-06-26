@@ -29,7 +29,10 @@ const Basket = () => {
     
     return (
         <div>
-            <div className={styles.bklist_main}>(v)  찜한 상품입니다.</div>
+            <div className={styles.bkbox1}>
+                <div className={styles.bkboxlogo2} ></div>
+                <div className={styles.bkbox11}>찜 목록</div>
+            </div>
             <BasketBoxes/>
             <BasketBoxes/>
             <BasketBoxes/>            
