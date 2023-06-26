@@ -224,7 +224,6 @@ function CategoryBoxes(props) {
     .catch(function (error) {
         console.log(error);
     });
-    console.log(props.query)
     
     return (
         <div className={styles.catebox_body}>
@@ -232,7 +231,7 @@ function CategoryBoxes(props) {
                 <div className={styles.catebox_box1} key={item}>
                     <div className={styles.catebox_index1}>{index + 1}. 사과의 '{item}'를 추천해주세요(0을 누를 시 생략)</div>
                     <div className={styles.catebox_index2}>
-                        {item.car_index.map((index) => (
+                        {item.cate_lst.map((index) => (
                             <div className={styles.catebox_index3} key={index}>{index}</div>
                         ))}
                     </div>
@@ -245,23 +244,23 @@ function CategoryBoxes(props) {
 const detail_category = [
     {
         category: "카테고리",
-        car_index: ["원진", "생활/건강", "가구/인테리어", "출산/육아", "디지털/가전"],
+        cate_lst: ["원진", "생활/건강", "가구/인테리어", "출산/육아", "디지털/가전"],
     },
     {
         category: "브랜드",
-        car_index: ["늘품", "산지애", "다농이네", "산들네", "과일꾼", "장길영사과"],
+        cate_lst: ["늘품", "산지애", "다농이네", "산들네", "과일꾼", "장길영사과"],
     },
     {
         category: "키워드 추천",
-        car_index: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사과"],
+        cate_lst: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사과"],
     },
     {
         category: "키워드 추천",
-        car_index: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사"],
+        cate_lst: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사"],
     },
     {
         category: "키워드 추천",
-        car_index: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사과"],
+        cate_lst: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사과"],
     },
 ];
 
