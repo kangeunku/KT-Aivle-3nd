@@ -52,7 +52,7 @@ def get_details(request):
     goods.use_yn = "Y"
     goods.save()
     
-    goods_no = Goods.objects.get(goods_url = goods_url).only('goods_no')
+    goods_no = Goods.objects.only('goods_no').get(goods_url = goods_url)
     # goods_no = Goods.objects.get(goods_no = Goods.objects.get(goods_url = goods_url).only('goods_no'))
     goods_summary = Goods_summary()
     goods_summary.goods_no = goods_no
@@ -95,7 +95,7 @@ def save_goods_imgs(goods_url):
     options.add_argument("--disable-dev-shm-usage")
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.get(goods_url)
-    driver.implicitly_wait(4)
+    driver.implicitly_wait(2)
 
     div_elements = driver.find_elements(By.CLASS_NAME, 'se-image')
 
@@ -164,7 +164,7 @@ def save_goods_imgs_premium(goods_url):
     options.add_argument("--disable-dev-shm-usage")
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.get(goods_url)
-    driver.implicitly_wait(4)
+    driver.implicitly_wait(2)
 
     div_elements = driver.find_elements(By.CLASS_NAME, 'se-image')
 
@@ -261,7 +261,7 @@ def get_goods_options(goods_url):
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
     driver.get(goods_url)
-    driver.implicitly_wait(4)
+    driver.implicitly_wait(2)
     
     option_info = {}
     
@@ -280,7 +280,7 @@ def get_goods_options(goods_url):
     fieldset_element = driver.find_element(By.CLASS_NAME, '_10hph879os')
     
     # 상품 이름
-    goods_name_element = fieldset_element.find_elements(By.CLASS_NAME, '_22kNQuEXmb')
+    goods_name_element = fieldset_element.find_element(By.CLASS_NAME, '_22kNQuEXmb')
     goods_name = goods_name_element.text
     option_info['goods_name'] = goods_name
     
@@ -370,6 +370,8 @@ def dfs_get_item_opt(current, max_depth, category_button, driver):
         # 정보 추출
         driver.implicitly_wait(1)
         extracted = [x.text for x in last_listbox]
+        
+        show_necessary.click()
 
         return extracted
         

@@ -48,4 +48,5 @@ def visible_selenium():
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.get('https://smartstore.naver.com/storyoutlet/products/4142362905')
     driver.implicitly_wait(4)
-    time.sleep(5)
+    time.sleep(120)
+    driver.close()
