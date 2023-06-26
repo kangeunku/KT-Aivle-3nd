@@ -98,6 +98,7 @@ const Send_api = (state, data) => {
         2 : "goods/test/", // 상품 조회
         3 : "register/", // 회원가입
         4 : "login/",  // 로그인
+        5 : 'stt/',
     }
     const url_fix = url + state_dir[state]
     

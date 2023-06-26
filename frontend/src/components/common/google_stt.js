@@ -68,7 +68,11 @@ const AudioRecord = () => {
             setAudioUrl()
             // base 64 파일
             var bs64 = btoa(fileReader.result);
-            Send_post('first_fun', bs64, 'yes');
+            let send_bs64 = {
+                'data': bs64,
+            }
+
+            Send_api(5, send_bs64);
         }
     }, [audioUrl]);
     
