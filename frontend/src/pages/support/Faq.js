@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styles from "../../styles/Faq.module.css";
+// import { RequestTTS } from "../../components/common/google_tts";
 import { TextToSpeech } from "../../components/common/google_tts";
 
 const faqData = [
@@ -50,14 +51,20 @@ const Support = () => {
         </div>
     );
 };
-    
+
 const FirstPage = ({goToSecondPage}) => {
-
-    const [activeIndex, setActiveIndex] = useState(null);
-
+    const [ activeIndex, setActiveIndex ] = useState(null);
+    const [ audioSource, setAudioSource ] = useState();
+    const [ text, setText ] = useState('');
+    
     const handleQuestionClick = (index) => {
-      setActiveIndex(activeIndex === index ? null : index);
+        setActiveIndex(activeIndex === index ? null : index);
+        setText(faqData[index].answer);
     };
+
+    const handleTextToSpeechonComplete = useCallback((result) => {
+        setAudioSource(result);
+    }, []);
 
     return (
         <div className={styles.faq_container1}>
@@ -74,7 +81,7 @@ const FirstPage = ({goToSecondPage}) => {
                                 {activeIndex === index ? (
                                     <div className={styles.faq_upbutton} alt="내리기"/>
                                 ) : (
-                                    <div className={styles.faq_downbutton} alt="이미지 설명"><TextToSpeech id='tts' value='stop'/></div>
+                                    <div className={styles.faq_downbutton} alt="이미지 설명"/>
                                 )}
                             </div>
                             <hr className={styles.faq_container_hr} />
@@ -84,9 +91,7 @@ const FirstPage = ({goToSecondPage}) => {
                                         {faq.answer.split('\n').map((line, lineIndex) => (
                                             <div key={lineIndex}>
                                                 {line}
-                                                {/* <TextToSpeech id='tts' value={faq.answer}>{}</TextToSpeech> */}
-                                                <audio id="tts"><source id="src-tts" src=""/></audio>
-                                                {/* {console.log(faq.answer)} */}
+                                                <TextToSpeech value={faq.answer} onComplete={handleTextToSpeechonComplete}/>
                                             </div>
                                         ))}
                                     </div>
@@ -109,7 +114,7 @@ const SecondPage = ({goToThirdPage}) => {
     const [activeIndex, setActiveIndex] = useState(null);
 
     const handleQuestionClick = (index) => {
-      setActiveIndex(activeIndex === index ? null : index);
+        setActiveIndex(activeIndex === index ? null : index);
     };
 
     return (
