@@ -22,7 +22,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
-from ..models import Goods
+from ..models import Goods, Goods_summary
 from ..serializers import GoodsSerialize
 
 def index(request):
@@ -43,14 +43,25 @@ def get_details(request):
                   }
 
     # DB로 가기
-    goods = Goods()
-    goods.goods_info = "오전 11시455분" # 모델을 통해 넣을 정보들 
-    goods.goods_url = "https://www.235432n142av.com/322534/"
-    goods.goods_name = "졸려어155134541"
+    goods = Goods() 
+    goods.goods_url = goods_url
+    goods.goods_name = result['detail_options']['goods_name']
+    goods.goods_star = result['detail_options']['goods_star']
+    goods.goods_price = int(result['detail_options']['goods_price'].replace(',', ''))
+    goods.goods_thumb = result['detail_options']['goods_thumb']
     goods.use_yn = "Y"
-    goods.goods_json = result
     goods.save()
     
+    goods_no = Goods.objects.get(goods_url = goods_url).only('goods_no')
+    # goods_no = Goods.objects.get(goods_no = Goods.objects.get(goods_url = goods_url).only('goods_no'))
+    goods_summary = Goods_summary()
+    goods_summary.goods_no = goods_no
+    goods_summary.summary = {'is_show' : result['output']['is_show'],
+                             'summary_lst' : result['output']['summary_lst']}
+    goods_summary.whole_summary = result['output']['final_summary']
+    goods_summary.detail = result['detail_options']
+    goods_summary.save()
+
     return Response(result) # 프론트로가기
 # {"goods_url":""}
 
@@ -267,6 +278,11 @@ def get_goods_options(goods_url):
     
     # 상품 가격 및 상세 옵션에 대한 정보를 담고 있는 엘리먼트
     fieldset_element = driver.find_element(By.CLASS_NAME, '_10hph879os')
+    
+    # 상품 이름
+    goods_name_element = fieldset_element.find_elements(By.CLASS_NAME, '_22kNQuEXmb')
+    goods_name = goods_name_element.text
+    option_info['goods_name'] = goods_name
     
     # 상품 가격
     goods_price_element = fieldset_element.find_elements(By.CLASS_NAME, '_1LY7DqCnwR')
