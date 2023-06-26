@@ -25,6 +25,7 @@ class GoodsAPI(APIView): # 상품 정보 API 1
             goods = Goods.objects.get(goods_url = goods_url)
             serializer = GoodsSerialize(goods)
             return Response(serializer.data, status = status.HTTP_200_OK) # 상품 정보 회신
+        
         except Goods.DoesNotExist:
             goods_url = request.data.get('goods_url')
             print('-' * 10)
@@ -41,10 +42,10 @@ class GoodsAPI(APIView): # 상품 정보 API 1
             serializer = GoodsSerialize(goods)
             return Response(serializer.data, status = status.HTTP_200_OK) # 상품 정보 저장 후 회신
 
- # 정참조 users = Users.objects.get(name='뽀삐') /n  Users_basket = users.basket.all()
 
 @permission_classes([IsAuthenticated]) 
 @method_decorator(csrf_exempt, name = "dispatch")
+
 class BasketsAPI(APIView):
     def get(self, request): # 장바구니 페이지 GET 요청시 장바구니에 있는 모든 상품 전달
         
@@ -61,13 +62,14 @@ class Baskets_Add_DelAPI(View):
         data = json.loads(request.body)
         # goods= Goods.objects.get(goods_url = request.POST.get('goods_url'))
         baskets = Baskets()
-        baskets.goods_no = Goods.objects.get(goods_url = data['goods_url']).only('goods_no')
+        baskets.goods_no = Goods.objects.only('goods_no').get(goods_url = data['goods_url'])
         # baskets.goods_no = Goods.objects.get(goods_no = Goods.objects.get(goods_url = data['goods_url'].only('goods_no'))
         baskets.username = Users.objects.get(username = request.user.username)
         baskets.use_yn = 'Y'
         serializer = BasketsSerialize(baskets)
         baskets.save()
         return JsonResponse(serializer.data) # 데이터 회신은 필요없음
+    
     
     def put(self, request): # param : basket_no // 미완
         data = json.loads(request.body)
@@ -86,6 +88,7 @@ class SurveyAPI(APIView):
         survey.answer = '도움이 많이 됩니당'               # 건의사항에 대한 답변 받기
         return Response('감사함늬다')
 
+
 @permission_classes([IsAuthenticated])
 class QnaAPI(APIView):
     def post(self, request):
@@ -96,6 +99,7 @@ class QnaAPI(APIView):
         qna.type = '사이트 문의' # 선택으로 type 설정
         # qna.img_url = 'asdfasdf.jpg'  # if문으로 img가 있으면 넣기 null = True라 공백 가능
         qna.use_yn = 'Y'
+        
         
 class FaqAPI(APIView):
     def get(self, request):
