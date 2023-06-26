@@ -1,6 +1,6 @@
 # blog/urls.py
 from django.urls import path,include
-from .views import goods_views, views,db_views, test_views, main_views, login_views, test_request
+from .views import goods_views, views,db_views, test_views, main_views, login_views, test_request, user_info_update_views
 from rest_framework import routers
 from knox import views as knox_views
 from django.views.decorators.csrf import csrf_exempt
@@ -30,5 +30,8 @@ urlpatterns = [
     path('logoutall/', knox_views.LogoutAllView.as_view(), name='logoutall'),
     path('user/', login_views.UserDetailView.as_view(), name='user'), #user정보
     path('test_request/', test_request.Test.as_view(), name='test_request'),
+    path('setpassword/', user_info_update_views.SetPasswordAPI.as_view(), name='setpassword'), # 비밀번호 변경
+    path('setnickname/', user_info_update_views.SetNicknameAPI.as_view(), name='setpassword'), # 별명 변경 
+    path('deleteuser/', user_info_update_views.DeleteUserAPI.as_view(), name='setpassword'), # 회원 탈퇴
 
 ]
