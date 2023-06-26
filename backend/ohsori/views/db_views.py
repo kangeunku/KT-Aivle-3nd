@@ -17,7 +17,6 @@ from ..serializers import UsersSerialize, GoodsSerialize, BasketsSerialize, FaqS
 from ..models import Users, Goods, Baskets, Faq, Qna, Survey
 from .goods_views import *
 
-
 class GoodsAPI(APIView): # 상품 정보 API 1
     permissions_classes = [IsAuthenticated]
     def get(self, request): # 상품 정보 요청 // goods_url
@@ -28,12 +27,17 @@ class GoodsAPI(APIView): # 상품 정보 API 1
             return Response(serializer.data, status = status.HTTP_200_OK) # 상품 정보 회신
         except Goods.DoesNotExist:
             goods_url = request.data.get('goods_url')
+            print('-' * 10)
+            result = get_details(goods_url)
             goods = Goods()
-            goods.goods_info = "상품 정보 요약 모델" # 함수로 처리 
             goods.goods_url = goods_url
-            goods.goods_name = "상품 이름 추출"
+            goods.goods_name = "쏘리소리 오소리"
+            goods.goods_star = result['detail_options']['goods_star']
+            goods.goods_price = result['detail_options']['goods_price']
+            goods.goods_thumb = result['detail_options']['goods_thumb']
             goods.use_yn = "Y"
             goods.save()
+            # 추가
             serializer = GoodsSerialize(goods)
             return Response(serializer.data, status = status.HTTP_200_OK) # 상품 정보 저장 후 회신
 
@@ -43,6 +47,7 @@ class GoodsAPI(APIView): # 상품 정보 API 1
 @method_decorator(csrf_exempt, name = "dispatch")
 class BasketsAPI(APIView):
     def get(self, request): # 장바구니 페이지 GET 요청시 장바구니에 있는 모든 상품 전달
+        
         users = Users.objects.get(username = request.user.username)
         user_baskets = users.baskets.filter(use_yn = 'Y')
         serializer = BasketsSerialize(user_baskets, many = True)
@@ -56,7 +61,8 @@ class Baskets_Add_DelAPI(View):
         data = json.loads(request.body)
         # goods= Goods.objects.get(goods_url = request.POST.get('goods_url'))
         baskets = Baskets()
-        baskets.goods_url = Goods.objects.get(goods_url = data['goods_url'])
+        baskets.goods_no = Goods.objects.get(goods_url = data['goods_url']).only('goods_no')
+        # baskets.goods_no = Goods.objects.get(goods_no = Goods.objects.get(goods_url = data['goods_url'].only('goods_no'))
         baskets.username = Users.objects.get(username = request.user.username)
         baskets.use_yn = 'Y'
         serializer = BasketsSerialize(baskets)

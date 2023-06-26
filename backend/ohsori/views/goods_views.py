@@ -29,31 +29,13 @@ def index(request):
     return HttpResponse('I am goods.index')
 
 
-@api_view(['GET', 'POST'])
-def get_details(request):
-    if request.method == 'GET':
-        return Response({'status' : '사용자가 상품의 상세 페이지에 접근할때, DB에 상품이 존재하지 않는다는 것이 확정된 후, 접근하는 것이 올바른 경로입니다.'})
-    else:
-        goods_url = request.data.get('goods_url')
-        # 상세 이미지 저장 후 product_id 가져오기
-        product_id = save_goods_imgs_premium(goods_url)
+# @api_view(['GET', 'POST'])
+def get_details(goods_url):
+    product_id = save_goods_imgs_premium(goods_url)
         
-        result = {'detail_options' : get_goods_options(goods_url),
-                  'output' : ocr2summary_premium(product_id)
-                  }
-
-    # DB로 가기
-    goods = Goods()
-    goods.goods_info = "오전 11시455분" # 모델을 통해 넣을 정보들 
-    goods.goods_url = "https://www.235432n142av.com/322534/"
-    goods.goods_name = "졸려어155134541"
-    goods.use_yn = "Y"
-    goods.goods_json = result
-    goods.save()
-    
-    return Response(result) # 프론트로가기
-# {"goods_url":""}
-
+    result = {'detail_options' : get_goods_options(goods_url),
+                  'output' : ocr2summary_premium(product_id)}
+    return result
 
 # @api_view(['GET', 'POST'])
 # def img_preprocess(request):
@@ -422,7 +404,7 @@ def ocr2summary(product_id):
             summary_lst.append(sentence)
             is_show.append(0)
     end_time = time.time()
-    print(f'텐스트 요약 작업 완료 : {end_time - start_time}')
+    print(f'텍스트 요약 작업 완료 : {end_time - start_time}')
     
     whole_summary = ' '.join(summary_lst)
     final_summary = request_summary(whole_summary, 3)
