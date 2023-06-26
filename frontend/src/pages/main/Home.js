@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {Send} from "../../components";
+import {Send_api} from "../../components";
 import styles from "../../styles/Home.module.css";
 import Slider from "../Slider";
+import axios from "axios";
 
 const Home = () => {
     const [currentPage, setCurrentPage] = useState('first');
@@ -24,6 +25,25 @@ const Home = () => {
     };
 
     const handleButtonClick = () => {
+        // // 요청할 url
+        // const url = "http://127.0.0.1:8000/main/search2/"
+        // // 보낼 데이터 확인후 적용 필요
+        // const data = {
+        //     "query":'"'+ inputValue +'"',
+        //     "display":"3",
+        //     "start":"1",
+        //     "sort":"sim"
+        // }
+    
+        // axios.post(url, data)
+        // .then(function (response) {
+        //     console.log(response);
+        //     console.log(JSON.stringify(response.data))
+        // })
+        // .catch(function (error) {
+        //     console.log(error);
+        // });
+
         goToSecondPage();
     };
 
@@ -65,7 +85,7 @@ const SecondPage = ({ inputValue, goToThirdPage}) => {
             <div>
             <div className={styles.home_mainguide}>상세 검색을 위해 카테고리를 불러오겠습니다.</div>
                 <div className={styles.home_search_box3}>
-                    <CategoryBoxes/>
+                    <CategoryBoxes query = {inputValue}/>
                 </div>
             </div>
             <div>
@@ -191,12 +211,26 @@ const ForthPage = () => {
     
 };
 
-function CategoryBoxes() {
+function CategoryBoxes(props) {
+    const url = "http://127.0.0.1:8000/main/search1/"
+    let result = []
+    let data = {
+        "query": '"'+ props.query +'"'
+    }    
+    axios.post(url, data)
+    .then(function (response) {
+        result = JSON.stringify(response.data)
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+    console.log(props.query)
+    
     return (
         <div className={styles.catebox_body}>
-            {detail_category.map((item, index) => (
-                <div className={styles.catebox_box1} key={item.category}>
-                    <div className={styles.catebox_index1}>{index + 1}. 사과의 '{item.category}'를 추천해주세요(0을 누를 시 생략)</div>
+            {result.map((item, index) => (
+                <div className={styles.catebox_box1} key={item}>
+                    <div className={styles.catebox_index1}>{index + 1}. 사과의 '{item}'를 추천해주세요(0을 누를 시 생략)</div>
                     <div className={styles.catebox_index2}>
                         {item.car_index.map((index) => (
                             <div className={styles.catebox_index3} key={index}>{index}</div>
