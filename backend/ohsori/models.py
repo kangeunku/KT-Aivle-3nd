@@ -13,7 +13,7 @@ class CustomToken(models.Model):
 
 class Goods(models.Model):
     goods_no = models.AutoField(help_text="상품고유번호", primary_key=True)
-    goods_url = models.URLField (help_text="상품url", unique = True) 
+    goods_url = models.URLField (help_text="상품url", max_length=500, unique = True) 
     goods_name = models.CharField(max_length=200, help_text='상품이름')
     goods_star = models.TextField(help_text='상품 별점') # goods_views의 get_detail에서 얻어온 정보를 저장 가능한지 확인용
     goods_price = models.IntegerField(help_text='상품가격')

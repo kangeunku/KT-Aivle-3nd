@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import environ
+
 AUTH_USER_MODEL = 'ohsori.Users'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -16,6 +17,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('DJANGO_SECRET_KEY')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -84,6 +86,12 @@ DATABASES = {
     }
 }
 
+# Media path
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+DATA_PATH = os.path.join(MEDIA_ROOT, 'data')
+AUDIO_PATH = os.path.join(DATA_PATH, 'audio')
+IMAGE_PATH = os.path.join(DATA_PATH, 'images')
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -126,6 +134,8 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -172,9 +182,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
     ],
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticated', # 장고 내 권한 설정
-    # ],
 }
 # CORS_ALLOW_METHODS = [
 #   'GET',
@@ -189,6 +196,3 @@ CORS_ALLOWED_ORIGINS = [
 # 서버올리면 필히 수정 필요
 # https://docs.djangoproject.com/en/4.0/ref/settings/#std-setting-CSRF_TRUSTED_ORIGINS
 CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000", "http://127.0.0.1:8000", "http://localhost:3000",]
-
-# 로그인 성공후 이동하는 URL
-# LOGIN_REDIRECT_URL = '/'

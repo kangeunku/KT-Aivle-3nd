@@ -39,8 +39,8 @@ def get_details(request):
         product_id = save_goods_imgs_premium(goods_url)
         
         result = {'detail_options' : get_goods_options(goods_url),
-                  'output' : ocr2summary_premium(product_id)
-                  }
+                'output' : ocr2summary_premium(product_id),
+                }
 
     # DB로 가기
     goods = Goods() 
@@ -438,7 +438,7 @@ def ocr2summary(product_id):
             summary_lst.append(sentence)
             is_show.append(0)
     end_time = time.time()
-    print(f'텐스트 요약 작업 완료 : {end_time - start_time}')
+    print(f'텍스트 요약 작업 완료 : {end_time - start_time}')
     
     whole_summary = ' '.join(summary_lst)
     final_summary = request_summary(whole_summary, 3)
