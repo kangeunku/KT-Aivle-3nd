@@ -1,5 +1,5 @@
 // import { array } from "prop-types";
-import { Send, Send_post } from "./common"
+import { Send, Send_api } from "./common"
 import React, { useState, useCallback } from "react";
 
 const AudioRecord = () => {
