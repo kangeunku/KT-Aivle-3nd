@@ -5,7 +5,7 @@ from .models import Users, Goods, Baskets, Faq, Qna, Survey
 class UsersSerialize(serializers.ModelSerializer):
     class Meta:
         model = Users 
-        fields = ('username','nickname','date_joined')
+        fields = "__all__"
 
 # Register Serializer
 class RegisterSerialize(serializers.ModelSerializer):
