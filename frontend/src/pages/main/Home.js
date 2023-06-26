@@ -73,7 +73,7 @@ const SecondPage = ({goToThirdPage, inputValue}) => {
             <div>
             <div className={styles.home_mainguide}>상세 검색을 위해 카테고리를 불러오겠습니다.</div>
                 <div className={styles.home_search_box3}>
-                    <CategoryBoxes onItemSelect={handleItemClick}/>
+                    <CategoryBoxes onItemSelect={handleItemClick} selectedItems={selectedItems}/>
                 </div>
             </div>
             <div>
@@ -205,7 +205,7 @@ function CategoryBoxes({onItemSelect, selectedItems}) {
                 <div className={styles.catebox_box1} key={item.category}>
                     <div className={styles.catebox_index1}>{index + 1}. 사과의 '{item.category}'를 추천해주세요(0을 누를 시 생략)</div>
                     <div className={styles.catebox_index2}>
-                        {/* {item.car_index.map((value) => (
+                        {item.car_index.map((value) => (
                             <div
                                 className={`${styles.catebox_index3} ${
                                     selectedItems.some((selectedItem) => selectedItem === value) ? styles.selected : ''
@@ -215,7 +215,7 @@ function CategoryBoxes({onItemSelect, selectedItems}) {
                             >
                                 {value}
                             </div>
-                        ))} */}
+                        ))}
                     </div>
                 </div>
             ))}
