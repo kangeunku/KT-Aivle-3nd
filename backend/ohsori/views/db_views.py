@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 
 import json
 from django.views import View
@@ -16,8 +17,9 @@ from ..serializers import UsersSerialize, GoodsSerialize, BasketsSerialize, FaqS
 from ..models import Users, Goods, Baskets, Faq, Qna, Survey
 from .goods_views import *
 
-@permission_classes([IsAuthenticated])
+
 class GoodsAPI(APIView): # 상품 정보 API 1
+    permissions_classes = [IsAuthenticated]
     def get(self, request): # 상품 정보 요청 // goods_url
         try:
             goods_url = request.data.get('goods_url')

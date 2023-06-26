@@ -12,10 +12,11 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
 from django.contrib.auth import login, authenticate
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerialize
-
+    permissions_classes = [AllowAny]
     def post(self, request, *args, **kwargs):
         
         serializer = self.get_serializer(data=request.data)
