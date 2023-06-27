@@ -49,7 +49,7 @@ def get_filtering_info(query):
     dom = bs(response.text, 'html.parser')
 
     # 카테고리 받아오기
-    filtering_dict = {}
+    detail_category = []
 
     query_checker = dom.select_one('#container > div.style_inner__i4gKy > div.filter_finder__E_I19')
 
@@ -62,7 +62,7 @@ def get_filtering_info(query):
 
         # 대분류 - key
         for each in filter_elements:
-
+            temp_dict = {}
             category = each.select_one('div.filter_finder_tit__x1gjS').get_text().replace('더보기', '')
 
             # 가격과 배송/혜택/색상 카테고리는 검색 결과가 존재할 경우 항상 등장한다.
@@ -71,9 +71,9 @@ def get_filtering_info(query):
                 flag = 1
             else: flag = 2
 
-            filtering_dict[category] = []
+            temp_dict['category'] = category
 
-
+            temp_lst = []
             # 소분류 - value
             for element in each.select('div ul > li > a'):
 
@@ -88,9 +88,11 @@ def get_filtering_info(query):
                 else:
                     content = element.text
 
-                filtering_dict[category].append(content)
+                temp_lst.append(content)
+            temp_dict['cate_lst'] = temp_lst
+            detail_category.append(temp_dict)
 
-    return filtering_dict
+    return detail_category
 
 def get_filtered_items(query, display=100, start=1, sort='sim', filter='naverpay', exclude=''):
     '''필터링 정보와 검색어를 입력받아 필터링된 상품과 함께 naver open api에서 제공하는 상품의 세부 정보들을 얻어오는 함수입니다.
@@ -138,7 +140,7 @@ def get_filtered_items(query, display=100, start=1, sort='sim', filter='naverpay
     return item_lst
 
 
-def get_item_link(item_lst):
+def get_item_link(item_lst): # 멀티 스레딩 적용가능
     '''get_filtered_items 함수에서 반환한 item_lst를 입력받아 각 상품이 가진 gate link 데이터를 실제 쇼핑몰 link 데이터로 변환해주는 함수입니다.
     params:
         item_lst : lst > dict : get_filtered_items 함수에서 반환된 lst
@@ -155,7 +157,6 @@ def get_item_link(item_lst):
 
     for idx, item in enumerate(item_lst):
         gate_link = item['link']
-        sleep(0.1)
         response = requests.get(gate_link, headers=gate_link_headers)
         document = bs(response.text, 'html.parser')
         item_link = document.select('#wrap > div.product_bridge_product__n_89z > a.product_btn_link__XRWYu')[1].attrs['href']
@@ -169,7 +170,6 @@ def get_item_link(item_lst):
             print(f'{idx}번째 상품은 네이버 쇼핑몰 웹페이지에서 제공되는 상품이 아닙니다.')
         else:
             item_lst[idx]['link'] = item_link_rd
-            item_lst[idx]['gate_link'] = gate_link
             item_lst_pp.append(item_lst[idx])
             print(f'{idx}번째 상품 추가 완료')
 

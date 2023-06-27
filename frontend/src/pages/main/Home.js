@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {Send} from "../../components";
+import {Send_api} from "../../components";
 import styles from "../../styles/Home.module.css";
 import Slider from "../Slider";
+import axios from "axios";
 
 const Home = () => {
     const [currentPage, setCurrentPage] = useState('first');
@@ -53,13 +54,23 @@ const FirstPage = ({inputValue, handleInputChange, handleButtonClick}) => {
     );
 };
 
-const SecondPage = ({goToThirdPage, inputValue}) => {
-    const [selectedItems, setSelectedItems] = useState([]);
-
-    const handleItemClick = (category, value) => {
-        const newItem = {category, value};
-        setSelectedItems((prevItems) => [...prevItems, newItem]);
-    };
+const SecondPage = ({ inputValue, goToThirdPage}) => {
+    const [result, setResult] = useState([]);
+    
+    useEffect(() => {
+        const url = "http://127.0.0.1:8000/main/search1/"
+        // let result = []
+        let data = {
+            "query": '"'+ inputValue +'"'
+        }   
+        axios.post(url, data)
+        .then(function (response) {
+            setResult(JSON.stringify(response.data))
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }, []);
 
     return (
         <div className={styles.home_container2}>
@@ -73,7 +84,7 @@ const SecondPage = ({goToThirdPage, inputValue}) => {
             <div>
             <div className={styles.home_mainguide}>상세 검색을 위해 카테고리를 불러오겠습니다.</div>
                 <div className={styles.home_search_box3}>
-                    <CategoryBoxes onItemSelect={handleItemClick} selectedItems={selectedItems}/>
+                    <CategoryBoxes result = {result}/>
                 </div>
             </div>
             <div>
@@ -198,23 +209,15 @@ const ForthPage = () => {
     
 };
 
-function CategoryBoxes({onItemSelect, selectedItems}) {
+const CategoryBoxes = ({ result })=> {   
     return (
         <div className={styles.catebox_body}>
-            {detail_category.map((item, index) => (
-                <div className={styles.catebox_box1} key={item.category}>
-                    <div className={styles.catebox_index1}>{index + 1}. 사과의 '{item.category}'를 추천해주세요(0을 누를 시 생략)</div>
+            {result && result.map((item, index) => (
+                <div className={styles.catebox_box1} key={item}>
+                    <div className={styles.catebox_index1}>{index + 1}. 사과의 '{item}'를 추천해주세요(0을 누를 시 생략)</div>
                     <div className={styles.catebox_index2}>
-                        {item.car_index.map((value) => (
-                            <div
-                                className={`${styles.catebox_index3} ${
-                                    selectedItems.some((selectedItem) => selectedItem === value) ? styles.selected : ''
-                                }`}
-                                key={value}
-                                onClick={() => onItemSelect(value)}
-                            >
-                                {value}
-                            </div>
+                        {item.cate_lst.map((index) => (
+                            <div className={styles.catebox_index3} key={index}>{index}</div>
                         ))}
                     </div>
                 </div>
@@ -226,23 +229,23 @@ function CategoryBoxes({onItemSelect, selectedItems}) {
 const detail_category = [
     {
         category: "카테고리",
-        car_index: ["원진", "생활/건강", "가구/인테리어", "출산/육아", "디지털/가전"],
+        cate_lst: ["원진", "생활/건강", "가구/인테리어", "출산/육아", "디지털/가전"],
     },
     {
         category: "브랜드",
-        car_index: ["늘품", "산지애", "다농이네", "산들네", "과일꾼", "장길영사과"],
+        cate_lst: ["늘품", "산지애", "다농이네", "산들네", "과일꾼", "장길영사과"],
     },
     {
         category: "키워드 추천",
-        car_index: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사과"],
+        cate_lst: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사과"],
     },
     {
         category: "키워드 추천",
-        car_index: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사"],
+        cate_lst: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사"],
     },
     {
         category: "키워드 추천",
-        car_index: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사과"],
+        cate_lst: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사과"],
     },
 ];
 
