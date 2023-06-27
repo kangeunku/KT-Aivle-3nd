@@ -18,23 +18,31 @@ from django.contrib.auth import login, authenticate, logout
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 # 비밀번호 변경   # insomnia에서 비밀번호 변경에서 crsf 오류 뜸 포기함 
+
 @method_decorator(csrf_exempt, name = "dispatch")
 class SetPasswordAPI(APIView): # View 쓰니깐 405 error뜸
     
+    # permission_classes = (IsAuthenticated, ) # 로그인한 사용자만 접근 가능
     
-    permission_classes = [IsAuthenticated] # 로그인한 사용자만 접근 가능
-    
-    def put(self, request):
+    def post(self, request):
         try:
             user = Users.objects.get(username=request.user.username)
+            print(request.user.username)
+            
+            print(request.data)
+            print('*'*10)
+            print(request.data.get('current_password'))
+            print('*'*10)
+            print(request.data.get('new_password'))
+            print('*'*10)
         except Users.DoesNotExist:
-            return Response({'status': 'fail'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'status': 'fail1'}, status=status.HTTP_404_NOT_FOUND)
 
         current_password = request.data.get('current_password') # 현재 비밀번호
         new_password = request.data.get('new_password') # 바꿀 비밀번호
-
+        print(current_password, new_password)
         if not user.check_password(current_password):
-            return Response({'status': 'fail'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'status': 'fail2'}, status=status.HTTP_400_BAD_REQUEST)
         
         # 1.이건 비밀번호를 변경하면 로그아웃이 되서 변경한 비밀번호로 다시 로그인해야함
         user.set_password(new_password)

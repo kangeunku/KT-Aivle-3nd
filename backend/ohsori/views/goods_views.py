@@ -29,7 +29,7 @@ def index(request):
     return HttpResponse('I am goods.index')
 
 
-# @api_view(['GET', 'POST'])
+@api_view(['GET', 'POST'])
 def get_details(goods_url):
     product_id = save_goods_imgs_premium(goods_url)
         
