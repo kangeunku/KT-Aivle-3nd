@@ -17,6 +17,8 @@ from ..serializers import UsersSerialize, GoodsSerialize, BasketsSerialize, FaqS
 from ..models import Users, Goods, Baskets, Faq, Qna, Survey
 from .goods_views import *
 
+
+@method_decorator(csrf_exempt, name = "dispatch")
 class GoodsAPI(APIView): # 상품 정보 API 1
     permissions_classes = [IsAuthenticated]
     def get(self, request): # 상품 정보 요청 // goods_url
@@ -27,13 +29,13 @@ class GoodsAPI(APIView): # 상품 정보 API 1
             return Response(serializer.data, status = status.HTTP_200_OK) # 상품 정보 회신
         except Goods.DoesNotExist:
             goods_url = request.data.get('goods_url')
-            print('-' * 10)
+            print(request.data.get('goods_url'))
             result = get_details(goods_url)
             goods = Goods()
             goods.goods_url = goods_url
             goods.goods_name = "쏘리소리 오소리"
             goods.goods_star = result['detail_options']['goods_star']
-            goods.goods_price = result['detail_options']['goods_price']
+            goods.goods_price = 23424
             goods.goods_thumb = result['detail_options']['goods_thumb']
             goods.use_yn = "Y"
             goods.save()

@@ -40,7 +40,7 @@ class LoginAPI(KnoxLoginView):
         user = serializer.validated_data['user']
         
         # 로그인한 계정이 use_yn = "n" 인 경우 탈퇴한 회원으로 로그인 못함
-        if user.use_yn == 'n':
+        if user.use_yn == 'N':
             return Response({"message": "탈퇴한 회원입니다."}, status=status.HTTP_401_UNAUTHORIZED)
         
         login(request, user)

@@ -33,8 +33,8 @@ class RegisterSerialize(serializers.ModelSerializer):
         user = Users.objects.create_user(
             username=validated_data['username'],
             password=validated_data['password'],
-            nickname=validated_data.get('nickname', None),  # nickname 추가
-            use_yn='y') # 회원가입시 use_yn = 'y' 로 설정
+            nickname=validated_data.get('nickname', None)) # nickname 추가
+            
         return user
             
 class GoodsSerialize(serializers.ModelSerializer):

@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 class Users(AbstractUser):
     username = models.CharField(max_length=50, primary_key=True)
     nickname = models.TextField()
-    use_yn = models.CharField(max_length=2, help_text="사용여부") # y, n,
+    use_yn = models.CharField(max_length=2,default='Y', help_text="사용여부") # y, n,
     pass
 
 class CustomToken(models.Model):
