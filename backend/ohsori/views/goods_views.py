@@ -1,9 +1,7 @@
-from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
 
-from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 
 from ..APIs.google_Vision import ocr
@@ -24,16 +22,17 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 from ..models import Goods, Goods_summary
 from ..serializers import GoodsSerialize
-
-def index(request):
-    return HttpResponse('I am goods.index')
-
-
-@api_view(['GET', 'POST'])
+    
+        
+@api_view(['GET'])
 def get_details(request):
-    if request.method == 'GET':
-        return Response({'status' : '사용자가 상품의 상세 페이지에 접근할때, DB에 상품이 존재하지 않는다는 것이 확정된 후, 접근하는 것이 올바른 경로입니다.'})
-    else:
+    try:
+        goods_url = request.data.get('goods_url')
+        goods = Goods.objects.get(goods_url = goods_url)
+        serializer = GoodsSerialize(goods)
+        return Response(serializer.data, status = status.HTTP_200_OK) # 상품 정보 회신
+    
+    except Goods.DoesNotExist:
         goods_url = request.data.get('goods_url')
         # 상세 이미지 저장 후 product_id 가져오기
         product_id = save_goods_imgs_premium(goods_url)
@@ -41,28 +40,27 @@ def get_details(request):
         result = {'detail_options' : get_goods_options(goods_url),
                 'output' : ocr2summary_premium(product_id),
                 }
-
     # DB로 가기
-    goods = Goods() 
-    goods.goods_url = goods_url
-    goods.goods_name = result['detail_options']['goods_name']
-    goods.goods_star = result['detail_options']['goods_star']
-    goods.goods_price = int(result['detail_options']['goods_price'].replace(',', ''))
-    goods.goods_thumb = result['detail_options']['goods_thumb']
-    goods.use_yn = "Y"
-    goods.save()
-    
-    goods_no = Goods.objects.only('goods_no').get(goods_url = goods_url)
-    # goods_no = Goods.objects.get(goods_no = Goods.objects.get(goods_url = goods_url).only('goods_no'))
-    goods_summary = Goods_summary()
-    goods_summary.goods_no = goods_no
-    goods_summary.summary = {'is_show' : result['output']['is_show'],
-                             'summary_lst' : result['output']['summary_lst']}
-    goods_summary.whole_summary = result['output']['final_summary']
-    goods_summary.detail = result['detail_options']
-    goods_summary.save()
+        goods = Goods() 
+        goods.goods_url = goods_url
+        goods.goods_name = result['detail_options']['goods_name']
+        goods.goods_star = result['detail_options']['goods_star']
+        goods.goods_price = int(result['detail_options']['goods_price'].replace(',', ''))
+        goods.goods_thumb = result['detail_options']['goods_thumb']
+        goods.use_yn = "Y"
+        goods.save()
+        
+        goods_no = Goods.objects.only('goods_no').get(goods_url = goods_url)
+        # goods_no = Goods.objects.get(goods_no = Goods.objects.get(goods_url = goods_url).only('goods_no'))
+        goods_summary = Goods_summary()
+        goods_summary.goods_no = goods_no
+        goods_summary.summary = {'is_show' : result['output']['is_show'],
+                                'summary_lst' : result['output']['summary_lst']}
+        goods_summary.whole_summary = result['output']['final_summary']
+        goods_summary.detail = result['detail_options']
+        goods_summary.save()
 
-    return Response(result) # 프론트로가기
+        return Response(result) # 프론트로가기
 # {"goods_url":""}
 
 

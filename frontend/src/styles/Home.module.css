@@ -1,7 +1,37 @@
 .home_container {
     position: relative;
     overflow-x: hidden;
+    top:30px;
+    left:50px;
+    height: 500px;
 }
+
+.homebox1{
+    display: flex;
+    align-items: center;
+    align-items: flex-end;
+}
+
+.page2logo2 {
+    position: relative;
+    left: 0%;
+    width: 282px;
+    height: 84px;
+    background-image: url(../assets/img/ohsori_logo2.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    justify-content: flex-end;
+}
+
+.homebox11{
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    margin-left: 10px;
+    color:#191919;
+}
+
 
 .home_img1 {
     position:relative;
@@ -18,46 +48,55 @@
     color: #121212;
     left:50px;
     top: 130px;
-
-
 }
 
 .home_search_box1 {
     position: relative;
-    width: 600px;
+    width: 1000px;
     height: 50px;
     background-color: white;
     border-Radius: 12px;
     left:50px;
-    top: 150px;
+    top: 50px;
 
 }
 
 .home_overlay_main {
     display: grid;
     place-items: center start;
-    position: relative;
     font-Size: 24px;
-    margin-Top: 24px;
-    margin-Bottom: 24px;
-    margin-left: 10px;
-    width: 80%;
-    height:100%;
-    border: None;
+    border: 3px solid rgba(25, 25, 25, 0.5);
+    position: relative;
+    width: 900px;
+    height: 70px;
+    background-color: white;
+    border-Radius: 12px;
 }
+.home_search_box1 {
+        place-items: center start;
+        font-Size: 24px;
+        border: None;
+        position: relative;
+        width: 1200px;
+        height: 70px;
+        left:50px;
+        top: 50px;
+    }
 
 .home_button1 {
+    display:flex;
     position: absolute;
-    top: 50%;
-    left: 90%;
-    transform: translate(-50%, -50%);
     width: 38px;
     height: 38px;
-    background-image: url(../assets/img/search_button.png);
+    background-image: url(../assets/img/search_button2.png);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 12px;
+    left:850px;
+    align-items: center;
+    top: 17px;
+    cursor: pointer;
     }
 
 .home_container2{
