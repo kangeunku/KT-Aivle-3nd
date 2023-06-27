@@ -2,7 +2,7 @@ from pathlib import Path
 import os
 import environ
 
-AUTH_USER_MODEL = 'ohsori.Users'
+AUTH_USER_MODEL = 'account.Users'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'corsheaders', # CORS 추가
     'ohsori',
     'knox',
-    'drf_yasg',
+    'account',
 ]
 
 MIDDLEWARE = [

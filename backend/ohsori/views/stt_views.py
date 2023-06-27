@@ -5,14 +5,16 @@ import sys, os
 
 from google.cloud import speech
 
-import pyaudio, cgi
 from six.moves import queue
 from django.conf import settings
 import base64, wave
 
 from rest_framework.decorators import api_view
-
 from rest_framework.response import Response
+
+from symspellpy_ko import KoSymSpell, Verbosity #symspellpy 기반 단어 교정 라이브러리
+from jamo import h2j, j2hcj
+from .unicode import join_jamos # unicode.py 불러오기
 
 @api_view(['GET'])
 def transcribe_streaming(request) -> speech.RecognitionConfig: #stream_file : bs64
@@ -22,7 +24,7 @@ def transcribe_streaming(request) -> speech.RecognitionConfig: #stream_file : bs
         stream_file = request.data.get('bs64')
         wav_data = base64.b64decode(stream_file)
         
-        wav_path = os.path.join(settings.AUDIO_PATH, 'eunku'+'_sound.wav') #user_no -> username 지금은 패스
+        wav_path = os.path.join(settings.AUDIO_PATH, 'eunku'+'_sound.wav') #user_no -> username 지금은 패스 !! 변경필요
         with open(wav_path, 'wb') as file:
             file.write(wav_data)
         with open(wav_path, "rb") as audio_file:
@@ -49,13 +51,12 @@ def transcribe_streaming(request) -> speech.RecognitionConfig: #stream_file : bs
         return Response(dict)
 
 
-from symspellpy_ko import KoSymSpell, Verbosity #symspellpy 기반 단어 교정 라이브러리
-from jamo import h2j, j2hcj
-from .unicode import join_jamos # unicode.py 불러오기
+
 
 def word_correction(text):
     whole_words = ['검색', '찜목록', '회원정보수정', '고객센터', 
-                   '더보기','일번','이번','삼번','사번','오번']
+                   '더보기','일번','이번','삼번','사번','오번', '1번',
+                   '2번','3번','4번','5번', '회원 정보 수정','고객 센터','찜 목록','더 보기']
     
     if text in whole_words:
         return text
