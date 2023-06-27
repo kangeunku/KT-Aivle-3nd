@@ -93,12 +93,12 @@ const Send_api = (state, data) => {
     const url = "http://127.0.0.1:8000/"
 
     const state_dir = {
-        0 : "main/search1/", // 카테고리 검색
-        1 : "main/search2/", // 상품 검색
-        2 : "goods/test/", // 상품 조회
-        3 : "register/", // 회원가입
-        4 : "login/",  // 로그인
-        5 : 'stt/',
+        0 : "v1/search1/", // 카테고리 검색
+        1 : "v1/search2/", // 상품 검색
+        2 : "v1/detail/", // 상품 조회
+        3 : "v1/register/", // 회원가입
+        4 : "v1/login/",  // 로그인
+        5 : 'v1/stt/',
     }
     const url_fix = url + state_dir[state]
     
