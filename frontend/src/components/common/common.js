@@ -88,7 +88,32 @@ const Hotkey_start = () => {
     );
 };
 
-export { Send, Stt_common, Hotkey_start };
+// 장고 전송 함수, state  
+const Send_api = (state, data) => {
+    const url = "http://127.0.0.1:8000/"
+
+    const state_dir = {
+        0 : "main/search1/", // 카테고리 검색
+        1 : "main/search2/", // 상품 검색
+        2 : "goods/test/", // 상품 조회
+        3 : "register/", // 회원가입
+        4 : "login/",  // 로그인
+        5 : 'stt/',
+    }
+    const url_fix = url + state_dir[state]
+    
+    axios.post(url_fix, data)
+    .then(function (response) {
+        console.log(response);
+        console.log(JSON.stringify(response.data))
+        return JSON.stringify(response.data)
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+};
+
+export { Send, Stt_common, Hotkey_start, Send_api };
 
 
 

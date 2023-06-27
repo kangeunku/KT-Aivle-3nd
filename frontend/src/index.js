@@ -8,13 +8,15 @@ import {CSRFToken, Modal} from "./components";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  <>
     <CSRFToken />
     {/* 라우터 사용하기위함 */}
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </React.StrictMode>
+  </>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

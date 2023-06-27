@@ -9,5 +9,10 @@ client = vision.ImageAnnotatorClient(client_options=client_options)
 def ocr(raw_image):
     image = vision.Image(content=raw_image)
     response = client.text_detection(image=image)
-    # texts = response.text_annotations
-    return response.text_annotations
+    texts = response.text_annotations
+    if len(texts) > 0:
+        whole_extraction = texts[0].description
+    else:
+        whole_extraction = ''
+    print('OCR 완료')
+    return whole_extraction
