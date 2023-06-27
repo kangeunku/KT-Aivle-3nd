@@ -17,6 +17,7 @@ class Test(APIView):
         print(request.session)
         print(request.user.is_authenticated)
         print(request.user.username)
+        print(request.user.use_yn)
 
         return Response('Good')
 

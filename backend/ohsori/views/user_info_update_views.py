@@ -82,7 +82,6 @@ class SetNicknameAPI(APIView):
 @method_decorator(csrf_exempt, name = "dispatch")
 class DeleteUserAPI(APIView):
     
-    
     permission_classes = [IsAuthenticated] # 로그인한 사용자만 접근 가능
     
     #def delete(self, request): # delete 쓰니깐 url에서 어떻게 탈퇴가 되는지 확인이 안됨
@@ -96,5 +95,13 @@ class DeleteUserAPI(APIView):
         if not user.check_password(password): # 비밀번호가 틀리면 fail
             return Response({'status': 'fail'}, status=status.HTTP_400_BAD_REQUEST)
 
-        user.delete() # 회원삭제
+        # user.delete() # 회원삭제 -> 우리는 회원정보 삭제가 아니라 use_yn = "n" 으로만 바꾸고 db에 저장
+        user.use_yn = 'n'
+        user.save()
+        
+        # 로그아웃 처리 및 토큰 삭제(탈퇴한 회원의 토큰은 custom token 테이블에 저장될 필요가 없다고 판단)
+        logout(request)
+        CustomToken.objects.filter(user=user).delete()
+        
+        
         return Response({'status': 'success'})

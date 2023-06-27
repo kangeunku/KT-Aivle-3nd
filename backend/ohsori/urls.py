@@ -32,7 +32,7 @@ urlpatterns = [
     path('test_request/', test_request.Test.as_view(), name='test_request'),
     path('setpassword/', user_info_update_views.SetPasswordAPI.as_view(), name='setpassword'), # 비밀번호 변경
     path('setnickname/', user_info_update_views.SetNicknameAPI.as_view(), name='setpassword'), # 별명 변경 
-    path('deleteuser/', user_info_update_views.DeleteUserAPI.as_view(), name='setpassword'), # 회원 탈퇴
+    path('deleteuser/', user_info_update_views.DeleteUserAPI.as_view(), name='setpassword'), # 회원 탈퇴(실제 탈퇴가 아니라 use_yn = 'n')
 
     path('selenium/', selenium_views.index, name='selenium'),
 
