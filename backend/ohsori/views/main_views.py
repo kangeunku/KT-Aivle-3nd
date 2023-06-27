@@ -1,17 +1,11 @@
-from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
-
-from django.http import HttpResponse, JsonResponse
 
 import requests
 from bs4 import BeautifulSoup as bs
 from urllib import parse
 from time import sleep
-
-def index(request):
-    return HttpResponse('I am main.index')
 
 @api_view(['POST'])
 def first_search(request):
