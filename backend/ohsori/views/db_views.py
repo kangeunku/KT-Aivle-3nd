@@ -31,7 +31,7 @@ class Baskets_Add_DelAPI(View):
         data = json.loads(request.body)
         # goods= Goods.objects.get(goods_url = request.POST.get('goods_url'))
         baskets = Baskets()
-        baskets.goods_no = Goods.objects.only('goods_no').get(goods_url = data['    '])
+        baskets.goods_no = Goods.objects.only('goods_no').get(goods_url = data['goods_url'])
         # baskets.goods_no = Goods.objects.get(goods_no = Goods.objects.get(goods_url = data['goods_url'].only('goods_no'))
         baskets.username = Users.objects.get(username = request.user.username)
         baskets.use_yn = 'Y'
