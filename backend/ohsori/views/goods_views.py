@@ -22,7 +22,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
-from ..models import Goods
+from ..models import Goods, Goods_summary
 from ..serializers import GoodsSerialize
 
 def index(request):
@@ -30,12 +30,41 @@ def index(request):
 
 
 @api_view(['GET', 'POST'])
-def get_details(goods_url):
-    product_id = save_goods_imgs_premium(goods_url)
+def get_details(request):
+    if request.method == 'GET':
+        return Response({'status' : '사용자가 상품의 상세 페이지에 접근할때, DB에 상품이 존재하지 않는다는 것이 확정된 후, 접근하는 것이 올바른 경로입니다.'})
+    else:
+        goods_url = request.data.get('goods_url')
+        # 상세 이미지 저장 후 product_id 가져오기
+        product_id = save_goods_imgs_premium(goods_url)
         
-    result = {'detail_options' : get_goods_options(goods_url),
-                  'output' : ocr2summary_premium(product_id)}
-    return result
+        result = {'detail_options' : get_goods_options(goods_url),
+                'output' : ocr2summary_premium(product_id),
+                }
+
+    # DB로 가기
+    goods = Goods() 
+    goods.goods_url = goods_url
+    goods.goods_name = result['detail_options']['goods_name']
+    goods.goods_star = result['detail_options']['goods_star']
+    goods.goods_price = int(result['detail_options']['goods_price'].replace(',', ''))
+    goods.goods_thumb = result['detail_options']['goods_thumb']
+    goods.use_yn = "Y"
+    goods.save()
+    
+    goods_no = Goods.objects.only('goods_no').get(goods_url = goods_url)
+    # goods_no = Goods.objects.get(goods_no = Goods.objects.get(goods_url = goods_url).only('goods_no'))
+    goods_summary = Goods_summary()
+    goods_summary.goods_no = goods_no
+    goods_summary.summary = {'is_show' : result['output']['is_show'],
+                             'summary_lst' : result['output']['summary_lst']}
+    goods_summary.whole_summary = result['output']['final_summary']
+    goods_summary.detail = result['detail_options']
+    goods_summary.save()
+
+    return Response(result) # 프론트로가기
+# {"goods_url":""}
+
 
 # @api_view(['GET', 'POST'])
 # def img_preprocess(request):
@@ -66,7 +95,7 @@ def save_goods_imgs(goods_url):
     options.add_argument("--disable-dev-shm-usage")
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.get(goods_url)
-    driver.implicitly_wait(4)
+    driver.implicitly_wait(2)
 
     div_elements = driver.find_elements(By.CLASS_NAME, 'se-image')
 
@@ -135,7 +164,7 @@ def save_goods_imgs_premium(goods_url):
     options.add_argument("--disable-dev-shm-usage")
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.get(goods_url)
-    driver.implicitly_wait(4)
+    driver.implicitly_wait(2)
 
     div_elements = driver.find_elements(By.CLASS_NAME, 'se-image')
 
@@ -232,7 +261,7 @@ def get_goods_options(goods_url):
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
     driver.get(goods_url)
-    driver.implicitly_wait(4)
+    driver.implicitly_wait(2)
     
     option_info = {}
     
@@ -249,6 +278,11 @@ def get_goods_options(goods_url):
     
     # 상품 가격 및 상세 옵션에 대한 정보를 담고 있는 엘리먼트
     fieldset_element = driver.find_element(By.CLASS_NAME, '_10hph879os')
+    
+    # 상품 이름
+    goods_name_element = fieldset_element.find_element(By.CLASS_NAME, '_22kNQuEXmb')
+    goods_name = goods_name_element.text
+    option_info['goods_name'] = goods_name
     
     # 상품 가격
     goods_price_element = fieldset_element.find_elements(By.CLASS_NAME, '_1LY7DqCnwR')
@@ -336,6 +370,8 @@ def dfs_get_item_opt(current, max_depth, category_button, driver):
         # 정보 추출
         driver.implicitly_wait(1)
         extracted = [x.text for x in last_listbox]
+        
+        show_necessary.click()
 
         return extracted
         
