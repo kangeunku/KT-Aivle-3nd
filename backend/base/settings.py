@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'corsheaders', # CORS 추가
     'ohsori',
     'knox',
-    'drf_yasg',
     'account',
 ]
 
