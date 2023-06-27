@@ -3,16 +3,11 @@ import json
 from os import path
 import environ
 
-if __name__=='__main__':
-    import sys
-    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
-    from base.settings import BASE_DIR
-else:
-    from ..base.settings import BASE_DIR
+from django.conf import settings
 
 env = environ.Env(DEBUG=(bool, True))
 environ.Env.read_env(
-    env_file=path.join(BASE_DIR, '.env')
+    env_file=path.join(settings.BASE_DIR, '.env')
 )
 
 CLIENT_ID = env('CLOVA_CLIENT_ID')
@@ -25,7 +20,7 @@ header = {
     'X-NCP-APIGW-API-KEY-ID': CLIENT_ID,
     'X-NCP-APIGW-API-KEY': CLIENT_SECRET
 }
-def request_summary(text):
+def request_summary(text, output_len):
     data = {
         'document': {
             'content': f'{text}'
@@ -34,7 +29,7 @@ def request_summary(text):
             'language': 'ko',
             'model': 'general',
             'tone': 2,
-            'summaryCount': 2
+            'summaryCount': output_len
         }
     }
 
@@ -42,8 +37,10 @@ def request_summary(text):
     rescode = response.status_code
 
     if rescode == 200:
-        print(response.text)
+        print('요약 완료 - clova_summary : 입력된 문장에 대한 요약이 완료되었습니다.')
+        return response.json()['summary']
     else:
-        print('Error: ' + response.text)
+        print('Error 발생 - clova_summary : 입력 문장이 너무 짧습니다.')
+        return ''
 
     # return -> {"summary":"text"}

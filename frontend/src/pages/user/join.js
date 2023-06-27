@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { Send_api } from "../../components";
 
 const Join = () => {
     const [joinState, setjoinState] = useState(1);
@@ -8,7 +9,6 @@ const Join = () => {
             console.log("end")
         }
         else{
-            console.log("11111")
             setjoinState(joinState + 1);
         }
     }
@@ -25,7 +25,6 @@ const Join = () => {
         return (
             <>
                 <Joinsteptwo />
-                <button className="next_step_btn" onClick={()=> next_stage('end')}>다음</button>
             </>
         );
     }
@@ -70,12 +69,20 @@ const Joinstepone = () => {
 }
 
 const Joinsteptwo = () => {
+    const[form, setFrom] = useState({
+        "username": "",
+        "password": "",
+        "password2": "",
+        "nickname": ""
+    });
+
+    const join_btn = () => {
+        let response_data = Send_api(3,form)
+    }
+
     return (
         <>
-            {/* <h2 className="subtitle_join">
-                <a>회원가입</a>
-            </h2> */}
-            <div className="choice_tab">
+           <div className="choice_tab">
                 <h3 className="welcome">
                     개인정보 입력
                 </h3>
@@ -83,22 +90,23 @@ const Joinsteptwo = () => {
                 <div className="step_two_form">
                     <label>
                         아이디 입력(1)
-                        <input type="input" className="input_form" />
+                        <input type="input" className="input_form" value={form.username} onChange={e=> setFrom({...form, username: e.target.value})}/>
                     </label> 
                     <label>
                         비밀번호 입력(2)
-                        <input type="password" className="input_form" />
+                        <input type="password" className="input_form" value={form.password} onChange={e=> setFrom({...form, password: e.target.value})}  />
                     </label> 
                     <label>
                         비밀번호 확인(3)
-                        <input type="password" className="input_form" />
+                        <input type="password" className="input_form" value={form.password2} onChange={e=> setFrom({...form, password2: e.target.value})} />
                     </label> 
                     <label>
                         별명 입력(4)
-                        <input type="input" className="input_form" />
+                        <input type="input" className="input_form" value={form.nickname}  onChange={e=> setFrom({...form, nickname: e.target.value})}/>
                     </label>  
                 </div>
             </div>
+            <button className="next_step_btn" onClick={()=> join_btn()}>회원가입</button>
             
         </>
     );

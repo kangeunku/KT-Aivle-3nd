@@ -1,7 +1,37 @@
 .home_container {
     position: relative;
     overflow-x: hidden;
+    top:30px;
+    left:50px;
+    height: 500px;
 }
+
+.homebox1{
+    display: flex;
+    align-items: center;
+    align-items: flex-end;
+}
+
+.page2logo2 {
+    position: relative;
+    left: 0%;
+    width: 282px;
+    height: 84px;
+    background-image: url(../assets/img/ohsori_logo2.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    justify-content: flex-end;
+}
+
+.homebox11{
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    margin-left: 10px;
+    color:#191919;
+}
+
 
 .home_img1 {
     position:relative;
@@ -18,43 +48,55 @@
     color: #121212;
     left:50px;
     top: 130px;
-
-
 }
 
 .home_search_box1 {
     position: relative;
-    width: 600px;
+    width: 1000px;
     height: 50px;
     background-color: white;
     border-Radius: 12px;
     left:50px;
-    top: 150px;
+    top: 50px;
 
 }
 
 .home_overlay_main {
     display: grid;
     place-items: center start;
-    position: relative;
     font-Size: 24px;
-    margin-Top: 24px;
-    margin-Bottom: 24px;
-    margin-left: 10px;
+    border: 3px solid rgba(25, 25, 25, 0.5);
+    position: relative;
+    width: 900px;
+    height: 70px;
+    background-color: white;
+    border-Radius: 12px;
 }
+.home_search_box1 {
+        place-items: center start;
+        font-Size: 24px;
+        border: None;
+        position: relative;
+        width: 1200px;
+        height: 70px;
+        left:50px;
+        top: 50px;
+    }
 
 .home_button1 {
+    display:flex;
     position: absolute;
-    top: 50%;
-    left: 90%;
-    transform: translate(-50%, -50%);
     width: 38px;
     height: 38px;
-    background-image: url(../assets/img/search_button.png);
+    background-image: url(../assets/img/search_button2.png);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 12px;
+    left:850px;
+    align-items: center;
+    top: 17px;
+    cursor: pointer;
     }
 
 .home_container2{
@@ -182,98 +224,4 @@
 .catebox_index3 {
     margin: 0 5px;
     margin-left: 20px;
-}
-
-
-/* 아래 수정 */
-.RecommendBox {
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    align-items: center;
-    margin: 50px 10vw;
-    width: 50vw;
-    border:3px solid white; 
-}
-
-.GoodsBox {
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    width: 40vw;
-    height: 300px;
-    border: 2px solid #285a43;
-    margin: 10px 10px;
-    overflow: auto;
-    border-radius:5px;
-}
-
-.Goods_img1 {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 10px;
-    margin-right: 2px;
-    position: relative;
-    height:96%;
-    width:50%;
-    transition: all 0.5s linear;
-    border:1.5px solid #B4E0A0;
-    background-image: url(../assets/img/apple_sample.JPG);
-}
-
-.GoodsInfo {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 10px;
-    margin-right: 2px;
-    position: relative;
-    height:96%;
-    width:50%;
-    transition: all 0.5s linear;
-    overflow: auto;
-    padding:10px;
-}
-.InfoText {
-    margin-top: 50px;
-    margin-left: 40px;
-    position: relative;
-    height:30%;
-    width:95%;
-    transition: all 0.5s linear;
-    text-align: center;
-    font-size: 45px;
-    border: none;
-
-}
-
-.Resultpopup {
-    position: fixed;
-    background-color: rgba(255, 255, 255, 1);
-    border-radius: 5px;
-    width:1500px;
-    height:1000px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    border: 1px solid rgba(0, 0, 0, 0.4);
-    border-radius: 5px;
-}
-
-.buy_button1 {
-    position: absolute;
-    left:50%;
-    top:200px;
-    background-color : white;
-    width : 180px;
-    height: 40px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 10px;
-    color:white;
-    font-size:20px;
-    font-weight:700;
-    text-align: center;
-    padding:10px;
-    border:3px solid #285a43;
-    color : #285a43
 }

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Users, Goods, Baskets, Faq, Qna, Survey, CustomToken
+from .models import Users, Goods, Baskets, Faq, Qna, Survey, CustomToken, Goods_summary
 from django.contrib.auth.admin import UserAdmin
 
 
@@ -18,5 +18,6 @@ admin.site.register(Baskets)
 admin.site.register(Faq)
 admin.site.register(Qna)
 admin.site.register(Survey)
+admin.site.register(Goods_summary)
 
 
