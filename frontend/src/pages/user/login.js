@@ -25,7 +25,10 @@ const Login = ({ changeislogn }) => {
             // setResult(response.data);
             console.log(JSON.stringify(response.statusText));
             const res = JSON.stringify(response.statusText);
+            
+            // 로그인 처리및 홈이동
             changeislogn(true)
+            navigate('/home')
             // if(res === '"OK"'){
             //     navigate();
             // }

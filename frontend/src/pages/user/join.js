@@ -4,6 +4,7 @@ import Modal from "./modal.js"
 import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
 // import {local_Hotkey} from './join';
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Join = ({changeislogn}) => {
     const [joinState, setjoinState] = useState(1);
@@ -72,7 +73,7 @@ const Join = ({changeislogn}) => {
 
 const Joinstepone = () => {
     const [ModalState, setModalState] = useState('false'); //모달창의 상태를 보관해 둘 useState입니다.
-
+    
     function OnOffModal() { //모달창 상태를 변경하는 함수입니다.
         if (ModalState === true) {
             setModalState(false);
@@ -228,7 +229,7 @@ const Joinstepone = () => {
 }
 
 const Joinsteptwo = ({changeislogn}) => {
-    
+    const navigate = useNavigate(); 
     const[form, setFrom] = useState({
         "username": "",
         "password": "",
@@ -240,19 +241,25 @@ const Joinsteptwo = ({changeislogn}) => {
         nickname_val : false,
     });
 
-    const join_btn = async () => {
-        const url = "http://127.0.0.1:8000/v1/register/"
+    // const join_btn = async () => {
+    //     const url = "http://127.0.0.1:8000/v1/register/"
 
-        await axios.post(url, form)
-        .then(function (response) {
-            // console.log(JSON.stringify(response));
-            const res = JSON.stringify(response.statusText);
-            changeislogn(true)
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    };
+    //     await axios.post(url, form)
+    //     .then(function (response) {
+    //         // console.log(JSON.stringify(response));
+    //         const res = JSON.stringify(response.statusText);
+    //         changeislogn(true)
+    //     })
+    //     .catch(function (error) {
+    //         console.log(error);
+    //     });
+    // };
+
+    const join_btn = () => {
+        
+        changeislogn(true)
+        navigate('/home')
+    }
 
     const handleUsernameChange = (e) => {
         const username = e.target.value;
