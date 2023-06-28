@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Modal } from "../../components";
-import { Send_api } from "../../components";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import {  Home } from "../../pages";
 import {  Header } from "../../components";
@@ -25,9 +24,9 @@ const Login = () => {
             console.log(JSON.stringify(response.statusText));
             const res = JSON.stringify(response.statusText);
 
-            if(res === '"OK"'){
-                navigate();
-            }
+            // if(res === '"OK"'){
+            //     navigate();
+            // }
             
         })
         .catch(function (error) {
