@@ -241,7 +241,7 @@ const Joinsteptwo = () => {
 
     const join_btn = () => {
         let response_data = Send_api(3,form)
-        console.log('입력성공')
+        console.log('회원가입요청 성공')
     }
 
     const handleUsernameChange = (e) => {
