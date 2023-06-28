@@ -33,7 +33,7 @@ const Home = () => {
         {currentPage === 'first' && (<FirstPage inputValue={inputValue} handleInputChange={handleInputChange} handleButtonClick={handleButtonClick} />)}
         {currentPage === 'second' && <SecondPage inputValue={inputValue} goToThirdPage={goToThirdPage}/>}
         {currentPage === 'third' && <ThirdPage  goToForthPage={goToForthPage}/>}
-        {currentPage === 'forth' && <ForthPage/>}
+        {currentPage === 'forth' && <ForthPage goToThirdPage={goToThirdPage}/>}
       </div>
     );
 };
@@ -202,9 +202,23 @@ const ThirdPage = ({goToForthPage}) => {
     )
 }
 
-const ForthPage = () => {
-    return(
-        <Slider/>
+const ForthPage = ({goToThirdPage}) => {
+    const [PopupState, setPopupState] = useState(true);
+
+    function OnOffPopup(){
+        if(PopupState===true){
+            setPopupState(false);
+        }
+        else{
+            setPopupState(true);
+        }
+    }
+    return (
+        <div>
+        {PopupState === true?
+        <Slider setPopupState={setPopupState}/>
+        : <FirstPage goToThirdPage={goToThirdPage()}></FirstPage>}
+        </div>
     )
     
 };

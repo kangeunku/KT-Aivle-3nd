@@ -1,11 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, forwardRef } from "react";
 import styled from "styled-components";
 
 const Resultpopup = styled.div`
     position: fixed;
     background-color: rgba(255, 255, 255, 1);
     border-radius: 5px;
-    width:1700px;
+    width:60vw;
     height:1000px;
     top: 50%;
     left: 50%;
@@ -57,7 +57,7 @@ const Row = styled.div`
 const Img = styled.img`
   margin: 0;
   margin: 0 20px;
-  margin-left:20px;
+  margin-left:0vw;
   position: relative;
   cursor: pointer;
   height:120px;
@@ -199,8 +199,8 @@ const MicroPic = styled.img`
     margin-left: 2px;
     margin-right: 2px;
     position: relative;
-    height:500px;
-    width:600px;
+    height:650px;
+    width:780px;
     transition: all 0.5s linear;
     border:3px solid #eaeaea; 
 `;
@@ -209,7 +209,7 @@ const MicroPic = styled.img`
 const RecommendBox = styled.div`
     display: flex;
     position: relative;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     transition: all 0.1s ease-in-out;
     margin-top : 50px;
@@ -219,6 +219,8 @@ const RecommendBox = styled.div`
     width:80vw;
     margin-left: 0vw;
     justify-content: center;
+    border:3px solid #eaeaea; 
+
 `;
 //    border:3px solid #eaeaea; 
 
@@ -271,7 +273,7 @@ const GoodsInfo1 = styled.textarea`
     margin-left: 10px;
     margin-right: 2px;
     position: relative;
-    height:30%;
+    height:40%;
     width:95%;
     transition: all 0.5s linear;
     text-align: center;
@@ -308,7 +310,7 @@ const MiniWrapper = styled.div`
   width: 600px;
   background-color: #B4E0A0;
   box-shadow:5px 5px 5px #c0c0c0;
-  margin-left:50px;
+  margin-left:-12vw;
 `;
 
 const MiniTitle = styled.span`
@@ -340,6 +342,9 @@ const WantedImg = [
   "assets/img/LeGOAT.png",
 ];
 
+
+
+
 const wantedTitle = [
   "오전 9시 이전 주문건 당일배송",
   "2022 한국 소비자 산업평가 사과 부문 우수상 수상!",
@@ -369,7 +374,24 @@ const wantedDes = [
 //     "assets/img/rightBtn.jpg"
 // ]
 
-function Slider() {
+const Slider = forwardRef((props, ref) =>{
+
+  //팝업 열고 닫기
+  let wrapperRef = useRef();
+
+  useEffect(()=>{
+    document.addEventListener('mousedown', handleClickOutside);
+    return()=>{
+        document.removeEventListener('mousedown', handleClickOutside);
+    }
+  })
+
+  const handleClickOutside=(event)=>{
+    if(wrapperRef && !wrapperRef.current.contains(event.target)){
+        props.setPopupState(false);
+    }
+  }
+
   //슬라이드
   const slideRef = useRef(null);
   const [index, setIndex] = useState(0); // 인덱스를 만들어줍니다.
@@ -476,8 +498,14 @@ function Slider() {
     };
   }, [index, isClick]);
   console.log(`브라우저 사이즈 : ${windowWidth}`);
+
+  function BtnEvent(){
+    //alert('모달창 내부 작업을 해도 모달창이 꺼지지 않습니다.');
+    props.setPopupState(false);
+  }
+
   return (
-    <Resultpopup>
+    <Resultpopup ref={wrapperRef}>
     <><><><><><LeftButton
       style={{
         left: windowWidth > 1800
@@ -526,7 +554,63 @@ function Slider() {
             }}
 
           >
+            <Container1>
+              <PrivewImg
+                style={{
+                  opacity: 0.5,
+                  width: windowWidth > 1200 ? null : `80vw`,
+                  height: windowWidth > 1200
+                    ? null
+                    : windowWidth < 770
+                      ? "185px"
+                      : "250px",
+                }}
+                src={WantedImg[morePrevImg3]}
+              ></PrivewImg>
+            </Container1>
 
+            <Container1>
+              <PrivewImg
+                style={{
+                  opacity: 0.5,
+                  width: windowWidth > 1200 ? null : `80vw`,
+                  height: windowWidth > 1200
+                    ? null
+                    : windowWidth < 770
+                      ? "185px"
+                      : "250px",
+                }}
+                src={WantedImg[morePrevImg2]}
+              ></PrivewImg>
+            </Container1>
+            <Container1>
+              <PrivewImg
+                style={{
+                  opacity: 0.5,
+                  width: windowWidth > 1200 ? null : `80vw`,
+                  height: windowWidth > 1200
+                    ? null
+                    : windowWidth < 770
+                      ? "185px"
+                      : "250px",
+                }}
+                src={WantedImg[morePrevImg]}
+              ></PrivewImg>
+            </Container1>
+            <Container1>
+              <PrivewImg
+                style={{
+                  opacity: 0.5,
+                  width: windowWidth > 1200 ? null : `80vw`,
+                  height: windowWidth > 1200
+                    ? null
+                    : windowWidth < 770
+                      ? "185px"
+                      : "250px",
+                }}
+                src={WantedImg[PrevImg]}
+              ></PrivewImg>
+            </Container1>
             <ImgWrapper>
               <Img
                 style={{
@@ -621,63 +705,7 @@ function Slider() {
 
             </Container1>
 
-            <Container1>
-              <PrivewImg
-                style={{
-                  opacity: 0.5,
-                  width: windowWidth > 1200 ? null : `80vw`,
-                  height: windowWidth > 1200
-                    ? null
-                    : windowWidth < 770
-                      ? "185px"
-                      : "250px",
-                }}
-                src={WantedImg[morePrevImg3]}
-              ></PrivewImg>
-            </Container1>
-
-            <Container1>
-              <PrivewImg
-                style={{
-                  opacity: 0.5,
-                  width: windowWidth > 1200 ? null : `80vw`,
-                  height: windowWidth > 1200
-                    ? null
-                    : windowWidth < 770
-                      ? "185px"
-                      : "250px",
-                }}
-                src={WantedImg[morePrevImg2]}
-              ></PrivewImg>
-            </Container1>
-            <Container1>
-              <PrivewImg
-                style={{
-                  opacity: 0.5,
-                  width: windowWidth > 1200 ? null : `80vw`,
-                  height: windowWidth > 1200
-                    ? null
-                    : windowWidth < 770
-                      ? "185px"
-                      : "250px",
-                }}
-                src={WantedImg[morePrevImg]}
-              ></PrivewImg>
-            </Container1>
-            <Container1>
-              <PrivewImg
-                style={{
-                  opacity: 0.5,
-                  width: windowWidth > 1200 ? null : `80vw`,
-                  height: windowWidth > 1200
-                    ? null
-                    : windowWidth < 770
-                      ? "185px"
-                      : "250px",
-                }}
-                src={WantedImg[PrevImg]}
-              ></PrivewImg>
-            </Container1>
+            
 
 
           </Row>
@@ -687,26 +715,123 @@ function Slider() {
 
       <Wrapper
         style={{
+          position: "absolute",
           overflow: "hidden",
-          marginTop: 100,
+          marginTop: 50,
           marginBottom: 100,
-          marginLeft:-90
+          marginLeft: "3%"
         }}
       >
-        <Justline>
+        {/* <Justline>
         </Justline>
-        <h1
+         */}
+      </Wrapper></>
+      <Wrapper>
+        <RecommendBox
           style={{
-            marginTop: 150,
-            marginLeft: -20,
+            flexDirection:"column",
+            borderRight:"1px",
+            borderBottom:"1px"
+          }}
+        >
+          <OptionBox
+            style={{
+              flexDirection: "row",
+              border:"none",
+
+            }}
+          >
+            <h1
+              style={{
+                fontSize: 25,
+                marginTop:20,
+                marginLeft:"20%"
+              }}
+            >
+            옵션</h1>
+            <select
+              style={{
+                height:40,
+                marginTop: 10,
+                marginLeft:300,
+                width:70
+              }}
+            >
+              <option value = "금사과">금사과</option>
+              <option value = "은사과">은사과</option>
+              <option value = "동사과">동사과</option>
+            </select>
+          </OptionBox>
+
+          <OptionBox
+            style={{
+              flexDirection: "row",
+              border:"none"
+            }}
+          >
+            <h1
+              style={{
+                fontSize: 25,
+                marginTop:20,
+                marginLeft:"20%"
+              }}
+            >
+            수량</h1>
+            <select
+              style={{
+                height:40,
+                marginTop: 10,
+                marginLeft:300,
+                width: 70,
+                textAlign:"center"
+              }}
+            >
+              <option value = "1">1</option>
+              <option value = "2">2</option>
+              <option value = "3">3</option>
+            </select>
+            {/* <div>
+              <i class="e59e"></i>
+            </div> */}
+          </OptionBox>
+
+          <OptionBox
+            style={{
+              flexDirection: "row",
+              border:"none"
+            }}
+          >
+            <h1
+              style={{
+                fontSize: 30,
+                marginTop:20,
+                marginLeft:"10%"
+              }}
+            >
+            총 상품 가격</h1>
+            <div>
+              <i class="e59e"></i>
+            </div>
+          </OptionBox>
+
+        </RecommendBox>
+      </Wrapper></>
+
+      
+      <h1
+          style={{
+            marginTop: 50,
+            textAlign:"center",
             fontSize: 40,
             fontweight: "bold"
           }}
         >
           추천상품</h1>
-      </Wrapper></>
-
-      <Wrapper>
+      <Wrapper
+        style={{
+            marginTop: -30
+        }}
+      >
         <RecommendBox>
           <GoodsBox>
             <GoodsImg
@@ -748,7 +873,7 @@ function Slider() {
             </GoodsInfo>
           </GoodsBox>
 
-          <GoodsBox>
+          {/* <GoodsBox>
             <GoodsImg
               src="assets/img/apple_.jpg"
             >
@@ -786,109 +911,98 @@ function Slider() {
                 ></img>
                 &nbsp; 4.99</h1>
             </GoodsInfo>
-          </GoodsBox>
+          </GoodsBox> */}
 
         </RecommendBox>
       </Wrapper></>
       <Wrapper
         style={{
-          marginTop:300,
+          marginTop:50,
           marginBottom:150,
           marginLeft:-90
         }}>
-        <Justline>
-        </Justline>
-      </Wrapper></>
-      <Wrapper>
-        <RecommendBox
-          style={{
-            flexDirection:"column"
-          }}
-        >
-          <OptionBox
+        {/* <Justline>
+        </Justline> */}
+          <div
             style={{
-              flexDirection: "row",
-              border:"none"
-            }}
-          >
-            <h1
-              style={{
-                fontSize: 30,
-                marginTop:20,
-                marginLeft:170
-              }}
-            >
-            옵션</h1>
-            <select
-              style={{
-                height:40,
-                marginTop: 10,
-                marginLeft:300,
-                width:70
-              }}
-            >
-              <option value = "금사과">금사과</option>
-              <option value = "은사과">은사과</option>
-              <option value = "동사과">동사과</option>
-            </select>
-          </OptionBox>
+              display:"flex",
+              flexDirection:"row",
+              //border:"3px solid #285a43",
+              margin:"auto"
 
-          <OptionBox
-            style={{
-              flexDirection: "row",
-              border:"none"
-            }}
-          >
-            <h1
-              style={{
-                fontSize: 30,
-                marginTop:20,
-                marginLeft:170
-              }}
-            >
-            수량</h1>
-            <select
-              style={{
-                height:40,
-                marginTop: 10,
-                marginLeft:300,
-                width: 70,
-                textAlign:"center"
-              }}
-            >
-              <option value = "1">1</option>
-              <option value = "2">2</option>
-              <option value = "3">3</option>
-            </select>
-            {/* <div>
-              <i class="e59e"></i>
-            </div> */}
-          </OptionBox>
+            }}>
+            <button 
+            style ={{
+              display:"block",
+              margin:"auto",
+              marginTop:"10px",
+              marginBottom:"50px",
+              backgroundColor : "white",
+              width : "180px",
+              height: "40px",
+              borderRadius: "10px",
+              fontSize:"20px",
+              fontWeight:700,
+              textAlign: "center",
+              border:"3px solid #285a43",
+              color : "#285a43",
+              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+              marginLeft:"70px"
 
-          <OptionBox
-            style={{
-              flexDirection: "row",
-              border:"none"
-            }}
-          >
-            <h1
-              style={{
-                fontSize: 30,
-                marginTop:20,
-                marginLeft:120
-              }}
-            >
-            총 상품 가격</h1>
-            <div>
-              <i class="e59e"></i>
+            }}onClick={BtnEvent}>
+            구매하기
+            </button>
+
+            <button 
+            style ={{
+              display:"block",
+              margin:"auto",
+              marginTop:"10px",
+              marginBottom:"50px",
+              backgroundColor : "white",
+              width : "180px",
+              height: "40px",
+              borderRadius: "10px",
+              fontSize:"20px",
+              fontWeight:700,
+              textAlign: "center",
+              border:"3px solid #285a43",
+              color : "#285a43",
+              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+              marginLeft:"40px"
+
+            }}onClick={BtnEvent}>
+            닫기
+            </button>
+
+            <button 
+            style ={{
+              display:"block",
+              margin:"auto",
+              marginTop:"10px",
+              marginBottom:"50px",
+              backgroundColor : "white",
+              width : "180px",
+              height: "40px",
+              borderRadius: "10px",
+              fontSize:"20px",
+              fontWeight:700,
+              textAlign: "center",
+              border:"3px solid #285a43",
+              color : "#285a43",
+              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+              marginLeft:"40px"
+
+            }}onClick={BtnEvent}>
+            찜하기
+            </button>
             </div>
-          </OptionBox>
-
-        </RecommendBox>
-      </Wrapper></>
-    </Resultpopup>
+      </Wrapper>
+      </>
+      
+          </Resultpopup>
   );
-}
+});
 
 export default Slider;
 
