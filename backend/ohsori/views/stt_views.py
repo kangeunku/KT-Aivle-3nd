@@ -50,9 +50,6 @@ def transcribe_streaming(request) -> speech.RecognitionConfig: #stream_file : bs
         dict['result'] = result
         return Response(dict)
 
-
-
-
 def word_correction(text):
     whole_words = ['검색', '찜목록', '회원정보수정', '고객센터', 
                    '더보기','일번','이번','삼번','사번','오번', '1번',

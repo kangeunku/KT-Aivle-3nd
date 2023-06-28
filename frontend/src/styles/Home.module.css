@@ -225,3 +225,13 @@
     margin: 0 5px;
     margin-left: 20px;
 }
+
+.selected { 
+    color: red; 
+    font-weight: 700; 
+}
+
+.unselected { 
+    color: black; 
+    font-weight: 100; 
+}

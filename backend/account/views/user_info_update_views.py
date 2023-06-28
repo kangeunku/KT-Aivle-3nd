@@ -1,37 +1,48 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from ..models import CustomToken, Users
 
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
-from django.contrib.auth import authenticate, logout
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth import authenticate, logout, login
 
 # 비밀번호 변경   # insomnia에서 비밀번호 변경에서 crsf 오류 뜸 포기함 
 
 @method_decorator(csrf_exempt, name = "dispatch")
+
+class CheckPasswordAPI(APIView): # View 쓰니깐 405 error뜸
+    permission_classes = [IsAuthenticated]# 로그인한 사용자만 접근 가능
+    
+    def post(self, request):
+        user = Users.objects.get(username=request.user.username)
+        password = request.data.get('password') # 현재 비밀번호
+        if user.check_password(password):
+            return Response({'status': 'succes'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({'status': 'fail(Incorrect Password)'}, status=status.HTTP_404_NOT_FOUND)
+
 class SetPasswordAPI(APIView): # View 쓰니깐 405 error뜸
     permission_classes = [IsAuthenticated]# 로그인한 사용자만 접근 가능
     
     def post(self, request):
-        try:
-            user = Users.objects.get(username=request.user.username)
-
-        except Users.DoesNotExist:
-            return Response({'status': 'fail1'}, status=status.HTTP_404_NOT_FOUND)
-
-        current_password = request.data.get('current_password') # 현재 비밀번호
-        new_password = request.data.get('new_password') # 바꿀 비밀번호
-        print(current_password, new_password)
-        if not user.check_password(current_password):
-            return Response({'status': 'fail2'}, status=status.HTTP_400_BAD_REQUEST)
+        user = Users.objects.get(username=request.user.username)
         
-        # 1.이건 비밀번호를 변경하면 로그아웃이 되서 변경한 비밀번호로 다시 로그인해야함
+        new_password = request.data.get('new_password') # 바꿀 비밀번호
+        
+        logout(request)
+        
         user.set_password(new_password)
         user.save()
+        
+        # # 로그인
+        user = authenticate(request, username=user.username, password=new_password)
+        login(request, user)
+        
         return Response({'status': 'success'})
 
 # 별명 변경 View

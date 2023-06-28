@@ -1,6 +1,10 @@
 import React, { useState } from "react";
-import { Modal } from "../../components/app/modal.js";
-import { Send_api } from "../../components";
+import { Modal } from "../../components";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import {  Home } from "../../pages";
+import {  Header } from "../../components";
+
+import axios from "axios";
 
 const Login = () => {
     const[form, setFrom] = useState({
@@ -10,8 +14,25 @@ const Login = () => {
         password_val : false,
     });
 
-    const join_btn = () => {
-        let response_data = Send_api(4, form);        
+    const navigate = useNavigate();
+
+    const join_btn = async () => {
+        const url = "http://127.0.0.1:8000/v1/login/"
+
+        await axios.post(url, form)
+        .then(function (response) {
+            // setResult(JSON.stringify(response.data))
+            // setResult(response.data);
+            console.log(JSON.stringify(response.statusText));
+            const res = JSON.stringify(response.statusText);
+
+            // if(res === '"OK"'){
+            //     navigate();
+            // }
+            
+        })
+        .catch(function (error) {
+            console.log(error);        
     };
 
     const handleUsernameChange = (e) => {
@@ -24,7 +45,8 @@ const Login = () => {
         const password = e.target.value;
         const isValidUserpw = password.length >= 4;
         setFrom({ ...form, password, password_val: isValidUserpw });
-    }
+        });
+    };
 
     const isAllFieldsValid = form.username_val && form.password_val;
 
@@ -53,12 +75,15 @@ const Login = () => {
                     <input type="password" className="input_form" value={form.password} onChange={e=> {setFrom({...form, password: e.target.value}); handleUserpwChange(e);}} placeholder="비밀번호를 입력해주세요" />
                     <p className="input_form_txt" style={{color: form.password_val ? 'green' : 'red'}}>4글자 이상으로 </p>
                 </label> 
+                <button className="next_step_btn" onClick={() => join_btn()}>로그인</button>
+                {/* <link to="/home" className="next_step_btn">로그인</link> */}
             </div>
             <button className="next_step_btn" onClick={()=> {join_btn()}} disabled={!isAllFieldsValid}> <strong style={{color:"red"}}>0</strong>모달<Modal value='강호준 바보'/></button>
             {/* setId() */}
             
         </>
     );
+    
 }
 
 // export default Input;

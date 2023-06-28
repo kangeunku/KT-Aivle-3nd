@@ -1,16 +1,17 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { Send_api } from "../../components";
 import Modal from "./modal.js"
 // import {Hotkey_start} from "../../components/common/common.js"
 import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
 // import {local_Hotkey} from './join';
+import axios from "axios";
 
 const Join = () => {
     const [joinState, setjoinState] = useState(1);
 
     const next_stage = (txt) => {
         if (txt === 'end') {
-            console.log("end")
+            console.log("end");
+            setjoinState(2);
         }
         else{
             setjoinState(joinState + 1);
@@ -29,8 +30,7 @@ const Join = () => {
                 if(joinState == 1) next_stage();
                 else if(joinState == 2) next_stage('end');
             };
-           
-    
+
             // 핫키 적용 함수
             const handlers_1 = {
                 enter_key: nextClick,
@@ -57,7 +57,7 @@ const Join = () => {
         return (
             <>
                 <Joinsteptwo />
-                <button className="next_step_btn" onClick={() => next_stage('end')}>다음</button>
+                {/* <button className="next_step_btn" onClick={() => next_stage('end')}>다음</button> */}
             </>
         );
     }
@@ -239,10 +239,18 @@ const Joinsteptwo = () => {
         nickname_val : false,
     });
 
-    const join_btn = () => {
-        let response_data = Send_api(3,form)
-        console.log('회원가입요청 성공')
-    }
+    const join_btn = async () => {
+        const url = "http://127.0.0.1:8000/v1/register/"
+
+        await axios.post(url, form)
+        .then(function (response) {
+            // console.log(JSON.stringify(response));
+            const res = JSON.stringify(response.statusText);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    };
 
     const handleUsernameChange = (e) => {
         const username = e.target.value;

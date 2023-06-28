@@ -13,13 +13,13 @@ def first_search(request):
     result = get_filtering_info(query)
     return Response(result)
 
-
 @api_view(['POST'])
 def second_search(request):
     params = {'query':request.data.get('query'),
             'display':request.data.get('display'),
             'start':request.data.get('start'),
-            'sort':request.data.get('sort'),
+            # 'sort':request.data.get('sort'),
+            'sort': 'sim',
             'filter':'naverpay',
             'exclude':''}
     result = get_item_link(get_filtered_items(**params))
@@ -34,64 +34,79 @@ def get_filtering_info(query):
         'cat_id' : '',
         'frm' : 'NVSHATC',
     }
-
     encoded_params = parse.urlencode(params, doseq=True)
     url = f'https://search.shopping.naver.com/search/all?{encoded_params}'
+    headers = {
+        'user-agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
+        'referer': 'https://shopping.naver.com/home',
+    }
+    # print(url)
+    # response = requests.get(url, headers=headers)
+    
+    # dom = bs(response.text, 'html.parser')
 
-    response = requests.get(url)
+    # # 카테고리 받아오기
+    # detail_category = []
 
-    dom = bs(response.text, 'html.parser')
+    # query_checker = dom.select_one('#container > div.style_inner__i4gKy > div.filter_finder__E_I19')
 
-    # 카테고리 받아오기
-    detail_category = []
+    # # 검색어에 문제가 있을 경우 고려
+    # if not query_checker:
+    #     print('검색 결과가 없습니다. 검색어를 다시한번 확인해주세요.')
 
-    query_checker = dom.select_one('#container > div.style_inner__i4gKy > div.filter_finder__E_I19')
+    # else:
+    #     filter_elements = query_checker.select('div.filter_finder__E_I19 > div > div')
 
-    # 검색어에 문제가 있을 경우 고려
-    if not query_checker:
-        print('검색 결과가 없습니다. 검색어를 다시한번 확인해주세요.')
+    #     # 대분류 - key
+    #     for each in filter_elements:
+    #         temp_dict = {}
+    #         category = each.select_one('div.filter_finder_tit__x1gjS').get_text().replace('더보기', '')
 
-    else:
-        filter_elements = query_checker.select('div.filter_finder__E_I19 > div > div')
+    #         # 가격과 배송/혜택/색상 카테고리는 검색 결과가 존재할 경우 항상 등장한다.
+    #         # 게다가 다른 카테고리와는 다른 구성을 가지고 있다. 따라서 다음과 같은 처리를 해준다.
+    #         if category == '가격' or category == '배송/혜택/색상':
+    #             flag = 1
+    #         else: flag = 2
 
-        # 대분류 - key
-        for each in filter_elements:
-            temp_dict = {}
-            category = each.select_one('div.filter_finder_tit__x1gjS').get_text().replace('더보기', '')
+    #         temp_dict['category'] = category
 
-            # 가격과 배송/혜택/색상 카테고리는 검색 결과가 존재할 경우 항상 등장한다.
-            # 게다가 다른 카테고리와는 다른 구성을 가지고 있다. 따라서 다음과 같은 처리를 해준다.
-            if category == '가격' or category == '배송/혜택/색상':
-                flag = 1
-            else: flag = 2
+    #         temp_lst = []
+    #         # 소분류 - value
+    #         for element in each.select('div ul > li > a'):
 
-            temp_dict['category'] = category
+    #             element_lst = element.select('span')
 
-            temp_lst = []
-            # 소분류 - value
-            for element in each.select('div ul > li > a'):
+    #             # 1개를 초과하는 추가 정보는 없다고 가정한다.
+    #             if len(element_lst) == flag:
+    #                 additional = element_lst[-1].text
+    #                 content = element.text.replace(additional, '')
 
-                element_lst = element.select('span')
+    #             # 1개가 아닐 경우가 있음에 유의하자.
+    #             else:
+    #                 content = element.text
 
-                # 1개를 초과하는 추가 정보는 없다고 가정한다.
-                if len(element_lst) == flag:
-                    additional = element_lst[-1].text
-                    content = element.text.replace(additional, '')
-
-                # 1개가 아닐 경우가 있음에 유의하자.
-                else:
-                    content = element.text
-
-                temp_lst.append(content)
-            temp_dict['cate_lst'] = temp_lst
-            detail_category.append(temp_dict)
-
+    #             temp_lst.append(content)
+    #         temp_dict['cate_lst'] = temp_lst
+    #         detail_category.append(temp_dict)
+    
+    
+    # 테스트용 detail_category
+    detail_category = [
+        {"category":"카테고리",
+         "cate_lst":["식품","생활/건강","가구/인테리어","출산/육아","디지털/가전","패션잡화","화장품/미용","패션의류","스포츠/레저","여가/생활편의","면세점"]},
+        {"category":"브랜드",
+         "cate_lst":["바보사랑","아트박스","UNKNOWN","오뚜기","1300K","핫트랙스","롯데칠성음료","팔도","매일유업","청정원","크라운","델몬트","텐바이텐","해태제과","서울우유","카프리썬","웅진","나우푸드","브래그","상하목장"]},
+        {"category":"가격",
+         "cate_lst":["1만원 ~ 2만원","2만원 ~ 4만원","4만원 ~ 6만원"]},
+        {"category":"배송/혜택/색상",
+         "cate_lst":["빠른배송","무료배송","희망일배송","정기구독","무료교환반품","핫딜","카드할인","쿠폰","적립"]}
+        ]
     return detail_category
 
 def get_filtered_items(query, display=100, start=1, sort='sim', filter='naverpay', exclude=''):
     '''필터링 정보와 검색어를 입력받아 필터링된 상품과 함께 naver open api에서 제공하는 상품의 세부 정보들을 얻어오는 함수입니다.
         필요 라이브러리 : urllib.urlencode, requests, bs4
-
+    
     params:
         query : str : 필터링 정보 + 검색어
         display : int default=100 : 한번에 표시할 상품 개수 (10 ~ 100)
@@ -112,7 +127,7 @@ def get_filtered_items(query, display=100, start=1, sort='sim', filter='naverpay
         'filter' : filter,
         'exclude' : exclude,
     }
-
+    print('query:', query)
     # naver open api 사용 양식에 따라 utf-8 인코딩
     encoded_params = parse.urlencode(params, doseq=True)
 
