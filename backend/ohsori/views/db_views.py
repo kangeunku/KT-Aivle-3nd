@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
 import json
+
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -25,14 +26,12 @@ class BasketsAPI(APIView):
         serializer = BasketsSerialize(user_baskets, many = True)
         return Response(serializer.data)
         
-@method_decorator(csrf_exempt, name = "dispatch")
-class Baskets_Add_DelAPI(View):    
+# @method_decorator(csrf_exempt, name = "dispatch")
+class Baskets_Add_DelAPI(View):
     def post(self, request): # basket_yn True or False // 요청 params : goods_url
         data = json.loads(request.body)
-        # goods= Goods.objects.get(goods_url = request.POST.get('goods_url'))
         baskets = Baskets()
-        baskets.goods_no = Goods.objects.only('goods_no').get(goods_url = data['    '])
-        # baskets.goods_no = Goods.objects.get(goods_no = Goods.objects.get(goods_url = data['goods_url'].only('goods_no'))
+        baskets.goods_no = Goods.objects.only('goods_no').get(goods_url = data['goods_url'])
         baskets.username = Users.objects.get(username = request.user.username)
         baskets.use_yn = 'Y'
         serializer = BasketsSerialize(baskets)
