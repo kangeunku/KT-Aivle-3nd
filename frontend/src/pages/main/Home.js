@@ -67,6 +67,40 @@ const Home = () => {
     );
 };
 
+// 별점시스템
+const StarRating = ({ score }) => {
+    const filledStars = Math.floor(score); // 꽉 채워진 별 개수
+    const halfFilledStar = score - filledStars === 0.5; // 절반 채워진 별 여부
+  
+    const renderStars = () => {
+        const stars = [];
+  
+    // 꽉 채워진 별 추가
+    for (let i = 0; i < filledStars; i++) {
+        stars.push(<div key={i} className={styles.goodsstar1}/>);
+        console.log(1)
+    }
+  
+    // 절반 채워진 별 추가
+    if (halfFilledStar) {
+        stars.push(<div key={filledStars} className={styles.goodsstar2}/>);
+        console.log(0.5)
+      }
+  
+    // 빈 별 추가
+    const emptyStars = 5 - filledStars - (halfFilledStar ? 1 : 0);
+    for (let i = 0; i < emptyStars; i++) {
+        stars.push(<div key={filledStars + (halfFilledStar ? 1 : 0) + i} className={styles.goodsstar3}/>);
+        console.log(0)
+    }
+
+    return stars;
+    };
+  
+    return <label className={styles.goodsscore}>{renderStars()}</label>;
+};
+
+
 const FirstPage = ({inputValue, handleInputChange, handleButtonClick}) => {
 
     return (
@@ -156,74 +190,39 @@ const ThirdPage = ({goToForthPage, result }) => {
     };
 
     return(
-        <div className={styles.home_container2}>
-            <div className={styles.home_search_contained}>
-                <p className={styles.home_main_guide}>추천 상품</p>
-                
+        <div className={styles.home_container}>
+            <div className={styles.homebox1}>
+                <div className={styles.page2logo2} ></div>
+                <div className={styles.homebox11}>추천 상품</div>
             </div>
-                <div className={styles.RecommendBox}>
-                    <div className={styles.GoodsBox}>
-                        <div className={styles.Goods_img1} alt="추천 상품 이미지1"/>
-                        <div className={styles.GoodsInfo}>
-                            <label className={styles.InfoText}
-                                style={{
-                                    fontWeight: "bold",
-                                    marginTop: "50px"
-                                }}
-                            ><b>소리소리오소리</b></label>
-                            <br></br>
-                            <label className={styles.InfoText}
-                                style={{
-                                    fontSize: 25,
-                                    marginLeft: 150,
-                                    marginTop:100
-                                }}
-                            ><b>39.99$</b></label>
-                            <div>
-                                <a className={styles.buy_button1} onClick={goToForthPage} alt="상품 상세페이지로 이동하는 버튼">
-                                    <div>구매하기</div>
-                                </a>
-                            </div>
-                            {/* <button onClick={() => handleButtonClick("선택")}>
-                                <div>구매하기</div>
-                            </button>
-                            {popupVisible && (
-                            <Popup onClose={handlePopupClose} message={popupMessage} />
-                            )} */}
-                        </div>
+            <div className={styles.homebox2}>
+                <div className={styles.goodsbox}>
+                    <div className={styles.goodsbox1}>
+                        <img className={styles.goodsimage} src={"https://shop-phinf.pstatic.net/20221021_183/1666336371323nsBJM_JPEG/67472269985761665_608306589.jpg?type=m510"} alt="추천 상품 이미지1"/>
                     </div>
-                    <div className={styles.GoodsBox}>
-                        <div className={styles.Goods_img1} alt="추천 상품 이미지1"/>
-                        <div className={styles.GoodsInfo}>
-                            <label className={styles.InfoText}
-                                style={{
-                                    fontWeight: "bold",
-                                    marginTop: "50px"
-                                }}
-                            ><b>소리소리오소리</b></label>
-                            <br></br>
-                            <label className={styles.InfoText}
-                                style={{
-                                    fontSize: 25,
-                                    marginLeft: 150,
-                                    marginTop:100
-                                }}
-                            ><b>39.99$</b></label>
-                            <div>
-                                <a className={styles.buy_button1} onClick={goToForthPage} alt="상품 상세페이지로 이동하는 버튼">
-                                    <div>구매하기</div>
-                                </a>
-                            </div>
+                    <div className={styles.goodsbox2}>
+                        <label className={styles.goodsname}>
+                            속초동해닭강정
+                        </label>
+                        <label className={styles.goodsprice}>
+                            19000원
+                        </label>
+                        <label className={styles.goodsscore}>
+                            <strong>5점</strong> <StarRating score={3.5} />
+                        </label>
+                        <button className={styles.goodsurl} onClick={goToForthPage}>
+                            구매하기
+                        </button>
                             {/* <button onClick={() => handleButtonClick("선택")}>
                                 <div>구매하기</div>
                             </button>
                             {popupVisible && (
                             <Popup onClose={handlePopupClose} message={popupMessage} />
                             )} */}
-                        </div>
                     </div>
                 </div>
-        </div>           
+            </div>    
+       </div>
     )
 }
 
