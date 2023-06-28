@@ -92,8 +92,8 @@ const App = () => {
         <div className="index_wrap">
           <h1 className="logo">
             {/* <a onClick={() =>{setloginState(true)}}>logo</a> */}
-            <Modal></Modal>
-            <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link>
+            {/* <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link> */}
+          <Modal></Modal>
           </h1>
           <Choicelogin changeislogn={changeislogn}/>
         </div>
@@ -109,7 +109,7 @@ const App = () => {
           <div className="wrap">
             <div className="side">
               <h1 className="logo">
-                <a onClick={() =>{setloginState(false)}}>logo</a>
+                <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link>
               </h1>
               <Navigate></Navigate>
             </div>
