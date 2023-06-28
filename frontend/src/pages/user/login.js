@@ -32,7 +32,8 @@ const Login = () => {
             
         })
         .catch(function (error) {
-            console.log(error);        
+            console.log(error);
+        })   
     };
 
     const handleUsernameChange = (e) => {
@@ -45,7 +46,6 @@ const Login = () => {
         const password = e.target.value;
         const isValidUserpw = password.length >= 4;
         setFrom({ ...form, password, password_val: isValidUserpw });
-        });
     };
 
     const isAllFieldsValid = form.username_val && form.password_val;

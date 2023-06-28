@@ -8,7 +8,7 @@
 .graphpop .content img {width: 120px;}
 
 .intor_graphpop {position: fixed; top: 0; left: 0; display: flex; width: 100vw; height: 100vh; z-index: 10000; animation: showup 0.3s ease forwards; opacity: 0;}
-.intor_graphpop .content {position: relative; margin:auto; background-color: rgba(255,255,255,0.95); padding: 50px; width: 80%; height: 90%; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25); border-radius: 20px; animation: showup 0.3s ease forwards; min-width: 1200px; min-height: 600px; opacity: 0; text-align: center; line-height: 160%; color: #262626;}
+.intor_graphpop .content {position: relative; margin:auto; background-color: rgba(255,255,255,0.95); padding: 50px; width: 80%; height: 90%; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25); border-radius: 20px; animation: showup 0.3s ease forwards; min-width: 800px; min-height: 400px; opacity: 0; text-align: center; line-height: 160%; color: #262626;}
 .intor_graphpop .content .start_closing{max-width: 300px; width: 100%; height: 66px; background: #285a43; border-radius: 10px; font-size: 32px; color: #fff;}
 
 .wrap {display: flex; flex-direction: row; flex-wrap: nowrap; align-items: stretch; height: 100%;}
@@ -35,7 +35,7 @@ li.active_list > a {color: var(--background-green)}
 .header .head_btn_box .btn:nth-child(1) {background: url(../assets/img/header_bulb.svg); background-size: 52px;}
 .header .head_btn_box .btn:nth-child(2) {background: url(../assets/img/header_speak_off.svg); background-size: 52px;}
 .header .head_btn_box .btn:nth-child(3) {background: url(../assets/img/header_mic.svg); background-size: 52px;}
-.content .container {flex-grow: 1; overflow: auto;}
+.content .container {flex-grow: 1; overflow: auto; height: calc(100% - 80px);}
 
 .index_wrap {position: relative; margin: 0 auto; padding: 120px 30px; max-width: 1440px; min-width: 1296px; width: 90%; height: 100%;}
 .index_wrap .logo {position: absolute; top: 0; width: 200px; height: 80px; font-size: 43px; color: transparent; cursor: pointer; }

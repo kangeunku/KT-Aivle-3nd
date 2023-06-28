@@ -106,27 +106,25 @@ const FirstPage = ({goToSecondPage}) => {
     };
 
     return(
-        <div>
-            <div className={styles.editbody}>
-                <div className={styles.editbox1}>
-                    <div className={styles.page2logo2} ></div>
-                    <div className={styles.editbox11}>회원정보 수정</div>
+        <div className={styles.editbody}>
+            <div className={styles.editbox1}>
+                <div className={styles.page2logo2} ></div>
+                <div className={styles.editbox11}>회원정보 수정</div>
+            </div>
+            <ol className={styles.editbox2}>
+                <li>회원정보 수정을 위해 비밀번호를 입력해주세요</li>
+            </ol>
+            <div className={styles.edit_form1}>
+                <div className={styles.edit_form1_txt}>비밀번호 입력</div>
+                <div className={styles.edit_form1_box2}>
+                    <input className={styles.edit_form1_input} type="password" placeholder="비밀번호를 입력해주세요" value={password} onChange={(e) => setPassword(e.target.value)}></input>
                 </div>
-                <ol className={styles.editbox2}>
-                    <li>회원정보 수정을 위해 비밀번호를 입력해주세요</li>
-                </ol>
-                <div className={styles.edit_form1}>
-                    <div className={styles.edit_form1_txt}>비밀번호 입력</div>
-                    <div className={styles.edit_form1_box2}>
-                        <input className={styles.edit_form1_input} type="password" placeholder="비밀번호를 입력해주세요" value={password} onChange={(e) => setPassword(e.target.value)}></input>
-                    </div>
-                    <button className={styles.button_main} onClick={handlePasswordSubmit}>
-                        <div>백엔드입력</div>
-                    </button>
-                    <button className={styles.button_main} onClick={goToSecondPage}>
-                        <div>그냥입력</div>
-                    </button>
-                </div>
+                <button className={styles.button_main} onClick={handlePasswordSubmit}>
+                    <div>백엔드입력</div>
+                </button>
+                <button className={styles.button_main} onClick={goToSecondPage}>
+                    <div>그냥입력</div>
+                </button>
             </div>
         </div>
     );};
