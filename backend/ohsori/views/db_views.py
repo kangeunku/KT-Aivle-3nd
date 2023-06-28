@@ -9,60 +9,29 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
 import json
+
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
-from ..serializers import UsersSerialize, GoodsSerialize, BasketsSerialize, FaqSerialize, QnaSerialize, SurveySerialize
-from ..models import Users, Goods, Baskets, Faq, Qna, Survey
-from .goods_views import *
+from ..serializers import GoodsSerialize, BasketsSerialize, FaqSerialize, QnaSerialize, SurveySerialize
+from ..models import Goods, Baskets, Faq, Qna, Survey
+from account.models import Users
 
-class GoodsAPI(APIView): # 상품 정보 API 1
-    permissions_classes = [IsAuthenticated]
-    def get(self, request): # 상품 정보 요청 // goods_url
-        try:
-            goods_url = request.data.get('goods_url')
-            goods = Goods.objects.get(goods_url = goods_url)
-            serializer = GoodsSerialize(goods)
-            return Response(serializer.data, status = status.HTTP_200_OK) # 상품 정보 회신
-        except Goods.DoesNotExist:
-            goods_url = request.data.get('goods_url')
-            print('-' * 10)
-            result = get_details(goods_url)
-            goods = Goods()
-            goods.goods_url = goods_url
-            goods.goods_name = "쏘리소리 오소리"
-            goods.goods_star = result['detail_options']['goods_star']
-            goods.goods_price = result['detail_options']['goods_price']
-            goods.goods_thumb = result['detail_options']['goods_thumb']
-            goods.use_yn = "Y"
-            goods.save()
-            # 추가
-            serializer = GoodsSerialize(goods)
-            return Response(serializer.data, status = status.HTTP_200_OK) # 상품 정보 저장 후 회신
-
- # 정참조 users = Users.objects.get(name='뽀삐') /n  Users_basket = users.basket.all()
-
-@permission_classes([IsAuthenticated]) 
 @method_decorator(csrf_exempt, name = "dispatch")
 class BasketsAPI(APIView):
     def get(self, request): # 장바구니 페이지 GET 요청시 장바구니에 있는 모든 상품 전달
-        
         users = Users.objects.get(username = request.user.username)
         user_baskets = users.baskets.filter(use_yn = 'Y')
         serializer = BasketsSerialize(user_baskets, many = True)
         return Response(serializer.data)
         
-        
-@permission_classes([IsAuthenticated]) 
-@method_decorator(csrf_exempt, name = "dispatch")
-class Baskets_Add_DelAPI(View):    
+# @method_decorator(csrf_exempt, name = "dispatch")
+class Baskets_Add_DelAPI(View):
     def post(self, request): # basket_yn True or False // 요청 params : goods_url
         data = json.loads(request.body)
-        # goods= Goods.objects.get(goods_url = request.POST.get('goods_url'))
         baskets = Baskets()
-        baskets.goods_no = Goods.objects.get(goods_url = data['goods_url']).only('goods_no')
-        # baskets.goods_no = Goods.objects.get(goods_no = Goods.objects.get(goods_url = data['goods_url'].only('goods_no'))
+        baskets.goods_no = Goods.objects.only('goods_no').get(goods_url = data['goods_url'])
         baskets.username = Users.objects.get(username = request.user.username)
         baskets.use_yn = 'Y'
         serializer = BasketsSerialize(baskets)
@@ -77,8 +46,7 @@ class Baskets_Add_DelAPI(View):
         serializer = BasketsSerialize(basket)
         return JsonResponse({"good" : "OK"})
 
-          
-class SurveyAPI(APIView):
+class SurveyAPI(APIView): # params : score, answer
     def post(self, request):
         survey = Survey()
         survey.username = Users.objects.get(username = request.user.username) 
@@ -86,7 +54,7 @@ class SurveyAPI(APIView):
         survey.answer = '도움이 많이 됩니당'               # 건의사항에 대한 답변 받기
         return Response('감사함늬다')
 
-@permission_classes([IsAuthenticated])
+
 class QnaAPI(APIView):
     def post(self, request):
         qna = Qna()
@@ -96,7 +64,7 @@ class QnaAPI(APIView):
         qna.type = '사이트 문의' # 선택으로 type 설정
         # qna.img_url = 'asdfasdf.jpg'  # if문으로 img가 있으면 넣기 null = True라 공백 가능
         qna.use_yn = 'Y'
-        
+
 class FaqAPI(APIView):
     def get(self, request):
         faq = Faq.objects.all()

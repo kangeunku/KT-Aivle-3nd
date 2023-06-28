@@ -1,10 +1,21 @@
-.bklist_main{
+.bkbox1{
+    display: flex;
     font-size: 32px;
     font-weight: 700;
     position: relative;
     top:30px;
     left:50px;
+    align-items: center;
+    align-items: flex-end;
 }
+
+.bkbox11{
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    margin-left: 10px;
+    color:#191919; }
+
 
 .bk_body {
     display: flex;
@@ -14,27 +25,26 @@
     position: relative;
     left:100px;
     Top:50px;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid rgba(40, 90, 67, 0.5);
 }
 
 .bklist {
     position : relative;
-    width: 70%;
-    height: 150px;
+    width: 95%;
+    height: 130px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin: 10px;
     flex-direction: row;
-    padding-bottom:15px;
 }
 
 .bklist_img {
     position: absolute;
     border-radius: var(--br-xl);
     background-color:aqua;
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
     object-fit: cover;
 }
 
@@ -62,44 +72,34 @@
     color: #8b8b8b;
   }
 
-.bklist_bt1,
-.bklist_bt2 {
-  cursor: pointer;
-  border: 0;
-  padding: var(--padding-5xs) var(--padding-5xl);
-  position: absolute;
-  border-radius: var(--br-3xs);
-  width: 150px;
-  height: 43px;
-  display: flex;
-  flex-direction: row;
-  box-sizing: border-box;
-  align-items: center;
-  justify-content: center;
-}
-
 .bklist_btbox{
     height:120px;
+    display:flex;
+    flex-direction: column;
 }
 
 .bklist_bt1 {
-    background-color: #b4e0a0;
+    background-color: white;
     width: 150px;
     height: 45px;
     top: 15px;
     left: 775px;
     padding: 8px 24px;
     border-radius: 10px;
+    border:3px solid #b4e0a0;
+    
   }
 
 .bklist_bt2 {
-  background-color: #dd7878;
+  background-color: white;
   width: 150px;
   height: 45px;
   bottom: 15px;
   left: 775px;
   padding: 8px 24px;
   border-radius: 10px;
+  border:3px solid #dd7878;
+
 }
 
 .bklist_btfont {
@@ -109,3 +109,11 @@
     color: floralwhite;
     letter-spacing: 0.12em;
 }
+
+.bkboxlogo2 {
+    position: relative;
+    left: 0%;
+    width:
+    282px;
+    height: 84px;
+    background-image: url(../assets/img/ohsori_logo2.png); background-position: center; background-repeat: no-repeat; background-size: contain; justify-content: flex-end; }

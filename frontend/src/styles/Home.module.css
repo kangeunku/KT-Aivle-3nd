@@ -1,7 +1,137 @@
 .home_container {
     position: relative;
-    overflow-x: hidden;
+    padding:30px 50px 0px;
+    height: 879px;
 }
+
+.homebox1{
+    display: flex;
+    align-items: center;
+    align-items: flex-end;
+}
+
+.homebox2{
+    position: relative;
+    bottom : 0px;
+    width: 75%;
+    height: 80%;
+    min-width: 700px;
+    min-height: 600px;
+    margin : 30px auto 0px;
+}
+
+.goodsbox {
+    display:flex;
+    margin: 50px auto;
+    width: 90%;
+    height: 280px;
+    border: #285A43 solid 1.5px;
+    border-radius: 20px;
+    box-shadow: 8px 8px 8px rgba(40, 90, 67, 0.25);
+}
+
+.goodsbox1 {
+    display : flex;
+    flex: 0 0 35%;
+    justify-content: center;
+}
+
+.goodsbox2 {
+    display: flex;
+    position: relative;
+    flex: 0 0 65%;
+    justify-content: center;
+    border: 1px blue;
+}
+
+
+.goodsimage {
+    width:90%;
+    height: 90%;
+    margin:auto auto;
+    background-color: pink;
+}
+
+.goodsname{
+    position: absolute;
+    display: inline-block;
+    white-space: nowrap;
+    left : 20%;
+    top: 20%;
+    color:#285A43;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.goodsprice{
+    position: absolute;
+    display: inline-block;
+    white-space: nowrap;
+    left : 40%;
+    top: 40%;
+    color:#285A43;
+    width: fit-content;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.goodsurl{
+    position: absolute;
+    width: 30%;
+    height: 40px;
+    box-shadow: 0px 4px 4px rgba(40, 90, 67, 0.25);
+    border-radius:10px;
+    border: 3px solid #285a43;
+    font-size: 20px;
+    font-weight: 700;
+    top:70%;
+    left:65%;
+}
+
+.goodsscore{
+    position:relative;
+    display:flex;
+    flex-direction: row;
+    top:65%;
+    height:30px;
+}
+
+.goodsstar1{
+    width:24px;
+    height:24px;
+    background-image: url(../assets/img/star1.png);
+}
+.goodsstar2{
+    width:24px;
+    height:24px;
+    background-image: url(../assets/img/star2.png);
+}
+.goodsstar3{
+    width:24px;
+    height:24px;
+    background-image: url(../assets/img/star3.png);
+}
+
+.page2logo2 {
+    position: relative;
+    left: 0%;
+    width: 282px;
+    height: 84px;
+    background-image: url(../assets/img/ohsori_logo2.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    justify-content: flex-end;
+}
+
+.homebox11{
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    margin-left: 10px;
+    color:#191919;
+}
+
 
 .home_img1 {
     position:relative;
@@ -18,46 +148,56 @@
     color: #121212;
     left:50px;
     top: 130px;
-
-
 }
 
 .home_search_box1 {
     position: relative;
-    width: 600px;
+    width: 1000px;
     height: 50px;
     background-color: white;
     border-Radius: 12px;
     left:50px;
-    top: 150px;
+    top: 50px;
 
 }
 
 .home_overlay_main {
     display: grid;
     place-items: center start;
-    position: relative;
     font-Size: 24px;
-    margin-Top: 24px;
-    margin-Bottom: 24px;
-    margin-left: 10px;
-    width: 80%;
-    height:100%;
-    border: None;
+    border: 3px solid rgba(25, 25, 25, 0.5);
+    position: relative;
+    width: 100%;
+    height: 70px;
+    background-color: white;
+    border-Radius: 12px;
 }
+.home_search_box1 {
+        place-items: center start;
+        font-Size: 24px;
+        border: None;
+        position: relative;
+        min-width: 500px;
+        width:65%;
+        height: 70px;
+        left:150px;
+        top: 50px;
+    }
 
 .home_button1 {
+    display:flex;
     position: absolute;
-    top: 50%;
-    left: 90%;
-    transform: translate(-50%, -50%);
     width: 38px;
     height: 38px;
-    background-image: url(../assets/img/search_button.png);
+    background-image: url(../assets/img/search_button2.png);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 12px;
+    left:850px;
+    align-items: center;
+    top: 17px;
+    cursor: pointer;
     }
 
 .home_container2{
@@ -185,4 +325,14 @@
 .catebox_index3 {
     margin: 0 5px;
     margin-left: 20px;
+}
+
+.selected { 
+    color: red; 
+    font-weight: 700; 
+}
+
+.unselected { 
+    color: black; 
+    font-weight: 100; 
 }
