@@ -13,7 +13,6 @@ def first_search(request):
     result = get_filtering_info(query)
     return Response(result)
 
-
 @api_view(['POST'])
 def second_search(request):
     params = {'query':request.data.get('query'),
