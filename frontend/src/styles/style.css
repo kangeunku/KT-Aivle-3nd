@@ -8,14 +8,14 @@
 .graphpop .content img {width: 120px;}
 
 .intor_graphpop {position: fixed; top: 0; left: 0; display: flex; width: 100vw; height: 100vh; z-index: 10000; animation: showup 0.3s ease forwards; opacity: 0;}
-.intor_graphpop .content {position: absolute; bottom: 0; background-color: #fff; padding: 50px; width: 100%; height: 95%; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25); border-radius: 20px; margin-top: 0; animation: showup 0.3s ease forwards; opacity: 0; text-align: center; color: #262626;}
+.intor_graphpop .content {position: relative; margin:auto; background-color: rgba(255,255,255,0.95); padding: 50px; width: 80%; height: 90%; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25); border-radius: 20px; animation: showup 0.3s ease forwards; min-width: 1200px; min-height: 600px; opacity: 0; text-align: center; line-height: 160%; color: #262626;}
 .intor_graphpop .content .start_closing{max-width: 300px; width: 100%; height: 66px; background: #285a43; border-radius: 10px; font-size: 32px; color: #fff;}
 
 .wrap {display: flex; flex-direction: row; flex-wrap: nowrap; align-items: stretch; height: 100%;}
 .wrap .side{flex-shrink: 0; width: 360px;}
 .wrap .content{display: flex; flex-grow: 1; flex-direction: column; background-color: #fff; border-radius: 50px 0 0 50px;}
 .logo {margin: 20px; width: 250px; height: 80px; font-size: 83px; color: transparent; cursor: pointer; background: url(../assets/img/ohsori_logo.png) no-repeat; background-size: 100%;}
-.logo > a{display: block; width: 100%; height: 100%;}
+.logo > a{ display: block; width: 100%; height: 100%;}
 .nav_lsit {padding: 40px 0 0 0;}
 .nav_lsit > li {position: relative; margin-bottom: 40px; padding: 20px 20px 20px 130px;}
 .nav_lsit > li::after {position: absolute; top: 28px; left: 83px; display: block; content: ''; width: 32px; height: 32px; background-size: 32px;}
@@ -37,9 +37,9 @@ li.active_list > a {color: var(--background-green)}
 .header .head_btn_box .btn:nth-child(3) {background: url(../assets/img/header_mic.svg); background-size: 52px;}
 .content .container {flex-grow: 1; overflow: auto;}
 
-.index_wrap {position: relative; margin: 0 auto; padding: 100px 30px; max-width: 1080px; width: 100%; height: 100%;}
+.index_wrap {position: relative; margin: 0 auto; padding: 120px 30px; max-width: 1440px; min-width: 1296px; width: 90%; height: 100%;}
 .index_wrap .logo {position: absolute; top: 0; width: 200px; height: 80px; font-size: 43px; color: transparent; cursor: pointer; }
-.index_wrap .index_content {position: relative; margin: 0 auto; max-width: 1300px; width: 100%; height: 100%; background: #fff; border-radius: 61px;}
+.index_wrap .index_content {position: relative; margin: 0 auto; min-height:648px; max-width: 1300px; width: 100%; height: 100%; background: #fff; border-radius: 61px;}
 .index_content .subtitle_join {position: absolute; top: 13px; left: 39px; font-size: 36px; color: #285a43;}
 .index_content .subtitle_join::after {position: absolute; bottom: 0; left: 0; display: block; width: 100%; height: 2px; background-color: #285a43; content: '';}
 .index_content .choice_tab {padding: 20px 90px;}
@@ -59,11 +59,12 @@ li.active_list > a {color: var(--background-green)}
 .terms_list li .terms_show_btn{position: absolute; right: 0; width: 200px; height: 43px; border-radius: 10px; font-size: 24px; background-color: #B4E0A0; color: #fff;}
 .index_content .next_step_btn{position: absolute; right: 50px; bottom: 100px; width: 200px; height: 43px; border-radius: 10px; font-size: 24px;  background-color: #285a43; color: #fff;}
 
-.step_two_form {display: flex; flex-direction: column; margin: 0 auto; max-width: 395px; font-size: 18px; }
+.step_two_form {display: flex; flex-direction: column; margin: 20px auto 20px; font-size: 18px; width:800px; }
 .step_two_form.login_step {margin: 10% auto;}
-.step_two_form .input_form {display: block; margin: 10px 0 20px; padding: 15px 20px; border-radius: 5px; width: 85%; font-size: 18px; background-color: #B4E0A0; border: 0;}
+.step_two_form .input_form {display: block; margin: 10px 40px 10px; width: 600px; padding: 15px 20px; border-radius: 5px; font-size: 18px; background-color: #B4E0A0; border: 0;}
+.step_two_form .input_form_txt { position: relative; text-align: right; width:680px; display: inline-block; margin: 0 auto 15px;}
 
-.test_btn {display: block; margin: 20px; width: 200px; font-size: 32px; line-height: 1.8; background-color: #285a43;}
+.test_btn { display: block; margin: 20px; width: 200px; font-size: 32px; line-height: 1.8; background-color: #285a43;}
 
 
 @keyframes close {
