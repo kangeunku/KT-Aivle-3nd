@@ -11,6 +11,9 @@ const App = () => {
   const [islogin, setloginState] = useState(false);
   const [navState, setnavState] = useState("home");
 
+  const changeislogn = (value) => {
+      setloginState(value);
+  };
   
   
   const Navigate = () => {
@@ -92,7 +95,7 @@ const App = () => {
             <Modal></Modal>
             <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link>
           </h1>
-          <Choicelogin />
+          <Choicelogin changeislogn={changeislogn}/>
         </div>
       </div>
     )

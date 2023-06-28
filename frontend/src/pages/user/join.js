@@ -5,7 +5,7 @@ import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
 // import {local_Hotkey} from './join';
 import axios from "axios";
 
-const Join = () => {
+const Join = ({changeislogn}) => {
     const [joinState, setjoinState] = useState(1);
 
     const next_stage = (txt) => {
@@ -56,7 +56,7 @@ const Join = () => {
     else if( joinState === 2 ){
         return (
             <>
-                <Joinsteptwo />
+                 <Joinsteptwo changeislogn={changeislogn}/>
                 {/* <button className="next_step_btn" onClick={() => next_stage('end')}>다음</button> */}
             </>
         );
@@ -227,7 +227,8 @@ const Joinstepone = () => {
     );
 }
 
-const Joinsteptwo = () => {
+const Joinsteptwo = ({changeislogn}) => {
+    
     const[form, setFrom] = useState({
         "username": "",
         "password": "",
@@ -246,6 +247,7 @@ const Joinsteptwo = () => {
         .then(function (response) {
             // console.log(JSON.stringify(response));
             const res = JSON.stringify(response.statusText);
+            changeislogn(true)
         })
         .catch(function (error) {
             console.log(error);
@@ -308,7 +310,7 @@ const Joinsteptwo = () => {
                     </label>  
                 </div>
             </div>
-            <button className="next_step_btn" onClick={()=> join_btn()} disabled={!isAllFieldsValid}> <strong style={{color:"red"}}>0</strong> 회원가입 </button>
+            <button className="next_step_btn" onClick={()=> join_btn()}> <strong style={{color:"red"}}>0</strong> 회원가입 </button>
         </>
     );
 }

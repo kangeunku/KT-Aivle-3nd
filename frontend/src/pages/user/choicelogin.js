@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Join } from "./join";
 import { Login } from "./login";
 
-const Choicelogin = () => {
+const Choicelogin = ({ changeislogn }) => {
     const [navState, setnavState] = useState("choicelogin");
 
     if(navState == 'choicelogin'){
@@ -37,7 +37,7 @@ const Choicelogin = () => {
     else if(navState == 'join'){
         return(
             <div className="index_content">
-                <Join />
+                <Join changeislogn={changeislogn}/>
             </div>
         )
 
@@ -45,7 +45,7 @@ const Choicelogin = () => {
     else if(navState == 'login'){
         return(
             <div className="index_content">
-                <Login />
+                <Login changeislogn={changeislogn}/>
             </div>
         )
     }

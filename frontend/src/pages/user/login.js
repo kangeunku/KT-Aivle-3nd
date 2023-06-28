@@ -6,7 +6,7 @@ import {  Header } from "../../components";
 
 import axios from "axios";
 
-const Login = () => {
+const Login = ({ changeislogn }) => {
     const[form, setFrom] = useState({
         "username": "",
         "password": "",
@@ -25,7 +25,7 @@ const Login = () => {
             // setResult(response.data);
             console.log(JSON.stringify(response.statusText));
             const res = JSON.stringify(response.statusText);
-
+            changeislogn(true)
             // if(res === '"OK"'){
             //     navigate();
             // }
