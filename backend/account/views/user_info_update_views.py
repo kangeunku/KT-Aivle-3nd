@@ -22,7 +22,7 @@ class CheckPasswordAPI(APIView): # View 쓰니깐 405 error뜸
         user = Users.objects.get(username=request.user.username)
         password = request.data.get('password') # 현재 비밀번호
         if user.check_password(password):
-            return Response({'status': 'succes'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'status': 'succes'}, status=status.HTTP_200_OK)
         else:
             return Response({'status': 'fail(Incorrect Password)'}, status=status.HTTP_404_NOT_FOUND)
 
