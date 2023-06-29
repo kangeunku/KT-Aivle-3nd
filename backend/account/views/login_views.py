@@ -23,6 +23,9 @@ class RegisterAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        
+        # 회원가입 후 로그인
+        login(request, user)
 
         return Response({
             "user": UsersSerialize(user, context=self.get_serializer_context()).data,
