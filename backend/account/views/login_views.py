@@ -1,7 +1,7 @@
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 
 from knox.models import AuthToken
 from knox.views import LoginView as KnoxLoginView
@@ -41,6 +41,13 @@ class LoginAPI(KnoxLoginView):
         serializer = AuthTokenSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
+        
+        # 로그인한 계정이 use_yn = "n" 인 경우 탈퇴한 회원으로 로그인 못함
+
+        if user.use_yn == 'n':
+
+            return Response({"message": "탈퇴한 회원입니다."}, status=status.HTTP_401_UNAUTHORIZED)
+        
         login(request, user)
         nick = Users.objects.get(username=user).nickname
         return Response({"message" : str(nick) + "님환영합니다"})
