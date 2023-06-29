@@ -7,7 +7,7 @@ from knox.models import AuthToken
 from knox.views import LoginView as KnoxLoginView
 
 from ..serializers import UsersSerialize, RegisterSerialize
-from ..models import CustomToken
+from ..models import CustomToken, Users
 
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie, csrf_exempt
 from django.utils.decorators import method_decorator
@@ -39,17 +39,5 @@ class LoginAPI(KnoxLoginView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request, user)
-
-        # Call KnoxLoginView post method
-        response = super().post(request, format=None)
-
-        # Get the token from the response
-        token = response.data['token']
-
-        # Delete existing token if exists
-        CustomToken.objects.filter(user=user).delete()
-
-        # Save the new token in CustomToken
-        CustomToken.objects.create(user=user, token=token)
-
-        return response
+        nick = Users.objects.get(username=user).nickname
+        return Response({"message" : str(nick) + "님환영합니다"})
