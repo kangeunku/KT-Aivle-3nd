@@ -144,8 +144,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 CORS_ORIGIN_WHITELIST = (
-    'http://127.0.0.1:8000', 'http://localhost:3000')
-# CORS_ALLOW_CREDENTIALS = True
+    'http://127.0.0.1:8000', 'http://127.0.0.1:3000')
+CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_HEADERS = (
     'access-control-allow-credentials',
@@ -188,11 +188,11 @@ REST_FRAMEWORK = {
 #   'POST',
 # ]
 CORS_ALLOWED_ORIGINS = [
-  "http://localhost:3000",
+#   "http://localhost:3000",
   "http://127.0.0.1:3000",
   "http://127.0.0.1:8000",
 ]
 # csrf을 허용하는 코드
 # 서버올리면 필히 수정 필요
 # https://docs.djangoproject.com/en/4.0/ref/settings/#std-setting-CSRF_TRUSTED_ORIGINS
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000", "http://127.0.0.1:8000", "http://localhost:3000",]
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000", "http://127.0.0.1:8000"]#, "http://localhost:3000",]
