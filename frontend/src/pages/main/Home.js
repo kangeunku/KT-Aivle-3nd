@@ -9,7 +9,7 @@ const Home = () => {
     const [inputValue, setInputValue] = useState('');
     const [result, setResult] = useState([]);
     const [res, setRes] = useState([]);
-
+    
     const goToSecondPage = async () => {
         setCurrentPage('second');
     };
@@ -34,8 +34,15 @@ const Home = () => {
     }
 
     const goToForthPage = () => {
+        console.log('goToForthPage');
         setCurrentPage('forth');
     };
+
+    const returnThirdPage = () => {
+        console.log('returnThirdPage');
+        setCurrentPage('third');
+    };
+
 
     const handleInputChange= (event) => {
         setInputValue(event.target.value);
@@ -59,10 +66,10 @@ const Home = () => {
 
     return(
         <div>
-        {currentPage === 'first' && (<FirstPage inputValue={inputValue} handleInputChange={handleInputChange} handleButtonClick={handleButtonClick} />)}
-        {currentPage === 'second' && <SecondPage inputValue={inputValue} goToThirdPage={goToThirdPage} result={result}/>}
-        {currentPage === 'third' && <ThirdPage  goToForthPage={goToForthPage} result={res}/>}
-        {currentPage === 'forth' && <ForthPage goToThirdPage={goToThirdPage}/>}
+            {currentPage === 'first' && (<FirstPage inputValue={inputValue} handleInputChange={handleInputChange} handleButtonClick={handleButtonClick} />)}
+            {currentPage === 'second' && <SecondPage inputValue={inputValue} goToThirdPage={goToThirdPage} result={result}/>}
+            {currentPage === 'third' && <ThirdPage goToForthPage={goToForthPage} result={res}/>}
+            {currentPage === 'forth' && <ForthPage goToThirdPage={returnThirdPage} result={res}/>}
         </div>
     );
 };
@@ -71,32 +78,32 @@ const Home = () => {
 const StarRating = ({ score }) => {
     const filledStars = Math.floor(score); // 꽉 채워진 별 개수
     const halfFilledStar = score - filledStars === 0.5; // 절반 채워진 별 여부
-  
+
     const renderStars = () => {
         const stars = [];
-  
+
     // 꽉 채워진 별 추가
     for (let i = 0; i < filledStars; i++) {
         stars.push(<div key={i} className={styles.goodsstar1}/>);
-        console.log(1)
+        // console.log(1)
     }
-  
+
     // 절반 채워진 별 추가
     if (halfFilledStar) {
         stars.push(<div key={filledStars} className={styles.goodsstar2}/>);
-        console.log(0.5)
-      }
-  
+        // console.log(0.5)
+        }
+
     // 빈 별 추가
     const emptyStars = 5 - filledStars - (halfFilledStar ? 1 : 0);
     for (let i = 0; i < emptyStars; i++) {
         stars.push(<div key={filledStars + (halfFilledStar ? 1 : 0) + i} className={styles.goodsstar3}/>);
-        console.log(0)
+        // console.log(0)
     }
 
     return stars;
     };
-  
+
     return <label className={styles.goodsscore}>{renderStars()}</label>;
 };
 
@@ -175,10 +182,16 @@ const Popup = ({ onClose, message }) => {
 
 // 추천 상품 목록 보여주기
 const ThirdPage = ({goToForthPage, result }) => {
-    const [popupVisible, setPopupVisible] =useState(false);
+    const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
 
-    console.log('third result', result);
+    // console.log('third result', result);
+    // result.map((item) =>{
+    //     console.log(item.image);
+    //     console.log(item.title);
+    //     console.log(item.lprice);
+    //     console.log(item.link);
+    // });
 
     const handleButtonClick = (message) => {
         setPopupMessage(message);
@@ -196,38 +209,41 @@ const ThirdPage = ({goToForthPage, result }) => {
                 <div className={styles.homebox11}>추천 상품</div>
             </div>
             <div className={styles.homebox2}>
-                <div className={styles.goodsbox}>
-                    <div className={styles.goodsbox1}>
-                        <img className={styles.goodsimage} src={"https://shop-phinf.pstatic.net/20221021_183/1666336371323nsBJM_JPEG/67472269985761665_608306589.jpg?type=m510"} alt="추천 상품 이미지1"/>
-                    </div>
-                    <div className={styles.goodsbox2}>
-                        <label className={styles.goodsname}>
-                            속초동해닭강정
-                        </label>
-                        <label className={styles.goodsprice}>
-                            19000원
-                        </label>
-                        <label className={styles.goodsscore}>
-                            <strong>5점</strong> <StarRating score={3.5} />
-                        </label>
-                        <button className={styles.goodsurl} onClick={goToForthPage}>
-                            구매하기
-                        </button>
-                            {/* <button onClick={() => handleButtonClick("선택")}>
-                                <div>구매하기</div>
+                {result.map((item) => (
+                    <div className={styles.goodsbox}>
+                        <div className={styles.goodsbox1} key={item.productId}>
+                            {/* <img className={styles.goodsimage} src={"https://shop-phinf.pstatic.net/20221021_183/1666336371323nsBJM_JPEG/67472269985761665_608306589.jpg?type=m510"} alt="추천 상품 이미지1"/> */}
+                            <img className={styles.goodsimage} src={item.image}/>
+                        </div>
+                        <div className={styles.goodsbox2}>
+                            <label className={styles.goodsname}>
+                                {item.title.slice(0, 10)}
+                            </label>
+                            <label className={styles.goodsprice}>
+                                {item.lprice}원
+                            </label>
+                            {/* <label className={styles.goodsscore}>
+                                <strong>5점</strong> <StarRating score={3.5} />
+                            </label> */}
+                            <button className={styles.goodsurl} onClick={goToForthPage}>
+                                구매하기
                             </button>
-                            {popupVisible && (
-                            <Popup onClose={handlePopupClose} message={popupMessage} />
-                            )} */}
+                                {/* <button onClick={() => handleButtonClick("선택")}>
+                                    <div>구매하기</div>
+                                </button>
+                                {popupVisible && (
+                                <Popup onClose={handlePopupClose} message={popupMessage} />
+                                )} */}
+                        </div>
                     </div>
-                </div>
+                ))}
             </div>    
-       </div>
+        </div>
     )
 }
 
 // 모달창으로 띄워주기
-const ForthPage = ({goToThirdPage}) => {
+const ForthPage = ({goToThirdPage, result}) => {
     const [PopupState, setPopupState] = useState(true);
 
     function OnOffPopup(){
@@ -237,15 +253,18 @@ const ForthPage = ({goToThirdPage}) => {
         else{
             setPopupState(true);
         }
-    }
+    };
+
+    // 통신 함수 구현
+
+    
     return (
         <div>
         {PopupState === true?
         <Slider setPopupState={setPopupState}/>
-        : <FirstPage goToThirdPage={goToThirdPage()}></FirstPage>}
+        : <ThirdPage goToForthPage={goToThirdPage} result={result}></ThirdPage>}
         </div>
     )
-    
 };
 
 function CategoryBoxes({result, onItemSelect, selectedItems}) {
@@ -270,28 +289,5 @@ function CategoryBoxes({result, onItemSelect, selectedItems}) {
         </div>
     );
 }
-
-const detail_category = [
-    {
-        category: "카테고리",
-        cate_lst: ["원진", "생활/건강", "가구/인테리어", "출산/육아", "디지털/가전"],
-    },
-    {
-        category: "브랜드",
-        cate_lst: ["늘품", "산지애", "다농이네", "산들네", "과일꾼", "장길영사과"],
-    },
-    {
-        category: "키워드 추천",
-        cate_lst: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사과"],
-    },
-    {
-        category: "키워드 추천",
-        cate_lst: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사"],
-    },
-    {
-        category: "키워드 추천",
-        cate_lst: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사과"],
-    },
-];
 
 export { Home };

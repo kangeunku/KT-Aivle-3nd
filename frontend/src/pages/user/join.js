@@ -4,8 +4,9 @@ import Modal from "./modal.js"
 import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
 // import {local_Hotkey} from './join';
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const Join = () => {
+const Join = ({changeislogn}) => {
     const [joinState, setjoinState] = useState(1);
 
     const next_stage = (txt) => {
@@ -56,7 +57,7 @@ const Join = () => {
     else if( joinState === 2 ){
         return (
             <>
-                <Joinsteptwo />
+                 <Joinsteptwo changeislogn={changeislogn}/>
                 {/* <button className="next_step_btn" onClick={() => next_stage('end')}>다음</button> */}
             </>
         );
@@ -72,7 +73,7 @@ const Join = () => {
 
 const Joinstepone = () => {
     const [ModalState, setModalState] = useState('false'); //모달창의 상태를 보관해 둘 useState입니다.
-
+    
     function OnOffModal() { //모달창 상태를 변경하는 함수입니다.
         if (ModalState === true) {
             setModalState(false);
@@ -227,7 +228,8 @@ const Joinstepone = () => {
     );
 }
 
-const Joinsteptwo = () => {
+const Joinsteptwo = ({changeislogn}) => {
+    const navigate = useNavigate(); 
     const[form, setFrom] = useState({
         "username": "",
         "password": "",
@@ -240,17 +242,26 @@ const Joinsteptwo = () => {
     });
 
     const join_btn = async () => {
+        // let response_data = Send_api(4, form);
         const url = "http://127.0.0.1:8000/v1/register/"
 
-        await axios.post(url, form)
+        await axios.post(url, form, {withCredentials: true})
         .then(function (response) {
             // console.log(JSON.stringify(response));
             const res = JSON.stringify(response.statusText);
+            changeislogn(true);
+            navigate('/home');
         })
         .catch(function (error) {
             console.log(error);
         });
     };
+
+    // const join_btn = () => {
+        
+    //     changeislogn(true)
+    //     navigate('/home')
+    // }
 
     const handleUsernameChange = (e) => {
         const username = e.target.value;
@@ -308,7 +319,7 @@ const Joinsteptwo = () => {
                     </label>  
                 </div>
             </div>
-            <button className="next_step_btn" onClick={()=> join_btn()} disabled={!isAllFieldsValid}> <strong style={{color:"red"}}>0</strong> 회원가입 </button>
+            <button className="next_step_btn" onClick={()=> join_btn()}> <strong style={{color:"red"}}>0</strong> 회원가입 </button>
         </>
     );
 }

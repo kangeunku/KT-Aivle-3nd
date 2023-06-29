@@ -6,7 +6,7 @@ import {  Header } from "../../components";
 
 import axios from "axios";
 
-const Login = () => {
+const Login = ({ changeislogn }) => {
     const[form, setFrom] = useState({
         "username": "",
         "password": "",
@@ -19,13 +19,17 @@ const Login = () => {
     const join_btn = async () => {
         const url = "http://127.0.0.1:8000/v1/login/"
 
-        await axios.post(url, form)
+        await axios.post(url, form, {withCredentials: true})
         .then(function (response) {
             // setResult(JSON.stringify(response.data))
             // setResult(response.data);
-            console.log(JSON.stringify(response.statusText));
+            // console.log(response);
+            // console.log(JSON.stringify(response.statusText));
             const res = JSON.stringify(response.statusText);
-
+            
+            // 로그인 처리및 홈이동
+            changeislogn(true)
+            navigate('/home')
             // if(res === '"OK"'){
             //     navigate();
             // }
