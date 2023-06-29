@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styles from "../../styles/Faq.module.css";
 // import { RequestTTS } from "../../components/common/google_tts";
-import { TextToSpeech } from "../../components/common/google_tts";
+// import { TextToSpeech } from "../../components/common/google_tts";
 
 const faqData = [
     { index: 0, 
@@ -93,7 +93,7 @@ const FirstPage = ({goToSecondPage}) => {
                                             {faq.answer.split('\n').map((line, lineIndex) => (
                                                 <div key={lineIndex}>
                                                     {line}
-                                                    <TextToSpeech value={faq.answer} onComplete={handleTextToSpeechonComplete}/>   
+                                                    {/* <TextToSpeech value={faq.answer} onComplete={handleTextToSpeechonComplete}/>    */}
                                                 </div>
                                             ))}
                                         </div>

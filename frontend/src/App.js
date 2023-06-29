@@ -1,79 +1,134 @@
 import React, { useState, useRef } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 
 import {  Home, Basket, EditInfo ,Support, Choicelogin, Test } from "./pages";
 import {  Header } from "./components";
 
+import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
 
 
 const App = () => {
   const [islogin, setloginState] = useState(false);
   const [navState, setnavState] = useState("home");
+
+  const changeislogn = (value) => {
+      setloginState(value);
+  };
+  
   
   const Navigate = () => {
-  
+    
+    
     return (
-      <nav className="nav"> 
-        <ul className="nav_lsit">
-          <li className={navState === "home" ? "active_list" : null}>
-            <Link to="/home" onClick={() => setnavState("home")}>검색</Link>
-          </li>
-          <li className={navState === "basket" ? "active_list" : null}>
-            <Link to="/basket" onClick={() => setnavState("basket")}>찜목록</Link>
-          </li>
-          <li className={navState === "editinfo" ? "active_list" : null}>
-            <Link to="/editinfo" onClick={() => setnavState("editinfo")}>회원정보 수정</Link>
-          </li>
-          <li className={navState === "support" ? "active_list" : null}>
-            <Link to="/support" onClick={() => setnavState("support")}>고객센터</Link>
-          </li>
-          <li className={navState === "test" ? "active_list" : null}>
-            <Link to="/test" onClick={() => setnavState("test")}>테스트섹션</Link>
-          </li>
-        </ul>
-      </nav>
+      <>
+      <Hotkey_global/>
+        <nav className="nav"> 
+          <ul className="nav_lsit">
+            <li className={navState === "home" ? "active_list" : null}>
+              <Link to="/home" onClick={() => setnavState("home")}>검색</Link>
+            </li>
+            <li className={navState === "basket" ? "active_list" : null}>
+              <Link to="/basket" onClick={() => setnavState("basket")}>찜목록</Link>
+            </li>
+            <li className={navState === "editinfo" ? "active_list" : null}>
+              <Link to="/editinfo" onClick={() => setnavState("editinfo")}>회원정보 수정</Link>
+            </li>
+            <li className={navState === "support" ? "active_list" : null}>
+              <Link to="/support" onClick={() => setnavState("support")}>고객센터</Link>
+            </li>
+            <li className={navState === "test" ? "active_list" : null}>
+              <Link to="/test" onClick={() => setnavState("test")}>테스트섹션</Link>
+            </li>
+          </ul>
+        </nav>
+      </>
       );
   }
   
+  // 핫키 생성
+  const Hotkey_global = () => {
+    // 핫키 설정
+    const keyMap_g = {
+        spaceQ_key: 'space+q',
+        spaceW_key: "space+w",
+        spaceE_key: "space+e",
+        spaceR_key: "space+r",
+        // keypress, keydown, keyup.
+        // space_down: { sequence: "space", action: "keydown" }
+    };
+
+    const homeClick = () => {
+        console.log('space+q');
+        setnavState("home");
+    };
+    const basketClick = () => {
+        console.log('space + w');
+    };
+    const editinfoClick = () => {
+      console.log('space + e');
+    };
+    const supportClick = () => {
+      console.log('space + r');
+    };
+
+    // 핫키 적용 함수
+    const handlers_g = {
+        spaceQ_key:homeClick,
+        spaceW_key:basketClick,
+        spaceE_key:editinfoClick,
+        spaceR_key:supportClick
+    };
+    
+    return (
+        <>
+            <GlobalHotKeys keyMap={keyMap_g} handlers={handlers_g}>
+            </GlobalHotKeys>
+        </>
+      );
+    };
   if (islogin == false){
     return (
       <div className='App'>
         <div className="index_wrap">
           <h1 className="logo">
             {/* <a onClick={() =>{setloginState(true)}}>logo</a> */}
-            <Modal></Modal>
-            <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link>
+            {/* <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link> */}
+          <Modal></Modal>
           </h1>
-          <Choicelogin />
+          <Choicelogin changeislogn={changeislogn}/>
         </div>
       </div>
     )
   }
   else{
     return (
-      <div className='App'>
-        <div className="wrap">
-          <div className="side">
-            <h1 className="logo">
-              <a onClick={() =>{setloginState(false)}}>logo</a>
-            </h1>
-            <Navigate></Navigate>
-          </div>
-          <section className="content">
-            <Header />
-            <div className="container">
-              <Routes>
-                {/* 라우터가 적용될 페이지 */}
-                <Route path="/home" element={<Home />} />
-                <Route path="/basket" element={<Basket />} />
-                <Route path="/editinfo" element={<EditInfo />} />
-                <Route path="/support" element={<Support />} />
-                <Route path="/test" element={<Test />} />
-              </Routes>
+      <>
+        <Hotkey_global/>
+
+        <div className='App'>
+          <div className="wrap">
+            <div className="side">
+              <h1 className="logo">
+                <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link>
+              </h1>
+              <Navigate></Navigate>
             </div>
-          </section>
+            <section className="content">
+              <Header />
+              <div className="container">
+                <Routes>
+                  {/* 라우터가 적용될 페이지 */}
+                  <Route path="/home" element={<Home />} />
+                  <Route path="/basket" element={<Basket />} />
+                  <Route path="/editinfo" element={<EditInfo />} />
+                  <Route path="/support" element={<Support />} />
+                  <Route path="/test" element={<Test />} />
+                </Routes>
+              </div>
+            </section>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 

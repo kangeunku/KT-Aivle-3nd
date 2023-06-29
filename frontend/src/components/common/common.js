@@ -88,6 +88,49 @@ const Hotkey_start = () => {
     );
 };
 
+const GlobalHotkey_start = () => {
+    const [spacePressed, setSpacePressed] = useState(false);
+  
+    const keyMap = {
+        space_down: 'space',
+    };
+  
+    const spacedownClick = () => {
+        console.log('space down');
+    };
+  
+    const handlers = {
+        space_down: spacedownClick,
+    };
+  
+    const handleKeyDown = (event) => {
+        if (event.code === 'Space') {
+            setSpacePressed(true);
+        }
+    };
+  
+    const handleKeyUp = (event) => {
+        if (event.code === 'Space') {
+            setSpacePressed(false);
+        }
+    };
+  
+    return (
+        <>
+            <GlobalHotKeys keyMap={keyMap} handlers={handlers} />
+            <div
+                tabIndex={-1}
+                onKeyDown={handleKeyDown}
+                onKeyUp={handleKeyUp}
+                style={{ outline: 'none' }}
+            >
+            </div>
+        </>
+    );
+};
+
+
+
 // 장고 전송 함수, state  
 const Send_api = (state, data) => {
     const url = "http://127.0.0.1:8000/"
@@ -113,7 +156,7 @@ const Send_api = (state, data) => {
     });
 };
 
-export { Send, Stt_common, Hotkey_start, Send_api };
+export { Send, Stt_common, Hotkey_start, GlobalHotkey_start, Send_api };
 
 
 
