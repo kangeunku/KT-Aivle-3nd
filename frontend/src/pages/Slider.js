@@ -2,18 +2,22 @@ import { useState, useRef, useEffect, forwardRef } from "react";
 import styled from "styled-components";
 
 const Resultpopup = styled.div`
-    position: fixed;
-    background-color: rgba(255, 255, 255, 1);
-    border-radius: 5px;
-    width:60vw;
-    height:1000px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    border: 1px solid rgba(0, 0, 0, 0.4);
-    border-radius: 5px;
-    overflow:auto;
+    position: relative; 
+    margin:auto; 
+    background-color: 
+    rgba(255,255,255,0.95); 
+    padding: 50px; 
+    width: 80%; 
+    height: 80%; 
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25); 
+    border-radius: 20px; 
+    animation: showup 0.3s ease forwards; 
+    min-width: 800px; 
+    min-height: 400px; 
+    opacity: 0; 
+    text-align: center; 
+    line-height: 160%; 
+    color: #262626;
 `;
 
 const Wrapper = styled.div`
@@ -346,7 +350,7 @@ const WantedImg = [
 
 
 const wantedTitle = [
-  "오전 9시 이전 주문건 당일배송",
+  "요약 제목 1",
   "2022 한국 소비자 산업평가 사과 부문 우수상 수상!",
   "사과내부의 당분이 한곳에 모여 꿀처럼 보이는 '밀병'",
   "상품 수령하신 후 냉장보관 후에 드셔야 더욱 맛있습니다.",
@@ -368,11 +372,6 @@ const wantedDes = [
   "발자국",
   "구구",
 ];
-
-// const btnNum = [
-//     "assets/img/leftBtn.jpg",
-//     "assets/img/rightBtn.jpg"
-// ]
 
 const Slider = forwardRef((props, ref) =>{
 
@@ -554,7 +553,7 @@ const Slider = forwardRef((props, ref) =>{
             }}
 
           >
-            <Container1>
+             <Container1>
               <PrivewImg
                 style={{
                   opacity: 0.5,
@@ -705,11 +704,7 @@ const Slider = forwardRef((props, ref) =>{
 
             </Container1>
 
-            
-
-
           </Row>
-
 
         </Wrapper></></>
 
@@ -1005,6 +1000,3 @@ const Slider = forwardRef((props, ref) =>{
 });
 
 export default Slider;
-
-
-//Slider.js

@@ -2,24 +2,32 @@ import React, { useState, useEffect, useCallback } from "react";
 import styles from "../../styles/Faq.module.css";
 // import { RequestTTS } from "../../components/common/google_tts";
 // import { TextToSpeech } from "../../components/common/google_tts";
+import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
+
 
 const faqData = [
     { index: 0, 
+        id : 1,
         subject: '이 사이트는 무엇을 제공하나요?', 
         answer: '이 사이트는 시각장애인을 위해 이미지에 있는 텍스트 정보를 요약하여 제공합니다. 이를 통해 시각장애인 사용자는 온라인 쇼핑에서 이미지에 있는 정보를 더 쉽게 알아볼 수 있습니다.' },
-    { index: 0, 
+    { index: 0,
+        id : 2, 
         subject: '어떻게 이 사이트를 사용하나요?', 
         answer: '이 사이트를 사용하려면, 키보드의 지정된 키를 누르거나, 안내에 따라 음성으로 명령을 입력할 수 있습니다. 모든 서비스의 처음으로 가려면 키보드의 ESC 키를 눌러주세요. 이 밖에 문의 사항은 고객센터의 1 대 1 문의를 이용해 주세요.' },
     { index: 2, 
+        id : 3,
         subject: '이미지에 있는 텍스트를 어떻게 요약하나요?', 
         answer: '사이트는 이미지 처리 기술과 자연어 처리 기술을 결합하여 이미지에 있는 텍스트를 인식하고 요약합니다. 이를 통해 중요한 정보를 간결하게 전달합니다.' },
     { index: 2, 
+        id : 4,
         subject: '요약된 텍스트를 어떻게 확인하나요?', 
         answer: '요약된 텍스트는 화면에 표시되며, 시각장애인 사용자를 위해 음성으로도 제공됩니다. 해당 화면 안의 찜하기 버튼을 통해서 해당 상품 정보를 보관할 수 있습니다.' },
     { index: 2, 
+        id : 5,
         subject: '내 개인정보는 안전하게 보호되나요?', 
         answer: '네, 이 사이트는 개인정보 보호에 최선을 다하고 있습니다. ' },
-    { index: 3, 
+    { index: 3,
+        id : 6, 
         subject: '이 사이트를 무료로 사용할 수 있나요?', 
         answer: '네, 이 사이트는 무료로 사용할 수 있습니다. 단, 상품에 대한 결제는 이 사이트에서 진행되지 않습니다.' },
 ];
@@ -59,14 +67,87 @@ const FirstPage = ({goToSecondPage}) => {
     
     const handleQuestionClick = (index) => {
         setActiveIndex(activeIndex === index ? null : index);
-        setText(faqData[index].answer);
+        //setText(faqData[index].answer);
     };
 
     const handleTextToSpeechonComplete = useCallback((result) => {
         setAudioSource(result);
     }, []);
 
+    // 핫키 생성
+    const Hotkey_faq = () => {
+        // 핫키 설정
+        const keyMap_faq = {
+            space1_key: 'space+1',
+            space2_key: "space+2",
+            space3_key: 'space+3',
+            space4_key: "space+4",
+            space5_key: "space+5",
+            space6_key: "space+6",
+            enter_key: 'enter'
+        };
+        
+        const faq1Click = () => {
+            console.log('faq1Click');
+            // handleQuestionClick(document.getElementById('1'));
+            setActiveIndex(activeIndex === 0 ? null : 0);
+            setText(faqData[0].answer);    
+        };
+        const faq2Click = () => {
+            console.log('faq1Click');
+            // handleQuestionClick(document.getElementById('1'));
+            setActiveIndex(activeIndex === 1 ? null : 1);
+            setText(faqData[1].answer);
+        };
+        const faq3Click = () => {
+            console.log('faq1Click');
+            // handleQuestionClick(document.getElementById('1'));
+            setActiveIndex(activeIndex === 2 ? null : 2);
+            setText(faqData[2].answer);  
+        };
+        const faq4Click = () => {
+            console.log('faq1Click');
+            // handleQuestionClick(document.getElementById('1'));
+            setActiveIndex(activeIndex === 3 ? null : 3);
+            setText(faqData[3].answer);  
+        };
+        const faq5Click = () => {
+            console.log('faq1Click');
+            // handleQuestionClick(document.getElementById('1'));
+            setActiveIndex(activeIndex === 4 ? null : 4);
+            setText(faqData[4].answer);  
+        };
+        const faq6Click = () => {
+            console.log('faq1Click');
+            // handleQuestionClick(document.getElementById('1'));
+            setActiveIndex(activeIndex === 5 ? null : 5);
+            setText(faqData[5].answer);  
+        };
+        const NextClick = () => {
+            console.log('enter');
+            goToSecondPage();
+        }
+        // 핫키 적용 함수
+        const handlers_faq = {
+            space1_key: faq1Click,
+            space2_key: faq2Click,
+            space3_key: faq3Click,
+            space4_key: faq4Click,
+            space5_key: faq5Click,
+            space6_key: faq6Click,
+            enter_key: NextClick
+        };
+        
+        return (
+            <>
+                <GlobalHotKeys keyMap={keyMap_faq} handlers={handlers_faq}>
+                </GlobalHotKeys>
+            </>
+        );
+    };
     return (
+        <>
+        <Hotkey_faq />
         <div className={styles.faq_container1}>
             <div className={styles.faq_main1}>
                 <div className={styles.page2logo2} ></div>
@@ -77,7 +158,7 @@ const FirstPage = ({goToSecondPage}) => {
                     {faqData.map((faq, index) => (
                         <div>
                             <div className={styles.faq_container_box} key={index}>
-                                <div className={styles.faq_container_title} onClick={() => {handleQuestionClick(index)}}>
+                                <div className={styles.faq_container_title} id={faq.id} onClick={() => {handleQuestionClick(index)}}>
                                     <strong>[{categories[faq.index]}]</strong> {faq.subject}
                                     {activeIndex === index ? (
                                         <div className={styles.faq_upbutton} alt="내리기"/>
@@ -111,9 +192,9 @@ const FirstPage = ({goToSecondPage}) => {
                 </button>
             </div>
         </div>
+        </>
     );
 };
-    
 const SecondPage = ({goToThirdPage}) => {
     const [activeIndex, setActiveIndex] = useState(null);
 
@@ -121,7 +202,33 @@ const SecondPage = ({goToThirdPage}) => {
         setActiveIndex(activeIndex === index ? null : index);
     };
 
+    // 핫키 생성
+    const Hotkey_faq_2 = () => {
+        // 핫키 설정
+        const keyMap_faq2 = {
+            enter_key: 'enter',
+        };
+
+        const enterClick = () => {
+            console.log('enter');
+            goToThirdPage();
+        };
+
+        // 핫키 적용 함수
+        const handlers_faq2 = {
+            enter_key: enterClick,
+        };
+        return (
+            <>
+                <GlobalHotKeys keyMap={keyMap_faq2} handlers={handlers_faq2}>
+                </GlobalHotKeys>
+            </>
+        );
+    };
+
     return (
+        <>
+        <Hotkey_faq_2 />
         <div className={styles.faq_container1}>
             <div className={styles.faq_main1}>
                 <div className={styles.page2logo2} ></div>
@@ -180,6 +287,7 @@ const SecondPage = ({goToThirdPage}) => {
             <div>
             </div>
         </div>
+        </>
     );
 };
 
@@ -209,9 +317,9 @@ const ThirdPage = () => {
         };
         setJsonData(JSON.stringify(data));
     };
-      
 
     return (
+        <>
         <div className={styles.faq_container3}>
             <div className={styles.faq_main1}>
                 <div className={styles.page2logo2} ></div>
@@ -231,7 +339,7 @@ const ThirdPage = () => {
                             문의 유형
                         </option>
                         {categories.map((category, index) => (
-                            <option className={styles.faq_selectbox} key={index} value={category}>
+                            <option className={styles.faq_selectbox} id={index} key={index} value={category}>
                                 {category}
                             </option>
                         ))}
@@ -262,6 +370,7 @@ const ThirdPage = () => {
                 {jsonData} && <div>저장된 데이터: {jsonData}</div>
             </div>
         </div>
+        </>
     );
 };
 

@@ -3,6 +3,9 @@ import {Send_api} from "../../components";
 import styles from "../../styles/Home.module.css";
 import Slider from "../Slider";
 import axios from "axios";
+import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
+
+
 
 const Home = () => {
     const [currentPage, setCurrentPage] = useState('first');
@@ -102,18 +105,40 @@ const StarRating = ({ score }) => {
 
 
 const FirstPage = ({inputValue, handleInputChange, handleButtonClick}) => {
+     // 핫키 생성
+     const Hotkey_h1 = () => {
+        // 핫키 설정
+        const keyMap_h1 = {
+            ctrlshift_key: 'ctrl+shift'
+        };
 
+        const inputClick = () => {
+            console.log('space');
+            document.getElementById('search_input').focus();
+        };
+        // 핫키 적용 함수
+        const handlers_h1 = {
+            ctrlshift_key: inputClick,
+        };
+        return (
+            <>  <GlobalHotKeys keyMap={keyMap_h1} handlers={handlers_h1}>
+                </GlobalHotKeys></>
+        );
+    };
     return (
+        <>
+        <Hotkey_h1/>
         <div className={styles.home_container}>
             <div className={styles.homebox1}>
                 <div className={styles.page2logo2} ></div>
                 <div className={styles.homebox11}>상품 검색</div>
             </div>
             <div className={styles.home_search_box1}>
-                <input className={styles.home_overlay_main} placeholder="입력해주세요" value={inputValue} onChange={handleInputChange}/>
-                <div className={styles.home_button1} onClick={handleButtonClick} alt="상세검색으로 이동하는 버튼"/>
+                <input className={styles.home_overlay_main} id="search_input" placeholder="입력해주세요" value={inputValue} onChange={handleInputChange}/>
+                <button className={styles.home_button1}  onClick={handleButtonClick} alt="상세검색으로 이동하는 버튼"></button>
             </div>
         </div>
+        </>
     );
 };
 
@@ -129,7 +154,30 @@ const SecondPage = ({ inputValue, goToThirdPage, result}) => {
         }
     };
 
+        // 핫키 생성
+    const Hotkey_h2 = () => {
+        // 핫키 설정
+        const keyMap_h2 = {
+            enter_key: 'space+1',
+        };
+        const nextClick = () => {
+            console.log('space + 1');
+            document.getElementById('next').focus();
+        };
+        // 핫키 적용 함수
+        const handlers_h2 = {
+            enter_key: nextClick,
+        };
+        return (
+            <>
+                <GlobalHotKeys keyMap={keyMap_h2} handlers={handlers_h2}>
+                </GlobalHotKeys>
+            </>
+        );
+    };
     return (
+        <>
+        <Hotkey_h2 />
         <div className={styles.home_container2}>
             <div className={styles.home_search_contained}>
                 <p className={styles.home_main_guide}>상품을 검색하세요</p>
@@ -146,11 +194,12 @@ const SecondPage = ({ inputValue, goToThirdPage, result}) => {
                 </div>
             </div>
             <div>
-                <a className={styles.home_button2} onClick={() => goToThirdPage(selectedItems)} alt="상품추천으로 이동하는 버튼">
+                <button className={styles.home_button2} id="next" onClick={() => goToThirdPage(selectedItems)} alt="상품추천으로 이동하는 버튼">
                     <div>다음</div>
-                </a>
+                </button>
             </div>
         </div>
+        </>
     )
 };
 
@@ -293,5 +342,6 @@ const detail_category = [
         cate_lst: ["청송사과", "못난이사과", "세척사과", "꿀사과", "얼음골사과", "문경사과"],
     },
 ];
+
 
 export { Home };

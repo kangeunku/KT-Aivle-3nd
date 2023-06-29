@@ -86,27 +86,23 @@ const Joinstepone = () => {
         // 핫키 설정
         const keyMap_2 = {
             space1_key: 'space+1',
-            spacebar_key: "space+w",
-            // keypress, keydown, keyup.
-            space_down: { sequence: "space", action: "keydown" }
+            space2_key: "space+2"
         };
 
         const termClick = () => {
             console.log('space+1');
             OnOffModal();
         };
-        const spaceClick = () => {
+        const checkboxClick = () => {
             console.log('space + w');
-        };
-        const spacedownClick = () => {
-            console.log('space down');
+            document.getElementById('Allcheckbox').focus(); 
+            //모두 동의로 포커스 이동 후 space로 check -> tab 눌러 다음 버튼으로 이동 -> enter
         };
 
         // 핫키 적용 함수
         const handlers_2 = {
             space1_key: termClick,
-            spacebar_key: spaceClick,
-            space_down: spacedownClick,
+            space2_key: checkboxClick,
         };
         
         return (
@@ -211,7 +207,7 @@ const Joinstepone = () => {
                     <Modal setModalState={setModalState}/> : ""}
                 </li> */}
             <li>
-                <input type="checkbox" className="check_terms"
+                <input type="checkbox" id ="Allcheckbox" className="check_terms"
                     onChange={(e) => onCheckedAll(e.target.checked)}
                     checked={
                         checkedList.length === 0
@@ -286,9 +282,63 @@ const Joinsteptwo = ({changeislogn}) => {
     };
 
     const isAllFieldsValid = form.username_val && form.password_val && form.password2_val && form.nickname_val;
+        
+        // 핫키 생성
+        const Hotkey_local_3 = () => {
+            // 핫키 설정
+            const keyMap_3 = {
+                space1_key: 'space+1',
+                space2_key: "space+2",
+                space3_key: 'space+3',
+                space4_key: "space+4",
+                // enter_key: "alt+ctrl"
+            };
+            
+            // const EnterClick = () => {
+            //     const inputRef = useRef(null);
+            //     console.log('enter');
+            //     if (inputRef.current) {
+            //         inputRef.current.blur();
+            //     }
+            // }
+            const idinputClick = () => {
+                console.log('idinputClick');
+                document.getElementById('id').focus();
+            };
 
+            // document.activeElement.
+            const pwinputClick = () => {
+                console.log('space + 2');
+                document.getElementById('pw1').focus();
+            };
+            const pwinputClick_ = () => {
+                console.log('space + 3');
+                document.getElementById('pw2').focus();
+            };
+            const nickClick = () => {
+                console.log('space + 4');
+                document.getElementById('nick').focus();
+            }
+    
+            // 핫키 적용 함수
+            const handlers_3 = {
+                space1_key: idinputClick,
+                space2_key: pwinputClick,
+                space3_key: pwinputClick_,
+                space4_key: nickClick,
+                // enter_key: EnterClick
+            };
+            
+            return (
+                <>
+                    <GlobalHotKeys keyMap={keyMap_3} handlers={handlers_3}>
+                    </GlobalHotKeys>
+                </>
+            );
+        };
     return (
         <>
+            <Hotkey_local_3 />
            <div className="choice_tab">
                 <h3 className="welcome">
                     개인정보 입력
@@ -297,22 +347,22 @@ const Joinsteptwo = ({changeislogn}) => {
                 <div className="step_two_form">
                     <label>
                         <h5> <strong style={{color:"red"}}>1</strong> 아이디 입력</h5>
-                        <input type="input" className="input_form" value={form.username} onChange={e=> {setFrom({...form, username: e.target.value}); handleUsernameChange(e);}} placeholder="아이디를 입력해주세요"/>
+                        <input type="input" id="id" className="input_form" value={form.username} onChange={e=> {setFrom({...form, username: e.target.value}); handleUsernameChange(e);}} placeholder="아이디를 입력해주세요"/>
                         <p className="input_form_txt" style={{color: form.username_val ? 'green' : 'red'}}>특수문자 사용 불가, 두 글자 이상 </p>
                     </label> 
                     <label>
                         <h5> <strong style={{color:"red"}}>2</strong> 비밀번호 입력 </h5>
-                        <input type="password" className="input_form" value={form.password} onChange={e=> {setFrom({...form, password: e.target.value}); handleUserpwChange(e);}} placeholder="비밀번호를 입력해주세요"/>
+                        <input type="password" id="pw1" className="input_form" value={form.password} onChange={e=> {setFrom({...form, password: e.target.value}); handleUserpwChange(e);}} placeholder="비밀번호를 입력해주세요"/>
                         <p className="input_form_txt" style={{color: form.password_val ? 'green' : 'red'}}>4글자 이상으로 </p>
                     </label> 
                     <label>
                         <h5> <strong style={{color:"red"}}>3</strong> 비밀번호 확인 </h5>
-                        <input type="password" className="input_form" value={form.password2} onChange={e=> {setFrom({...form, password2: e.target.value}); handleUserpw2Change(e);}} placeholder="비밀번호를 다시한번 입력해주세요"/>
+                        <input type="password" id="pw2" className="input_form" value={form.password2} onChange={e=> {setFrom({...form, password2: e.target.value}); handleUserpw2Change(e);}} placeholder="비밀번호를 다시한번 입력해주세요"/>
                         <p className="input_form_txt" style={{color: form.password2_val ? 'green' : 'red'}}>앞과 일치하게 입력해주세요 </p>                    
                     </label> 
                     <label>
                         <h5> <strong style={{color:"red"}}>4</strong> 별명 입력 </h5>
-                        <input type="input" className="input_form" value={form.nickname}  onChange={e=> {setFrom({...form, nickname: e.target.value}); handleNicknameChange(e);}} placeholder="별명을 입력해주세요"/>
+                        <input type="input" id="nick" className="input_form" value={form.nickname}  onChange={e=> {setFrom({...form, nickname: e.target.value}); handleNicknameChange(e);}} placeholder="별명을 입력해주세요"/>
                         <p className="input_form_txt" style={{color: form.nickname_val ? 'green' : 'red'}}>특수문자는 넣을 수 없습니다 </p>
                     </label>  
                 </div>
