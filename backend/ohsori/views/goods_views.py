@@ -26,12 +26,27 @@ from ..serializers import GoodsSerialize
         
 @api_view(['POST'])
 def get_details(request):
+    # 상품이 이미 DB에 저장되어 있는 경우 - 조회 및 필요정보 추출 로직
     try:
         goods_url = request.data.get('goods_url')
         goods = Goods.objects.get(goods_url = goods_url)
-        serializer = GoodsSerialize(goods)
-        return Response(serializer.data, status = status.HTTP_200_OK) # 상품 정보 회신
+        goods_summary = Goods_summary.objects.get(goods_no=goods.goods_no)
+        
+        is_show, img_pathes = goods_summary.summary['is_show'], goods_summary.summary['img_pathes']
+        summary_lst, whole_summary = goods_summary.summary['summary_lst'], goods_summary.whole_summary
+        
+        img_pathes_front = [img_pathes[idx] for idx, value in enumerate(is_show) if value != 0]
+        summary_lst_front = [summary_lst[idx] for idx, value in enumerate(is_show) if value != 0]
+        
+        front_result = {'img_pathes': img_pathes_front,
+                        'summary_lst': summary_lst_front,
+                        'whole_summary': whole_summary,
+                        'detail': goods_summary.detail
+                        }
+        
+        return Response() # 상품 정보 회신
     
+    # 상품이 DB에 저장되어 있지 않은 경우 - 크롤링 및 추출 후 DB 저장 및 전달 로직
     except Goods.DoesNotExist:
         goods_url = request.data.get('goods_url')
         # 상세 이미지 저장 후 product_id 가져오기
@@ -60,7 +75,8 @@ def get_details(request):
         goods_summary = Goods_summary()
         goods_summary.goods_no = goods_no
         goods_summary.summary = {'is_show' : is_show,
-                                'summary_lst' : summary_lst}
+                                'summary_lst' : summary_lst,
+                                'img_pathes': img_pathes}
         goods_summary.whole_summary = final_summary
         goods_summary.detail = result['detail_options']
         goods_summary.save()
@@ -70,6 +86,7 @@ def get_details(request):
         summary_lst_front = [summary_lst[idx] for idx, value in enumerate(is_show) if value != 0]
         front_result = {'img_pathes': img_pathes_front,
                         'summary_lst': summary_lst_front,
+                        'whole_summary': final_summary,
                         'detail': result['detail_options'],
                         }
 
