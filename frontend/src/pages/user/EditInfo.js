@@ -59,7 +59,7 @@ const submitPassword = async (password) => {
     try {
       // 비밀번호를 백엔드로 전달하는 비동기 요청을 수행합니다.
       // 비밀번호 일치 여부에 따라 handleSuccess 또는 handleFailure 콜백 함수를 호출합니다.
-        const response = await fetch('/api/checkPassword', {
+        const response = await fetch('/v1/checkpassword', {
             method: 'POST',
             body: JSON.stringify({ password }),
             headers: { 'Content-Type': 'application/json', },

@@ -10,8 +10,8 @@ const Login = ({ changeislogn }) => {
     const[form, setFrom] = useState({
         "username": "",
         "password": "",
-        username_val : false,
-        password_val : false,
+        // username_val : false,
+        // password_val : false,
     });
 
     const navigate = useNavigate();
@@ -19,7 +19,12 @@ const Login = ({ changeislogn }) => {
     const join_btn = async () => {
         const url = "http://127.0.0.1:8000/v1/login/"
 
-        await axios.post(url, form)
+        await axios.post(url, form, {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
         .then(function (response) {
             // setResult(JSON.stringify(response.data))
             // setResult(response.data);

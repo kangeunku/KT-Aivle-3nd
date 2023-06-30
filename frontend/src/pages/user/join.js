@@ -241,25 +241,25 @@ const Joinsteptwo = ({changeislogn}) => {
         nickname_val : false,
     });
 
-    // const join_btn = async () => {
-    //     const url = "http://127.0.0.1:8000/v1/register/"
+    const join_btn = async () => {
+        const url = "http://127.0.0.1:8000/v1/register/"
 
-    //     await axios.post(url, form)
-    //     .then(function (response) {
-    //         // console.log(JSON.stringify(response));
-    //         const res = JSON.stringify(response.statusText);
-    //         changeislogn(true)
-    //     })
-    //     .catch(function (error) {
-    //         console.log(error);
-    //     });
-    // };
+        await axios.post(url, form)
+        .then(function (response) {
+            // console.log(JSON.stringify(response));
+            const res = JSON.stringify(response.statusText);
+            changeislogn(true)
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    };
 
-    const join_btn = () => {
+    // const join_btn = () => {
         
-        changeislogn(true)
-        navigate('/home')
-    }
+    //     changeislogn(true)
+    //     navigate('/home')
+    // }
 
     const handleUsernameChange = (e) => {
         const username = e.target.value;
