@@ -14,7 +14,6 @@ from django.contrib.auth import authenticate, logout, login
 # 비밀번호 변경   # insomnia에서 비밀번호 변경에서 crsf 오류 뜸 포기함 
 
 @method_decorator(csrf_exempt, name = "dispatch")
-
 class CheckPasswordAPI(APIView): # View 쓰니깐 405 error뜸
     permission_classes = [IsAuthenticated]# 로그인한 사용자만 접근 가능
     
