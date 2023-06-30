@@ -123,8 +123,14 @@
 
 .myfaq_ans{
     font-weight: 700;
+    color:blue;
+}
+
+.myfaq_noans{
+    font-weight: 700;
     color:red;
 }
+
 
 .button_faq{
     position: absolute;

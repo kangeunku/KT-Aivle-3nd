@@ -42,11 +42,12 @@ class Faq(models.Model):
     
 class Qna(models.Model):
     qna_no = models.AutoField(help_text="문의 번호", primary_key=True)
-    username = models.ForeignKey(Users, on_delete=models.CASCADE, related_name="Qna")
-    question = models.CharField(help_text='개인질문')
+    username = models.ForeignKey(Users, on_delete=models.CASCADE, related_name="qna",db_column="username")
+    subject = models.CharField(max_length=20, help_text='질문제목', null = True, blank = True)# qna 제목 추가하기
+    question = models.CharField(help_text='질문')
     answer = models.TextField (help_text='개인답변', blank = True)
-    type = models.CharField(help_text='질문유형')
-    qna_img = models.URLField (help_text="이미지url", null =True)
+    type = models.CharField(help_text='질문유형', null = True, blank = True)
+    img_url = models.ImageField (help_text="이미지 파일", null =True, blank=True)
     reg_date = models.DateTimeField(auto_now_add = True, help_text="등록일자") 
     use_yn = models.CharField(max_length=2, help_text="사용여부")
     

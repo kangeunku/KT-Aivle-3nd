@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import styles from "../../styles/Faq.module.css";
 // import { RequestTTS } from "../../components/common/google_tts";
 // import { TextToSpeech } from "../../components/common/google_tts";
+import axios from "axios";
 
 const faqData = [
     { index: 0, 
@@ -41,7 +42,16 @@ const Support = (props) => {
     }, [props.state]);
     
     const goToSecondPage = async () => {
-        setCurrentPage('second');
+        try {
+            const url = "http://127.0.0.1:8000/v1/qna/";
+
+            const response = await axios.get(url, {withCredentials:true});
+            setResult(response.data);
+            setCurrentPage('second');
+        } catch (error) {
+            console.log(error);
+        }
+        
     };
 
     const goToThirdPage = async () => {
@@ -51,15 +61,15 @@ const Support = (props) => {
     return(
         <div>
         {currentPage === 'first' && <FirstPage goToSecondPage={goToSecondPage} />}
-        {currentPage === 'second' && <SecondPage goToThirdPage={goToThirdPage} />}
-        {currentPage === 'third' && <ThirdPage />}
+        {currentPage === 'second' && <SecondPage goToThirdPage={goToThirdPage} result={result}/>}
+        {currentPage === 'third' && <ThirdPage goToSecondPage={goToSecondPage}/>}
         </div>
     );
 };
 
 const FirstPage = ({goToSecondPage}) => {
     const [ activeIndex, setActiveIndex ] = useState(null);
-    const [ audioSource, setAudioSource ] = useState();
+    // const [ audioSource, setAudioSource ] = useState();
     const [ text, setText ] = useState('');
     
     const handleQuestionClick = (index) => {
@@ -67,9 +77,9 @@ const FirstPage = ({goToSecondPage}) => {
         setText(faqData[index].answer);
     };
 
-    const handleTextToSpeechonComplete = useCallback((result) => {
-        setAudioSource(result);
-    }, []);
+    // const handleTextToSpeechonComplete = useCallback((result) => {
+    //     setAudioSource(result);
+    // }, []);
 
     return (
         <div className={styles.faq_container1}>
@@ -80,7 +90,7 @@ const FirstPage = ({goToSecondPage}) => {
             <div className={styles.faq_box}>
                 <div className={styles.faq_container}>
                     {faqData.map((faq, index) => (
-                        <div>
+                        <div key={index}>
                             <div className={styles.faq_container_box} key={index}>
                                 <div className={styles.faq_container_title} onClick={() => {handleQuestionClick(index)}}>
                                     <strong>[{categories[faq.index]}]</strong> {faq.subject}
@@ -119,30 +129,43 @@ const FirstPage = ({goToSecondPage}) => {
     );
 };
     
-const SecondPage = ({goToThirdPage}) => {
+const SecondPage = ({goToThirdPage, result}) => {
     const [activeIndex, setActiveIndex] = useState(null);
-
+    
     const handleQuestionClick = (index) => {
         setActiveIndex(activeIndex === index ? null : index);
+    };
+
+    const handleAnswerClick = async () => {
+        try {
+            const url = "http://127.0.0.1:8000/v1/qna/";
+            const data = {
+                "qna_no": activeIndex.qna_no,
+                "answer": "답변은 당신 마음 속에"
+            }
+            const response = await axios.put(url, data, {withCredentials:true});
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
         <div className={styles.faq_container1}>
             <div className={styles.faq_main1}>
-                <div className={styles.page2logo2} ></div>
+                <div className={styles.page2logo2} onClick={handleAnswerClick}></div>
                 <div className={styles.faqbox11}>내 문의 내역</div>
             </div>
             <div className={styles.faq_box}>
                 <div className={styles.faq_container}>
-                    {myfaqData.length === 0 ? (
+                    {result.length === 0 ? (
                         <div className={styles.faq_container_title}>내 문의 내역이 없습니다.</div>
                     ) : (
-                        myfaqData.map((faq, index) => (
-                            <div>
+                        result.map((index) => (
+                            <div key={index.qna_no}>
                                 <div className={styles.faq_container_box} key={index}>
                                     <div className={styles.faq_container_title} onClick={() => handleQuestionClick(index)}>
-                                        [{categories[faq.index]}] {faq.subject}
-                                        {faq.answer ? (
+                                        [{index.type.replace(/"/g, '')}] {index.subject.replace(/"/g, '')}
+                                        {index.answer ? (
                                             <div>
                                                 <span className={styles.myfaq_ans}> [답변 완료] </span>
                                                 {activeIndex === index ? (
@@ -151,18 +174,20 @@ const SecondPage = ({goToThirdPage}) => {
                                                     <div className={styles.faq_downbutton} alt="이미지 설명"/>
                                                 )}
                                             </div>
-                                        ): null}
+                                        ): (<div>
+                                                <span className={styles.myfaq_noans}> [답변 미완료] </span>
+                                            </div>)}
                                     </div>
-                                    {faq.answer ? (
+                                    {index.answer ? (
                                         <div>
                                             {activeIndex === index && (
                                                 <div className={styles.faq_container_image}>
                                                     <hr className={styles.faq_container_hr1}></hr>
                                                     <div className={styles.faq_answer}>
-                                                        <strong>Q.</strong> {faq.question.split('\n').map((line, lineIndex) => (
+                                                        <strong>Q.</strong> {index.question.replace(/"/g, '').split('\n').map((line, lineIndex) => (
                                                             <div key={lineIndex}>{line}</div>
                                                         ))}
-                                                        <strong>A.</strong> {faq.answer.split('\n').map((line, lineIndex) => (
+                                                        <strong>A.</strong> {index.answer.replace(/"/g, '').split('\n').map((line, lineIndex) => (
                                                             <div key={lineIndex}>{line}</div>
                                                         ))}
                                                     </div>
@@ -188,7 +213,7 @@ const SecondPage = ({goToThirdPage}) => {
     );
 };
 
-const ThirdPage = () => {
+const ThirdPage = ({goToSecondPage}) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [category, setCategory] = useState('');
@@ -197,7 +222,7 @@ const ThirdPage = () => {
     const handleTitleChange = (event) => {
         setTitle(event.target.value);
     };
-      
+    
     const handleContentChange = (event) => {
         setContent(event.target.value);
     };
@@ -205,16 +230,29 @@ const ThirdPage = () => {
     const handleCategoryChange = (event) => {
         setCategory(event.target.value);
     };
-      
-    const handleSaveData = () => {
-        const data = {
-            title: title,
-            content: content,
-            category: category,
-        };
-        setJsonData(JSON.stringify(data));
-    };
-      
+    
+    const handleSaveData = async () => {
+        if (title.length !== 0 && content.length !== 0 && categories.length !== 0) {
+            try {
+                const url = 'http://127.0.0.1:8000/v1/qna/';
+                const data = {
+                    "type": '"' + category + '"',
+                    "subject": '"' + title + '"',
+                    "question": '"' + content + '"',
+                    // "img_url": null,
+                };
+                // setJsonData(JSON.stringify(data));
+        
+                const response = await axios.post(url, data, {withCredentials: true});
+
+                goToSecondPage();
+            } catch (error) {
+                console.log(error);
+            }
+        } else {
+            // popup
+        }
+    };    
 
     return (
         <div className={styles.faq_container3}>

@@ -10,8 +10,8 @@ const Login = ({ changeislogn }) => {
     const[form, setFrom] = useState({
         "username": "",
         "password": "",
-        username_val : false,
-        password_val : false,
+        // username_val : false,
+        // password_val : false,
     });
 
     const navigate = useNavigate();
