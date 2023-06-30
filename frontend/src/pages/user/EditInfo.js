@@ -8,8 +8,8 @@ const EditInfo = (props) => {
 
     // 동일한 링크를 클릭시 처음화면으로 초기화
     useEffect(() => {
-        props.relanding(false)
-        setCurrentPage('first')
+        props.relanding(false);
+        setCurrentPage('first');
         console.log("choicelogin")
     }, [props.state]);
 
@@ -65,25 +65,25 @@ const Popup = ({ onClose, message }) => {
 };
 
 const submitPassword = async (password) => {
-    // try {
-    //     // 비밀번호를 백엔드로 전달하는 비동기 요청을 수행합니다.
-    //     // 비밀번호 일치 여부에 따라 handleSuccess 또는 handleFailure 콜백 함수를 호출합니다.
-    //     const url = "http://127.0.0.1:8000/v1/checkpassword/";
-    //     const data = {
-    //         "password": password,
-    //     };
+    try {
+        // 비밀번호를 백엔드로 전달하는 비동기 요청을 수행합니다.
+        // 비밀번호 일치 여부에 따라 handleSuccess 또는 handleFailure 콜백 함수를 호출합니다.
+        const url = "http://127.0.0.1:8000/v1/checkpassword/";
+        const data = {
+            "password": password,
+        };
 
-    //     const response = await axios.post(url, data, {withCredentials: true});
-    //     console.log(response.statusText);
+        const response = await axios.post(url, data, {withCredentials: true});
+        // console.log(response.statusText);
 
-    //     if (response.statusText === 'OK'){
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // } catch (error) {
-    //     console.error(error);
-    // }
+        if (response.statusText === 'OK'){
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.error(error);
+    }
     return true
 };
 
@@ -168,7 +168,6 @@ const SecondPage = ({goToThirdPage, goToFourthPage, goToFifthPage}) => {
 };
 
 const ThirdPage = ({goToSecondPage}) => {
-
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
     const [nicknameval, setNicknameval] = useState("");
@@ -177,7 +176,7 @@ const ThirdPage = ({goToSecondPage}) => {
         try {
             const url = "http://127.0.0.1:8000/v1/setnickname/";
             const data = {
-                'nickname': nicknameval,
+                'nickname': '"' + nicknameval + '"',
             };
             const response = await axios.post(url, data, {withCredentials: true});
             // console.log(response.statusText);
@@ -199,7 +198,6 @@ const ThirdPage = ({goToSecondPage}) => {
         goToSecondPage();
     };
 
-
     //닉네임 enteredNickname은 입력된 닉네임으로한다
     const handleNicknameChange = (event) => {
         const enteredNickname = event.target.value;
@@ -207,7 +205,7 @@ const ThirdPage = ({goToSecondPage}) => {
     };
     
     // 닉네임 유효성 검사. 지금은 4글자 이상으로 해뒀고 회의후 바꾸기
-    const isNicknameValid = nicknameval.length >= 4;
+    const isNicknameValid = nicknameval.match(/^[가-힣]*$/) && nicknameval.length >= 2;
 
     return(
         <div>
@@ -239,7 +237,7 @@ const ThirdPage = ({goToSecondPage}) => {
                         {isNicknameValid && (
                             <input
                                 type="checkbox"
-                                checked={isNicknameValid}
+                                // checked={isNicknameValid}
                                 className={styles.edit_form1_checkbox}
                             />
                         )}
@@ -255,7 +253,7 @@ const ThirdPage = ({goToSecondPage}) => {
     );
 };
 
-const FourthPage = (goToSecondPage, {changeislogin}) => {
+const FourthPage = ({goToSecondPage, changeislogin}) => {
 
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");

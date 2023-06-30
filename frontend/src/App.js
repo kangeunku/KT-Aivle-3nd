@@ -43,7 +43,7 @@ const App = () => {
     Navigate('/test');
   }
   
-  const Navigate_ = () => {
+  const ReNavigate = () => {
     return (
       <>
       <Hotkey_global/>
@@ -145,45 +145,7 @@ const App = () => {
                 {/* <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link> */}
                 <a onClick={() =>{setloginState(false)}}>logo</a>
               </h1>
-                <nav className="nav"> 
-                  <ul className="nav_lsit">
-                    <li className={navState === "home" ? "active_list" : null}>
-                      <Link to="/home" onClick={() => setnavState("home")}>검색</Link>
-                    </li>
-                    <li className={navState === "basket" ? "active_list" : null}>
-                      <Link to="/basket" onClick={() => setnavState("basket")}>찜목록</Link>
-                    </li>
-                    <li className={navState === "editinfo" ? "active_list" : null}>
-                      <Link to="/editinfo" onClick={() => setnavState("editinfo")}>회원정보 수정</Link>
-                    </li>
-                    <li className={navState === "support" ? "active_list" : null}>
-                      <Link to="/support" onClick={() => setnavState("support")}>고객센터</Link>
-                    </li>
-                    <li className={navState === "test" ? "active_list" : null}>
-                      <Link to="/test" onClick={() => setnavState("test")}>테스트섹션</Link>
-                    </li>
-                  </ul>
-                </nav>
-                {/* <nav className="nav"> 
-                  <ul className="nav_lsit">
-                    <li className={navState === "home" ? "active_list" : null}>
-                      <button  onClick={() => {goHome(); setnavState("home");}}>검색</button>
-                    </li>
-                    <li className={navState === "basket" ? "active_list" : null}>
-                      <button onClick={() => {goBasket(); setnavState("basket");}}>찜목록</button>
-                    </li>
-                    <li className={navState === "editinfo" ? "active_list" : null}>
-                      <button onClick={() => {goEditinfo(); setnavState("editinfo");}}>회원정보 수정</button>
-                    </li>
-                    <li className={navState === "support" ? "active_list" : null}>
-                      <button onClick={() => {goSupport(); setnavState("support");}}>고객센터</button>
-                    </li>
-                    <li className={navState === "test" ? "active_list" : null}>
-                      <button onClick={() => {goTest(); setnavState("test");}}>테스트섹션</button>
-                    </li>
-                  </ul>
-                </nav> */}
-              {/* <Navigate></Navigate> */}
+                <ReNavigate></ReNavigate>
             </div>
             <section className="content">
               <Header />

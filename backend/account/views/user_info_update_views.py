@@ -66,15 +66,15 @@ class SetNicknameAPI(APIView):
     permission_classes = [IsAuthenticated] # 로그인한 사용자만 접근 가능
     
     def post(self, request):
-        user = Users.objects.get(username=request.user.username)
+        try:
+            user = Users.objects.get(username=request.user.username)
+        except Users.DoesNotExist:
+            return Response({'status': 'fail'}, status=status.HTTP_404_NOT_FOUND)
+
         nickname = request.data.get('nickname')
         user.nickname = nickname
-        serializer = UsersSerialize(user)
-        if serializer.is_valid(raise_exception=True):
-            user.save()
-            return Response({'status': 'success'})
-        else:
-            return Response({'변경 실패': '한글로 된 닉네임을 작성해주세요'})
+        user.save()
+        return Response({'status': 'success'})
     
 
 # 회원탈퇴 View
