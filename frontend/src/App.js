@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react";
-import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 //useNavigate : https://iridescent-zeal.tistory.com/214
 
@@ -22,9 +21,6 @@ const App = () => {
     setreState(value);
   };
 
-  const relanding = (value) => {
-    setreState(value);
-  };
   const Navigate = useNavigate();
 
   const goHome = () => {
