@@ -36,6 +36,25 @@ const wantedDes = [
   "발자국",
   "구구",
 ];
+// 0은 필수옵션 셀렉트, 1은 선택옵션 셀렉트, 2는 직접 입력할 수 있는 옵션 3은 수량 +-하는것 
+
+const select_boxes = {
+  0: {
+    index: 0,
+    placeholder: '텀블러 사이즈&종류 선택하세요',
+    options: ['솔리드 핸들 텀블러', '파스텔 고급 텀블러(차량겸용)', '슬림 차량겸용 텀블러 500ml']
+  },
+  1: {
+    index: 1,
+    placeholder: '컬러 선택하세요',
+    options: [ '아보카도 그린(손잡이 + 빨대+개별박스포장) (+5000원)', '파스텔실버(손잡이 + 빨대+개별박스포장) (+5000원)', '파스텔블랙(손잡이 + 빨대+개별박스포장) (+5000원)' ]
+  },
+  2: {
+    index: 2, placeholder: '각인서비스를원하신다면 20자이내로 입력해주세요', options: [ '' ]
+  },
+  3: { index: 3, placeholder: '옵션 수량 선택', options: ['' ]
+  }
+};
 
 // const btnNum = [
 //     "assets/img/leftBtn.jpg",
@@ -121,17 +140,6 @@ const Slider = forwardRef((props, ref) =>{
       setIsSlide(false);
     }, 300);
   };
-  const morePrevImg3 = index === 1 ? 6 : index === 0 ? 5 : index === 2 ? 7 : index === 3?8 :index - 4;
-  const morePrevImg2 = index === 1 ? 7 : index === 0 ? 6 : index === 2 ? 8 : index - 3;
-  const morePrevImg = index === 1 ? 8 : index === 0 ? 7 : index - 2;
-  const PrevImg = index === 0 ? 8 : index - 1;
-  const NextImg = index === 8 ? 0 : index + 1;
-  const NextImg2 = index === 8 ? 1 : index === 7 ? 0 : index + 2;
-  const NextImg3 = index === 8 ? 2 : index === 7 ? 1 : index === 6 ? 0 :index + 3;
-  const NextImg4 = index === 8 ? 3 : index === 7 ? 2 : index === 6 ? 1 : index ===5?0 : index + 4;
-  
-  //console.log(slideRef.current);
-  //console.log(index);
 
   const onMouseDown = (event) => {
     setIsClick(true);
@@ -166,35 +174,35 @@ const Slider = forwardRef((props, ref) =>{
     setWindowWidth(window.innerWidth);
   };
 
-  // 브라우저 크기 감지
-  useEffect(() => {
-    window.addEventListener("resize", resizeWidth);
-    return () => {
-      window.removeEventListener("resize", resizeWidth);
-    };
-  }, []);
+  // 카운트 증가 감소
+  const [count, setCount] = useState(0);
 
-  // 슬라이더 자동 전환 
-  useEffect(() => {
-    const autoPage = setTimeout(() => {
-      setX(-5);
-      setIsSlide(true);
-      setTimeout(() => {
-        setIndex((prev) => (prev === 8 ? 0 : prev + 1));
-        setX(0);
-        setIsSlide(false);
-      }, 300);
-    }, 5000);
-    return () => {
-      clearTimeout(autoPage);
-    };
-  }, [index, isClick]);
-  console.log(`브라우저 사이즈 : ${windowWidth}`);
+  const decreaseCount = () => {
+    if(count > 0) {
+      setCount(count-1);
+    }
+  };
+
+  const increaseCount = () => {
+    setCount(count+1)
+  };
+
 
   function BtnEvent(){
     //alert('모달창 내부 작업을 해도 모달창이 꺼지지 않습니다.');
     props.setPopupState(false);
   }
+
+  function OptionSelect({ value, onChange }) {
+    return (
+      <select value={value} onChange={onChange}>
+        <option value="apple">사과</option>
+        <option value="banana">바나나</option>
+        <option value="pear">배</option>
+      </select>
+    );
+  }
+
 
   //팝업 열고 닫기
   let wrapperRef = useRef();
@@ -258,8 +266,47 @@ const Slider = forwardRef((props, ref) =>{
             <span className={styles.minititle}>{wantedTitle[index]}</span>
             <span className={styles.minides}>{wantedDes[index]}</span>
       </session>
-      <session className={`${styles.box} ${styles.box4}`}>
-        {/* 다른 추천상품 */}
+
+      <span className={styles.popuptxt}>Option</span>
+
+{/* 옵션과 수량 */}
+      <session className={`${styles.box} ${styles.box4}`}>      
+        <div className={styles.box4_idx0}>
+          <span className={styles.box4_txt}>필수옵션</span>
+          <select className={styles.box4_select}>
+            <option value = "금사과">금사과</option>
+            <option value = "은사과">은사과</option>
+            <option value = "동사과">동사과</option>
+          </select>
+        </div>
+        <div className={styles.box4_idx1}>
+          <span className={styles.box4_txt}>선택옵션</span>
+          <select className={styles.box4_select}>
+            <option value = "연유추가">연유추가</option>
+            <option value = "팥고물도 추가">팥고물도 추가</option>
+            <option value = "다 다 추가">다 다 추가</option>
+          </select>
+        </div>
+        <div className={styles.box4_idx2}>
+          <span className={styles.box4_txt}>입력옵션</span>
+          <textarea className={styles.box4_txtarea}>
+          </textarea>
+        </div>
+        <div className={styles.box4_idx3}>
+          <span className={styles.box4_txt}>수량</span>
+          <div className={styles.box4_count}>
+            <button className={styles.box4_countleft} onClick={decreaseCount} ></button>
+            <span>{count}</span>
+            <button className={styles.box4_countright} onClick={increaseCount} ></button>
+          </div>
+        </div>
+      </session>
+
+{/* 버튼들 */}
+      <session className={`${styles.box} ${styles.box5}`}>
+        <button className={styles.button} onClick={BtnEvent}> 구매하기 </button>
+        <button className={styles.button} onClick={BtnEvent}> 닫기 </button>
+        <button className={styles.button} onClick={BtnEvent}> 찜하기 </button>
       </session>
     </div>
   );
