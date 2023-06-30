@@ -11,12 +11,18 @@ from concurrent.futures import ThreadPoolExecutor
 
 @api_view(['POST'])
 def first_search(request):
+    '''
+    POST 상품 검색(query) 전달 시 상품 검색에서 가능한 카테고리 전달
+    '''
     query = request.data.get('query')
     result = get_filtering_info(query)
     return Response(result)
 
 @api_view(['POST'])
 def second_search(request):
+    '''
+    프론트에서 카테고리 선택 후 POST로 전달시 검색 결과 회신
+    '''
     params = {'query':request.data.get('query'),
             'display':request.data.get('display'),
             'start':request.data.get('start'),

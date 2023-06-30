@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from ..models import CustomToken, Users
+from ..serializers import UsersSerialize
 
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -14,7 +15,12 @@ from django.contrib.auth import authenticate, logout, login
 # 비밀번호 변경   # insomnia에서 비밀번호 변경에서 crsf 오류 뜸 포기함 
 
 @method_decorator(csrf_exempt, name = "dispatch")
-class CheckPasswordAPI(APIView): # View 쓰니깐 405 error뜸
+class CheckPasswordAPI(APIView):
+    '''
+    고객센터에서 회원정보 변경을 위해 password 확인
+    프론트에서 post요청을 통해 password 전달함
+    장고에서 성공/실패로 Response전달 
+    '''
     permission_classes = [IsAuthenticated]# 로그인한 사용자만 접근 가능
     
     def post(self, request):
@@ -25,7 +31,12 @@ class CheckPasswordAPI(APIView): # View 쓰니깐 405 error뜸
         else:
             return Response({'status': 'fail(Incorrect Password)'}, status=status.HTTP_404_NOT_FOUND)
 
-class SetPasswordAPI(APIView): # View 쓰니깐 405 error뜸
+class SetPasswordAPI(APIView):
+    '''
+    고객센터에서 비밀번호 변경 요청
+    프론트에서 post요청을 통해 new_password 전달함
+    장고에서 성공 Response전달 
+    '''
     permission_classes = [IsAuthenticated]# 로그인한 사용자만 접근 가능
     
     def post(self, request):
@@ -47,32 +58,40 @@ class SetPasswordAPI(APIView): # View 쓰니깐 405 error뜸
 # 별명 변경 View
 @method_decorator(csrf_exempt, name = "dispatch")
 class SetNicknameAPI(APIView):
-    
+    '''
+    고객센터에서 닉네임 변경 요청
+    프론트에서 post요청을 통해 nickname 전달함
+    장고에서 성공 Response전달 
+    '''    
     permission_classes = [IsAuthenticated] # 로그인한 사용자만 접근 가능
     
     def post(self, request):
-        try:
-            user = Users.objects.get(username=request.user.username)
-        except Users.DoesNotExist:
-            return Response({'status': 'fail'}, status=status.HTTP_404_NOT_FOUND)
-
+        user = Users.objects.get(username=request.user.username)
         nickname = request.data.get('nickname')
         user.nickname = nickname
-        user.save()
-        return Response({'status': 'success'})
+        serializer = UsersSerialize(user)
+        if serializer.is_valid(raise_exception=True):
+            user.save()
+            return Response({'status': 'success'})
+        else:
+            return Response({'변경 실패': '한글로 된 닉네임을 작성해주세요'})
     
 
 # 회원탈퇴 View
 @method_decorator(csrf_exempt, name = "dispatch")
 class DeleteUserAPI(APIView):
+    '''
+    고객센터에서 회원 탈퇴 요청
+    프론트에서 post 요청을 통해 password 전달
+    장고에서 성공시 use_yn을 n으로 변경
+    성공 사항 Response전달
+    '''    
     permission_classes = [IsAuthenticated] # 로그인한 사용자만 접근 가능
     #def delete(self, request): # delete 쓰니깐 url에서 어떻게 탈퇴가 되는지 확인이 안됨
     def post(self, request):
-        try:
-            user = Users.objects.get(username=request.user.username)
-        except Users.DoesNotExist:
-            return Response({'status': 'fail'}, status=status.HTTP_404_NOT_FOUND)
+        user = Users.objects.get(username=request.user.username)
         password = request.data.get('password') # 비밀번호 입력
+        
         if not user.check_password(password): # 비밀번호가 틀리면 fail
             return Response({'status': 'fail'}, status=status.HTTP_400_BAD_REQUEST)
         # user.delete() # 회원삭제 -> 우리는 회원정보 삭제가 아니라 use_yn = "N" 으로만 바꾸고 db에 저장

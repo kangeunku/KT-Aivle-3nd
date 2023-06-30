@@ -1,8 +1,6 @@
-# blog/urls.py
 from django.urls import path, include, re_path
-from .views import goods_views, db_views, main_views,stt_views
+from ohsori.views import goods_views, db_views, main_views, stt_views
 from rest_framework import routers
-from knox import views as knox_views
 
 app_name = 'ohsori'
 
@@ -14,7 +12,6 @@ urlpatterns = [
     path('v1/stt/', stt_views.transcribe_streaming, name ='stt'),
     path('v1/basket/', db_views.BasketsAPI.as_view(), name='basket'),
     path('v1/basket_change/', db_views.Baskets_Add_DelAPI.as_view(), name='basket_change'),
-    path("v1/survey/", db_views.SurveyAPI.as_view(), name="survey"),
     path("v1/qna/", db_views.QnaAPI.as_view(), name="qna"),
     path("v1/checkqna/", db_views.CheckQna, name="checkqna"),
     path('v1/search1/', main_views.first_search, name='main_first_search'),
