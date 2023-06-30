@@ -242,13 +242,15 @@ const Joinsteptwo = ({changeislogn}) => {
     });
 
     const join_btn = async () => {
+        // let response_data = Send_api(4, form);
         const url = "http://127.0.0.1:8000/v1/register/"
 
-        await axios.post(url, form)
+        await axios.post(url, form, {withCredentials: true})
         .then(function (response) {
             // console.log(JSON.stringify(response));
             const res = JSON.stringify(response.statusText);
-            changeislogn(true)
+            changeislogn(true);
+            navigate('/home');
         })
         .catch(function (error) {
             console.log(error);

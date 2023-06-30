@@ -19,16 +19,12 @@ const Login = ({ changeislogn }) => {
     const join_btn = async () => {
         const url = "http://127.0.0.1:8000/v1/login/"
 
-        await axios.post(url, form, {
-            withCredentials: true,
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          })
+        await axios.post(url, form, {withCredentials: true})
         .then(function (response) {
             // setResult(JSON.stringify(response.data))
             // setResult(response.data);
-            console.log(JSON.stringify(response.statusText));
+            // console.log(response);
+            // console.log(JSON.stringify(response.statusText));
             const res = JSON.stringify(response.statusText);
             
             // 로그인 처리및 홈이동
