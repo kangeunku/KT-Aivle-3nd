@@ -32,8 +32,13 @@ const myfaqData = [
     { index: 3, subject: '취업시켜주세요',  question: '제곧내', answer:'' },
 ];
 
-const Support = () => {
+const Support = (props) => {
     const [currentPage, setCurrentPage] = useState('first');
+
+     // 동일한 링크를 클릭시 처음화면으로 초기화
+     useEffect(() => {
+        setCurrentPage('first')
+    }, [props.state]);
     
     const goToSecondPage = async () => {
         setCurrentPage('second');

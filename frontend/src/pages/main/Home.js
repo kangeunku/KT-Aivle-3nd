@@ -4,12 +4,22 @@ import styles from "../../styles/Home.module.css";
 import Slider from "../Slider";
 import axios from "axios";
 
-const Home = () => {
+const Home = (props) => {
     const [currentPage, setCurrentPage] = useState('first');
     const [inputValue, setInputValue] = useState('');
     const [result, setResult] = useState([]);
     const [res, setRes] = useState([]);
     
+    
+    // 동일한 링크를 클릭시 처음화면으로 초기화
+    useEffect(() => {
+        props.relanding(false)
+        setCurrentPage('first')
+        setInputValue('')
+        setResult([])
+        setRes([])
+    }, [props.state]);
+
     const goToSecondPage = async () => {
         setCurrentPage('second');
     };

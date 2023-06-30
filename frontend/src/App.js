@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 
 import {  Home, Basket, EditInfo ,Support, Choicelogin, Test } from "./pages";
 import {  Header } from "./components";
@@ -10,31 +10,33 @@ import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
 const App = () => {
   const [islogin, setloginState] = useState(false);
   const [navState, setnavState] = useState("home");
+  const [reState, setreState] = useState(false);
 
-  const changeislogn = (value) => {
+  const changeislogin = (value) => {
       setloginState(value);
   };
-  
+
+  const relanding = (value) => {
+    setreState(value);
+  };
   
   const Navigate = () => {
-    
-    
     return (
       <>
       <Hotkey_global/>
         <nav className="nav"> 
           <ul className="nav_lsit">
             <li className={navState === "home" ? "active_list" : null}>
-              <Link to="/home" onClick={() => setnavState("home")}>검색</Link>
+              <Link to="/home" onClick={() => navState === "home" ?  relanding(true) : setnavState("home") }>검색</Link>
             </li>
             <li className={navState === "basket" ? "active_list" : null}>
-              <Link to="/basket" onClick={() => setnavState("basket")}>찜목록</Link>
+              <Link to="/basket" onClick={() => navState === "basket" ? relanding(true) :setnavState("basket")}>찜목록</Link>
             </li>
             <li className={navState === "editinfo" ? "active_list" : null}>
-              <Link to="/editinfo" onClick={() => setnavState("editinfo")}>회원정보 수정</Link>
+              <Link to="/editinfo" onClick={() => navState === "editinfo" ? relanding(true) :setnavState("editinfo")}>회원정보 수정</Link>
             </li>
             <li className={navState === "support" ? "active_list" : null}>
-              <Link to="/support" onClick={() => setnavState("support")}>고객센터</Link>
+              <Link to="/support" onClick={() => navState === "support" ? relanding(true) :setnavState("support")}>고객센터</Link>
             </li>
             {/* <li className={navState === "test" ? "active_list" : null}>
               <Link to="/test" onClick={() => setnavState("test")}>테스트섹션</Link>
@@ -96,7 +98,7 @@ const App = () => {
           <Modal></Modal>
           <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link>
           </h1>
-          <Choicelogin changeislogn={changeislogn}/>
+          <Choicelogin changeislogn={changeislogin}/>
         </div>
       </div>
     )
@@ -120,10 +122,10 @@ const App = () => {
               <div className="container">
                 <Routes>
                   {/* 라우터가 적용될 페이지 */}
-                  <Route path="/home" element={<Home />} />
-                  <Route path="/basket" element={<Basket />} />
-                  <Route path="/editinfo" element={<EditInfo />} />
-                  <Route path="/support" element={<Support />} />
+                  <Route path="/home" element={<Home state={reState} relanding={relanding} />} />
+                  <Route path="/basket" element={<Basket state={reState} relanding={relanding} />} />
+                  <Route path="/editinfo" element={<EditInfo state={reState} relanding={relanding} changeislogin={changeislogin}/>} />
+                  <Route path="/support" element={<Support state={reState} relanding={relanding} />} />
                   {/* <Route path="/test" element={<Test />} /> */}
                 </Routes>
               </div>

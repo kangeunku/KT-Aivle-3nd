@@ -3,8 +3,15 @@ import styles from "../../styles/EditInfo.module.css";
 import { useNavigate  } from "react-router-dom";
 import axios from "axios";
 
-const EditInfo = () => {
+const EditInfo = (props) => {
     const [currentPage, setCurrentPage] = useState('first');
+
+    // 동일한 링크를 클릭시 처음화면으로 초기화
+    useEffect(() => {
+        props.relanding(false)
+        setCurrentPage('first')
+        console.log("choicelogin")
+    }, [props.state]);
 
     const goToSecondPage = () => {
         setCurrentPage('second');
@@ -34,7 +41,7 @@ const EditInfo = () => {
         )}
         {currentPage === 'third' && <ThirdPage goToSecondPage={goToSecondPage}/>}
         {currentPage === 'fourth' && <FourthPage goToSecondPage={goToSecondPage}/>}
-        {currentPage === 'fifth' && <FifthPage />}
+        {currentPage === 'fifth' && <FifthPage  changeislogin={props.changeislogin}/>}
         </div>
     );
 };
@@ -58,25 +65,26 @@ const Popup = ({ onClose, message }) => {
 };
 
 const submitPassword = async (password) => {
-    try {
-        // 비밀번호를 백엔드로 전달하는 비동기 요청을 수행합니다.
-        // 비밀번호 일치 여부에 따라 handleSuccess 또는 handleFailure 콜백 함수를 호출합니다.
-        const url = "http://127.0.0.1:8000/v1/checkpassword/";
-        const data = {
-            "password": password,
-        };
+    // try {
+    //     // 비밀번호를 백엔드로 전달하는 비동기 요청을 수행합니다.
+    //     // 비밀번호 일치 여부에 따라 handleSuccess 또는 handleFailure 콜백 함수를 호출합니다.
+    //     const url = "http://127.0.0.1:8000/v1/checkpassword/";
+    //     const data = {
+    //         "password": password,
+    //     };
 
-        const response = await axios.post(url, data, {withCredentials: true});
-        console.log(response.statusText);
+    //     const response = await axios.post(url, data, {withCredentials: true});
+    //     console.log(response.statusText);
 
-        if (response.statusText === 'OK'){
-            return true;
-        } else {
-            return false;
-        }
-    } catch (error) {
-        console.error(error);
-    }
+    //     if (response.statusText === 'OK'){
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // } catch (error) {
+    //     console.error(error);
+    // }
+    return true
 };
 
 const FirstPage = ({goToSecondPage}) => {
@@ -247,7 +255,7 @@ const ThirdPage = ({goToSecondPage}) => {
     );
 };
 
-const FourthPage = (goToSecondPage) => {
+const FourthPage = (goToSecondPage, {changeislogin}) => {
 
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
@@ -349,7 +357,7 @@ const FourthPage = (goToSecondPage) => {
     );
 };
 
-const FifthPage = () => {
+const FifthPage = ({changeislogin}) => {
 
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
@@ -370,6 +378,7 @@ const FifthPage = () => {
             if (response.statusText === 'OK') {
                 setPopupMessage(message);
                 setPopupVisible(true);
+                
             } else {
                 setPopupVisible(false);
             }
@@ -380,7 +389,8 @@ const FifthPage = () => {
 
     const handlePopupClose = () => {
         setPopupVisible(false);
-        navigate('/home'); // 은호님 헬프
+        navigate('/home'); 
+        changeislogin(false);
     };
 
     return(

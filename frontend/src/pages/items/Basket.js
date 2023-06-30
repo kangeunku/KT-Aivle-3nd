@@ -9,9 +9,14 @@ import Slider from "../Slider";
 
 // import  {addCount} from '../../jebal';
 
-const Basket = () => {
+const Basket = (props) => {
     const [currentPage, setCurrentPage] = useState('first');
-    console.log(currentPage)
+
+    // 동일한 링크를 클릭시 처음화면으로 초기화
+    useEffect(() => {
+        props.relanding(false)
+        setCurrentPage('first')
+    }, [props.state]);
 
     const goToSecondPage = async () => {
         await new Promise(resolve => setTimeout(resolve, 30));
@@ -102,9 +107,6 @@ const FirstPage =({goToSecondPage}, props) => {
                          </button>
                      </div>
                  </div>
-                 
-             
-                 
              </div>   
         </div>
         
@@ -113,7 +115,7 @@ const FirstPage =({goToSecondPage}, props) => {
 
 const SecondPage =({goToFirstPage}) =>{
     const [PopupState, setPopupState] = useState(true);
-    console.log(PopupState)
+    // console.log(PopupState)
 
     function OnOffPopup(){
         if(PopupState===true){
