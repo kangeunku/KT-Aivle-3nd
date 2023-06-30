@@ -290,7 +290,7 @@ const Joinsteptwo = ({changeislogn}) => {
             // 핫키 설정
             const keyMap_3 = {
                 space1_key: 'space+1',
-                space2_key: "space+2",
+                space2_key: "ctrl+q",
                 space3_key: 'space+3',
                 space4_key: "space+4",
                 // enter_key: "alt+ctrl"

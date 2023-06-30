@@ -1,42 +1,7 @@
 import { useState, useRef, useEffect, forwardRef } from "react";
 import styles from "../styles/Slider.module.css";
 
-const WantedImg = [
-  "assets/img/apple_info_sample.jpg",
-  "assets/img/apple_info_sample0.jpg",
-  "assets/img/apple_info_sample1.jpg",
-  "assets/img/apple_info_sample2.jpg",
-  "assets/img/apple_info_sample3.jpg",
-  "assets/img/apple_info_sample4.jpg",
-  "assets/img/apple1.jpg",
-  "assets/img/Badger.jpg",
-  "assets/img/LeGOAT.png",
-];
 
-const wantedTitle = [
-  "오전 9시 이전 주문건 당일배송",
-  "2022 한국 소비자 산업평가 사과 부문 우수상 수상!",
-  "사과내부의 당분이 한곳에 모여 꿀처럼 보이는 '밀병'",
-  "상품 수령하신 후 냉장보관 후에 드셔야 더욱 맛있습니다.",
-  "홈골농원의 사과는 산딸기, 송이버섯 등 천연 식품이 자라는 자연환경에서 재배되고 있습니다.",
-  "기스 사과 예시",
-  "apple",
-  "오소리",
-  "농농",
-];
-
-const wantedDes = [
-  "수령하신 상품에 문제가 있을 경우 100% 해결해드립니다.",
-  "한국 소비자 산업평가 식품 분야 우수업체 홈골농원",
-  "사과내부 꿀이 없다는 사유로 반품이 불가합니다.",
-  "사과에 문제가 있을 경우 010-5080-6716 번호로 사진 전송",
-  "일교차가 커 과육과 당도가 뛰어난 사과!",
-  "사과 내부 꿀이 없는 것은 기스에 해당하지 않습니다.",
-  "사과",
-  "발자국",
-  "구구",
-];
-// 0은 필수옵션 셀렉트, 1은 선택옵션 셀렉트, 2는 직접 입력할 수 있는 옵션 3은 수량 +-하는것 
 
 const select_boxes = {
   0: {
@@ -56,12 +21,10 @@ const select_boxes = {
   }
 };
 
-// const btnNum = [
-//     "assets/img/leftBtn.jpg",
-//     "assets/img/rightBtn.jpg"
-// ]
 
 const Slider = forwardRef((props, ref) =>{
+
+  const iData = JSON.parse(localStorage.getItem("imgData"));
 
   //슬라이드
   const slideRef = useRef(null);
@@ -214,7 +177,7 @@ const Slider = forwardRef((props, ref) =>{
 {/*메인 슬라이드 */}
       <session className={`${styles.box} ${styles.box1}`}>
 
-        <img className={styles.slide1} src={WantedImg[index]} />
+        <img className={styles.slide1} src={iData[index].image} />
         <button className={styles.button_left} onClick={decreaseClick} />
         <button className={styles.button_right} onClick={increaseClick} />
       </session>
@@ -236,7 +199,7 @@ const Slider = forwardRef((props, ref) =>{
                 <nav className={styles.box2container} key={cnt}>
                   <img className={`${styles.img} ${styles.previewimg}`}
                     style={{ opacity: 0.5, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
-                    src={WantedImg[(index-cnt >= 0)?index-cnt: 9-cnt+index]}
+                    src={iData[(index-cnt >= 0)?index-cnt: 9-cnt+index].image}
                   />
                 </nav>
               ))}
@@ -244,7 +207,7 @@ const Slider = forwardRef((props, ref) =>{
           <nav className={styles.imgwrapper}>
               <img className={styles.img}
                 style={{ opacity: 1, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
-                src={WantedImg[index]}
+                src={iData[index].image}
               />
           </nav>
           {/*컨테이너 왼쪽 이미지*/}
@@ -252,7 +215,7 @@ const Slider = forwardRef((props, ref) =>{
                 <nav className={styles.box2container} key={cnt}>
                   <img className={`${styles.img} ${styles.previewimg}`}
                     style={{ opacity: 0.5, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
-                    src={WantedImg[(index+cnt <= 8)?index+cnt:cnt+index-9]}
+                    src={iData[(index+cnt <= 8)?index+cnt:cnt+index-9].image}
                   />
                 </nav>
               ))}
@@ -263,8 +226,8 @@ const Slider = forwardRef((props, ref) =>{
       
 {/*대체텍스트 요약 */}
       <session className={`${styles.box} ${styles.box3}`}>
-            <span className={styles.minititle}>{wantedTitle[index]}</span>
-            <span className={styles.minides}>{wantedDes[index]}</span>
+            <span className={styles.minititle}>{iData[index].answer}</span>
+            <span className={styles.minides}>{iData[index].answer}</span>
       </session>
 
       <span className={styles.popuptxt}>Option</span>

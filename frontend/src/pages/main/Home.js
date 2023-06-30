@@ -5,8 +5,6 @@ import Slider from "../Slider";
 import axios from "axios";
 import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
 
-
-
 const Home = () => {
     const [currentPage, setCurrentPage] = useState('first');
     const [inputValue, setInputValue] = useState('');
@@ -35,7 +33,7 @@ const Home = () => {
         });
         setCurrentPage('third');
     }
-
+    
     const goToForthPage = () => {
         console.log('goToForthPage');
         setCurrentPage('forth');
@@ -120,7 +118,7 @@ const FirstPage = ({inputValue, handleInputChange, handleButtonClick}) => {
         };
 
         const inputClick = () => {
-            console.log('space');
+            console.log('ctrl + shift');
             document.getElementById('search_input').focus();
         };
         // 핫키 적용 함수
@@ -229,18 +227,38 @@ const Popup = ({ onClose, message }) => {
             <div className={styles.popup1_lgimg}>오소리</div>
 </div> */}
 
+const imgData = [
+    {   image: 'assets/img/apple_info_sample.jpg',
+        answer: '이미지1' },
+    {   image: 'assets/img/apple_info_sample0.jpg',
+        answer: '이미지2' },
+    {   image: 'assets/img/apple_info_sample1.jpg',
+        answer: '이미지3' },
+    {   image: 'assets/img/apple_info_sample2.jpg',
+        answer: '이미지4' },
+    {   image: 'assets/img/apple_info_sample3.jpg',
+        answer: '이미지5' },
+    {   image: 'assets/img/apple_info_sample4.jpg',
+        answer: '이미지6' },
+    {   image: 'assets/img/apple1.jpg',
+    answer: '이미지7' },
+    {   image: 'assets/img/Badger.jpg',
+    answer: '이미지8' },
+    {   image: 'assets/img/LeGOAT.png',
+    answer: '이미지9' },
+    ];
+
 // 추천 상품 목록 보여주기
 const ThirdPage = ({goToForthPage, result }) => {
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
 
-    // console.log('third result', result);
-    // result.map((item) =>{
-    //     console.log(item.image);
-    //     console.log(item.title);
-    //     console.log(item.lprice);
-    //     console.log(item.link);
-    // });
+    localStorage.clear(); //localStorage 안 데이터 전부 삭제
+    localStorage.setItem("imgData", JSON.stringify(imgData));
+
+    // localStorage.setItem('name', 'Mo');
+
+    console.log('third result', result);
 
     const handleButtonClick = (message) => {
         setPopupMessage(message);
@@ -294,6 +312,8 @@ const ThirdPage = ({goToForthPage, result }) => {
 // 모달창으로 띄워주기
 const ForthPage = ({goToThirdPage, result}) => {
     const [PopupState, setPopupState] = useState(true);
+
+    console.log('forth page', result);
 
     function OnOffPopup(){
         if(PopupState===true){
