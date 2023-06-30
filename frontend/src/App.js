@@ -17,33 +17,6 @@ const App = () => {
   };
   
   
-  const Navigate = () => {
-    
-    
-    return (
-      <>
-      <Hotkey_global/>
-        <nav className="nav"> 
-          <ul className="nav_lsit">
-            <li className={navState === "home" ? "active_list" : null}>
-              <Link to="/home" onClick={() => setnavState("home")}>검색</Link>
-            </li>
-            <li className={navState === "basket" ? "active_list" : null}>
-              <Link to="/basket" onClick={() => setnavState("basket")}>찜목록</Link>
-            </li>
-            <li className={navState === "editinfo" ? "active_list" : null}>
-              <Link to="/editinfo" onClick={() => setnavState("editinfo")}>회원정보 수정</Link>
-            </li>
-            <li className={navState === "support" ? "active_list" : null}>
-              <Link to="/support" onClick={() => setnavState("support")}>고객센터</Link>
-            </li>
-            {/* <li className={navState === "test" ? "active_list" : null}>
-              <Link to="/test" onClick={() => setnavState("test")}>테스트섹션</Link>
-            </li> */}
-          </ul>
-        </nav>
-      </>
-      );
   const Navigate = useNavigate();
 
   const goHome = () => {
