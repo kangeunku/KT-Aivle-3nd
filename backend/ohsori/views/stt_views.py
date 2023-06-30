@@ -18,6 +18,10 @@ from .unicode import join_jamos # unicode.py 불러오기
 
 @api_view(['POST'])
 def transcribe_streaming(request) -> speech.RecognitionConfig: #stream_file : bs64
+    '''
+    프론트에서 STT를 통해 만들어진 bs64를 POST로 back에 전달
+    back에서 정해진 단어 부합 여부를 확인한 후 전달(검색, 더보기, 1번, 다시 말씀해주세요 등)
+    '''
     if request.method == 'POST':
         """Streams transcription of the given audio file."""
         client = speech.SpeechClient()
@@ -44,11 +48,9 @@ def transcribe_streaming(request) -> speech.RecognitionConfig: #stream_file : bs
         for result in response.results:
             transcript += result.alternatives[0].transcript + " "
         # print('transcript: \n', transcript)
+        
         result = word_correction(transcript)
-        dict = {}
-        dict['stt'] = transcript
-        dict['result'] = result
-        return Response(dict)
+        return Response({'text' : 'result'})
 
 def word_correction(text):
     whole_words = ['검색', '찜목록', '회원정보수정', '고객센터', 

@@ -24,7 +24,7 @@ from ..models import Goods, Goods_summary
 from ..serializers import GoodsSerialize
     
         
-@api_view(['GET'])
+@api_view(['POST'])
 def get_details(request):
     try:
         goods_url = request.data.get('goods_url')

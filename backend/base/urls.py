@@ -10,6 +10,7 @@ urlpatterns = [
     path('',include('ohsori.urls')),
     path('',include('account.urls')),
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
