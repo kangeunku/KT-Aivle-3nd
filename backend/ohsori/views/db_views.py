@@ -56,7 +56,7 @@ class SurveyAPI(APIView): # params : score, answer
 
 
 class QnaAPI(APIView):
-    def post(self, request):
+    def post(self, request): # params :     l 
         qna = Qna()
         qna.username = Users.objects.get(username = request.user.username) # 세션에서 유저정보 담아서 어떻게어떻게 하기
         qna.question = '집에 가고 싶은데 어떻게 해야 하나요' # 질문 받기
@@ -64,6 +64,9 @@ class QnaAPI(APIView):
         qna.type = '사이트 문의' # 선택으로 type 설정
         # qna.img_url = 'asdfasdf.jpg'  # if문으로 img가 있으면 넣기 null = True라 공백 가능
         qna.use_yn = 'Y'
+        qna.save()
+        return Response('등록되었습니다')
+    # 사용 삭제 추가하기
 
 class FaqAPI(APIView):
     def get(self, request):
