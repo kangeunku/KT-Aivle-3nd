@@ -1,52 +1,54 @@
 import React, { useState, useEffect } from "react";
 import styles from "../../styles/EditInfo.module.css";
+import { useNavigate  } from "react-router-dom";
+import axios from "axios";
 
 const EditInfo = () => {
     const [currentPage, setCurrentPage] = useState('first');
-  
+
     const goToSecondPage = () => {
-      setCurrentPage('second');
+        setCurrentPage('second');
     };
-  
+
     const goToThirdPage = () => {
-      setCurrentPage('third');
+        setCurrentPage('third');
     };
-  
+
     const goToFourthPage = () => {
-      setCurrentPage('fourth');
+        setCurrentPage('fourth');
     };
-  
+
     const goToFifthPage = () => {
-      setCurrentPage('fifth');
+        setCurrentPage('fifth');
     };
-  
+
     return (
-      <div>
+        <div>
         {currentPage === 'first' && <FirstPage goToSecondPage={goToSecondPage} />}
         {currentPage === 'second' && (
-          <SecondPage
-            goToThirdPage={goToThirdPage}
-            goToFourthPage={goToFourthPage}
-            goToFifthPage={goToFifthPage}
-          />
+            <SecondPage
+                goToThirdPage={goToThirdPage}
+                goToFourthPage={goToFourthPage}
+                goToFifthPage={goToFifthPage}
+            />
         )}
-        {currentPage === 'third' && <ThirdPage />}
-        {currentPage === 'fourth' && <FourthPage />}
+        {currentPage === 'third' && <ThirdPage goToSecondPage={goToSecondPage}/>}
+        {currentPage === 'fourth' && <FourthPage goToSecondPage={goToSecondPage}/>}
         {currentPage === 'fifth' && <FifthPage />}
-      </div>
+        </div>
     );
 };
 
 const Popup = ({ onClose, message }) => {
     const [visible, setVisible] = useState(true);
-  
+
     useEffect(() => {
         setTimeout(() => {
             setVisible(false);
             onClose();
         }, 2000);
     }, []);
-  
+
     return (
         <div className={styles.popup1}>
             <div className={styles.popup1_txt}>{message}</div>
@@ -57,25 +59,25 @@ const Popup = ({ onClose, message }) => {
 
 const submitPassword = async (password) => {
     try {
-      // 비밀번호를 백엔드로 전달하는 비동기 요청을 수행합니다.
-      // 비밀번호 일치 여부에 따라 handleSuccess 또는 handleFailure 콜백 함수를 호출합니다.
-        const response = await fetch('/api/checkPassword', {
-            method: 'POST',
-            body: JSON.stringify({ password }),
-            headers: { 'Content-Type': 'application/json', },
-      });
-  
-        if (response.ok) {
-            const isPasswordCorrect = await response.json();
-                return isPasswordCorrect; 
-            } else {
-                throw new Error('비밀번호 확인에 실패하였습니다.') // 비밀번호가 틀릴 경우의 처리
-            }
+        // 비밀번호를 백엔드로 전달하는 비동기 요청을 수행합니다.
+        // 비밀번호 일치 여부에 따라 handleSuccess 또는 handleFailure 콜백 함수를 호출합니다.
+        const url = "http://127.0.0.1:8000/v1/checkpassword/";
+        const data = {
+            "password": password,
+        };
+
+        const response = await axios.post(url, data, {withCredentials: true});
+        console.log(response.statusText);
+
+        if (response.statusText === 'OK'){
+            return true;
+        } else {
+            return false;
+        }
     } catch (error) {
         console.error(error);
     }
 };
-
 
 const FirstPage = ({goToSecondPage}) => {
     const [popupVisible, setPopupVisible] = useState(false);
@@ -95,14 +97,14 @@ const FirstPage = ({goToSecondPage}) => {
                 console.error(error);
         }
     };
-  
+
     const handleButtonClick = (message) => {
-      setPopupMessage(message);
-      setPopupVisible(true);
+        setPopupMessage(message);
+        setPopupVisible(true);
     };
-  
+
     const handlePopupClose = () => {
-      setPopupVisible(false);
+        setPopupVisible(false);
     };
 
     return(
@@ -121,9 +123,6 @@ const FirstPage = ({goToSecondPage}) => {
                 </div>
                 <button className={styles.button_main} onClick={handlePasswordSubmit}>
                     <div>백엔드입력</div>
-                </button>
-                <button className={styles.button_main} onClick={goToSecondPage}>
-                    <div>그냥입력</div>
                 </button>
             </div>
         </div>
@@ -160,19 +159,36 @@ const SecondPage = ({goToThirdPage, goToFourthPage, goToFifthPage}) => {
     );
 };
 
-const ThirdPage = ({goToFourthPage}) => {
+const ThirdPage = ({goToSecondPage}) => {
 
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
     const [nicknameval, setNicknameval] = useState("");
-  
-    const handleButtonClick = (message) => {
-      setPopupMessage(message);
-      setPopupVisible(true);
+
+    const handleButtonClick = async (message) => {
+        try {
+            const url = "http://127.0.0.1:8000/v1/setnickname/";
+            const data = {
+                'nickname': nicknameval,
+            };
+            const response = await axios.post(url, data, {withCredentials: true});
+            // console.log(response.statusText);
+
+            if (response.statusText === 'OK'){
+                setPopupMessage(message);
+                setPopupVisible(true);
+                
+            } else {
+                setPopupVisible(false);
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
-  
+
     const handlePopupClose = () => {
-      setPopupVisible(false);
+        setPopupVisible(false);
+        goToSecondPage();
     };
 
 
@@ -180,11 +196,10 @@ const ThirdPage = ({goToFourthPage}) => {
     const handleNicknameChange = (event) => {
         const enteredNickname = event.target.value;
         setNicknameval(enteredNickname);
-      };
+    };
     
     // 닉네임 유효성 검사. 지금은 4글자 이상으로 해뒀고 회의후 바꾸기
     const isNicknameValid = nicknameval.length >= 4;
-
 
     return(
         <div>
@@ -232,7 +247,7 @@ const ThirdPage = ({goToFourthPage}) => {
     );
 };
 
-const FourthPage = () => {
+const FourthPage = (goToSecondPage) => {
 
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
@@ -242,27 +257,42 @@ const FourthPage = () => {
     const [password1, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
     
-  
-    const handleButtonClick = (message) => {
-      setPopupMessage(message);
-      setPopupVisible(true);
+    const handleButtonClick = async (message) => {
+        try {
+            const url = "http://127.0.0.1:8000/v1/setpassword/";
+            const data = {
+                "new_password": password1,
+            };
+
+            const response = await axios.post(url, data, {withCredentials: true});
+            // console.log(response.statusText);
+
+            if (response.statusText === 'OK'){
+                setPopupMessage(message);
+                setPopupVisible(true);
+            } else {
+                setPopupVisible(false);
+            }
+        } catch (error) {
+            console.error(error);
+        } 
     };
-  
+
     const handlePopupClose = () => {
-      setPopupVisible(false);
+        setPopupVisible(false);
+        goToSecondPage();
     };
 
     const [isBVisible, setIsBVisible] = useState(false);
 
     const handleButtonClick2 = () => {
-      setIsBVisible(true);
+        setIsBVisible(true);
     }
 
-   // pw 유효성 검사. pw1과 pw2가 같은지 검사하지만 보안 문제에 걸릴 수도있어서 상의하기
-   const isPasswordValid1 = /^[a-zA-Z0-9]{4,}$/.test(password1);
+    // pw 유효성 검사. pw1과 pw2가 같은지 검사하지만 보안 문제에 걸릴 수도있어서 상의하기
+    const isPasswordValid1 = /^[a-zA-Z0-9]{4,}$/.test(password1);
 
-   
-   const isPasswordValid2 = password1===password2;
+    const isPasswordValid2 = password1===password2;
 
     return(
         <div>
@@ -323,14 +353,34 @@ const FifthPage = () => {
 
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
-  
-    const handleButtonClick = (message) => {
-      setPopupMessage(message);
-      setPopupVisible(true);
+    const [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
+
+    const handleButtonClick = async (message) => {
+        try {
+            const url = "http://127.0.0.1:8000/v1/deleteuser/";
+            const data = {
+                'password': password,
+            };
+
+            const response = await axios.post(url, data, {withCredentials: true});
+            // console.log(response.statusText);
+
+            if (response.statusText === 'OK') {
+                setPopupMessage(message);
+                setPopupVisible(true);
+            } else {
+                setPopupVisible(false);
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
-  
+
     const handlePopupClose = () => {
-      setPopupVisible(false);
+        setPopupVisible(false);
+        navigate('/home'); // 은호님 헬프
     };
 
     return(
@@ -352,6 +402,8 @@ const FifthPage = () => {
                             className={styles.edit_form1_input}
                             type="password"
                             placeholder="비밀번호를 입력해주세요"
+                            value={password} 
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
                     <div>

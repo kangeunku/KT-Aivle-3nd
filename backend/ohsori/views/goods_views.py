@@ -47,7 +47,7 @@ def get_details(request):
         goods.goods_star = result['detail_options']['goods_star']
         goods.goods_price = int(result['detail_options']['goods_price'].replace(',', ''))
         goods.goods_thumb = result['detail_options']['goods_thumb']
-        goods.use_yn = "Y"
+        goods.use_yn = "y"
         goods.save()
         
         goods_no = Goods.objects.only('goods_no').get(goods_url = goods_url)

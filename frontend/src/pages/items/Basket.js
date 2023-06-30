@@ -111,16 +111,18 @@ const FirstPage =({goToSecondPage}, props) => {
        </tbody> */}
 
         <div>
-            <div className={styles.bklist_main}>(v)  찜한 상품입니다.</div>
-             <div className={styles.bk_body}>
-             
-                     <div className={styles.bklist}>
-                     <div className={styles.bklist_img}>이미지가들어갑니당</div>
-                     <div className={styles.bklist_com}>
-                         <div className={styles.bklist_name}>아이템이름</div>
-                         <div className={styles.bklist_txt}>추가적 설명</div>
-                         <div className={styles.bklist_price}>(가격)원</div>
-                     </div>
+            <div className={styles.bkboxes}>
+                <div className={styles.page2logo2} ></div>
+                <div className={styles.bkboxes1}>찜 목록</div>
+            </div>
+            <div className={styles.bk_body}>
+                <div className={styles.bklist}>
+                    <div className={styles.bklist_img}>이미지가들어갑니당</div>
+                    <div className={styles.bklist_com}>
+                        <div className={styles.bklist_name}>아이템이름</div>
+                        <div className={styles.bklist_txt}>추가적 설명</div>
+                        <div className={styles.bklist_price}>(가격)원</div>
+                    </div>
                      
                      <div className={styles.bklist_btbox}>
                          <button className={styles.bklist_bt1} id="more" onClick={()=>{ goToSecondPage() }}>

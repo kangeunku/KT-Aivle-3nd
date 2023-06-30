@@ -6,6 +6,8 @@ import requests
 from bs4 import BeautifulSoup as bs
 from urllib import parse
 from time import sleep
+from concurrent.futures import ThreadPoolExecutor
+
 
 @api_view(['POST'])
 def first_search(request):
@@ -22,7 +24,7 @@ def second_search(request):
             'sort': 'sim',
             'filter':'naverpay',
             'exclude':''}
-    result = get_item_link(get_filtered_items(**params))
+    result = get_item_link_premium(get_filtered_items(**params))
     return Response(result)
 
 #############################################################
@@ -182,4 +184,40 @@ def get_item_link(item_lst): # 멀티 스레딩 적용가능
             item_lst_pp.append(item_lst[idx])
             print(f'{idx}번째 상품 추가 완료')
 
+    return item_lst_pp
+
+
+def get_item_link_premium(item_lst):
+    
+    # 네이버 쇼핑몰로 리다이렉트 되는 링크를 가진 상품들만을 모아놓기 위한 빈 리스트
+    item_lst_pp = []
+
+    gate_link_headers = {
+        'user-agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
+    }
+    
+    params = [{'url':info['link'], 'headers':gate_link_headers} for info in item_lst]
+    with ThreadPoolExecutor(max_workers=5) as pool:
+        responses = list(pool.map(lambda params : requests.get(**params), params))
+        
+    # temp = [response.status_code for response in responses]    
+    
+    documents = [bs(response.text, 'html.parser') for response in responses]
+    item_links = [{'url':document.select('#wrap > div.product_bridge_product__n_89z > a.product_btn_link__XRWYu')[1].attrs['href'],
+                   'headers':gate_link_headers} for document in documents]
+    
+    with ThreadPoolExecutor(max_workers=5) as pool:
+        responses2 = list(pool.map(lambda item_links : requests.get(**item_links), item_links))
+        
+    item_links_rd = [response.url for response in responses2]
+    
+    for idx, item_link_rd in enumerate(item_links_rd):
+        if item_link_rd.startswith('https://cr.'):
+            print(f'{idx}번째 상품은 네이버 쇼핑몰 웹페이지에서 제공되는 상품이 아닙니다.')
+        else:
+            item_lst[idx]['link'] = item_link_rd
+            item_lst_pp.append(item_lst[idx])
+            print(f'{idx}번째 상품 추가 완료')
+    
+    
     return item_lst_pp

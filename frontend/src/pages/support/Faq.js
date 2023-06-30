@@ -356,7 +356,7 @@ const ThirdPage = () => {
                 </div>
                 <div className={styles.faq3_row4}>
                     <div className={styles.faq_row11}>내용</div>
-                    <input className={styles.faq_row12}
+                    <textarea className={styles.faq_row12}
                         type="content"
                         value={content}
                         onChange={handleContentChange}

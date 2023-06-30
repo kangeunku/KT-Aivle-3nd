@@ -17,6 +17,33 @@ const App = () => {
   };
   
   
+  const Navigate = () => {
+    
+    
+    return (
+      <>
+      <Hotkey_global/>
+        <nav className="nav"> 
+          <ul className="nav_lsit">
+            <li className={navState === "home" ? "active_list" : null}>
+              <Link to="/home" onClick={() => setnavState("home")}>검색</Link>
+            </li>
+            <li className={navState === "basket" ? "active_list" : null}>
+              <Link to="/basket" onClick={() => setnavState("basket")}>찜목록</Link>
+            </li>
+            <li className={navState === "editinfo" ? "active_list" : null}>
+              <Link to="/editinfo" onClick={() => setnavState("editinfo")}>회원정보 수정</Link>
+            </li>
+            <li className={navState === "support" ? "active_list" : null}>
+              <Link to="/support" onClick={() => setnavState("support")}>고객센터</Link>
+            </li>
+            {/* <li className={navState === "test" ? "active_list" : null}>
+              <Link to="/test" onClick={() => setnavState("test")}>테스트섹션</Link>
+            </li> */}
+          </ul>
+        </nav>
+      </>
+      );
   const Navigate = useNavigate();
 
   const goHome = () => {
@@ -93,8 +120,9 @@ const App = () => {
         <div className="index_wrap">
           <h1 className="logo">
             {/* <a onClick={() =>{setloginState(true)}}>logo</a> */}
-            {/* <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link> */}
+            
           <Modal></Modal>
+          <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link>
           </h1>
           <Choicelogin changeislogn={changeislogn}/>
         </div>
@@ -110,7 +138,8 @@ const App = () => {
           <div className="wrap">
             <div className="side">
               <h1 className="logo">
-                <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link>
+                {/* <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link> */}
+                <a onClick={() =>{setloginState(false)}}>logo</a>
               </h1>
                 <nav className="nav"> 
                   <ul className="nav_lsit">
@@ -161,7 +190,7 @@ const App = () => {
                   <Route path="/basket" element={<Basket />} />
                   <Route path="/editinfo" element={<EditInfo />} />
                   <Route path="/support" element={<Support />} />
-                  <Route path="/test" element={<Test />} />
+                  {/* <Route path="/test" element={<Test />} /> */}
                 </Routes>
               </div>
             </section>
