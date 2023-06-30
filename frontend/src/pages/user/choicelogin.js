@@ -2,11 +2,60 @@ import React, { useState } from "react";
 import { Join } from "./join";
 import { Login } from "./login";
 
+import {useNavigate} from "react-router-dom"
+import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
+
 const Choicelogin = ({ changeislogn }) => {
     const [navState, setnavState] = useState("choicelogin");
 
+    const Navigate = useNavigate();
+
+    const goJoin = () => {
+        Navigate('/join');
+    }
+
+    const goLogin = () => {
+        Navigate('/login');
+    }
+    // 핫키 생성
+  const Hotkey_choicelogin = () => {
+    // 핫키 설정
+    const keyMap_cl = {
+        space1_key: 'space+1',
+        space2_key: "space+2"
+        // keypress, keydown, keyup.
+        // space_down: { sequence: "space", action: "keydown" }
+    };
+
+    const joinClick = () => {
+        console.log('space + 1');
+        setnavState("join");
+        goJoin();
+    };
+    const loginClick = () => {
+        console.log('space + 2');
+        setnavState("login");
+        goLogin();
+    };
+
+    // 핫키 적용 함수
+    const handlers_cl = {
+        space1_key:joinClick,
+        space2_key:loginClick,
+    };
+    
+    return (
+        <>
+            <GlobalHotKeys keyMap={keyMap_cl} handlers={handlers_cl}>
+            </GlobalHotKeys>
+        </>
+      );
+    };
+
     if(navState == 'choicelogin'){
         return (
+            <>
+            <Hotkey_choicelogin />
             <div className="index_content">
                 <div className="choice_tab">
                     <h2 className="welcome">
@@ -32,6 +81,7 @@ const Choicelogin = ({ changeislogn }) => {
                     </a>
                 </div>
             </div>
+            </>
         );
     }
     else if(navState == 'join'){

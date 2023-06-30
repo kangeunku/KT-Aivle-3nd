@@ -7,6 +7,7 @@
 
 .faq_container1{
     position:relative;
+    margin-top: 30px;
 }
 
 .faq_main1{
@@ -14,7 +15,7 @@
     font-weight: 700;
     margin-Bottom: 30px;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     margin-left: 50px;
 }
 
@@ -33,13 +34,10 @@
 
 .faq_box {
     position:relative;
-    width: 850px;
-    height: 400px;
-    overflow-y: auto;
+    width: 65%;
     overflow-x: hidden;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 30px;
+    margin: 5% auto 0;
+
 }
 
 .faqbox11{ font-size: 32px; font-weight: 700; margin-bottom: 12px; margin-left: 10px; color:#191919; }
@@ -68,6 +66,7 @@
     /* display: flex; */
     /* flex-direction: column; */
     align-items:center;
+    min-width:600px;
 }
   
 .faq_container_box {
@@ -152,8 +151,8 @@
 }
 
 .button_faq{
-    position: absolute;
-    right:10%;
+    position: fixed;
+    right:4%;
     background-color : #285a43;
     width : 180px;
     height: 40px;
@@ -162,12 +161,11 @@
     color:white;
     font-size:20px;
     font-weight:700;
-    top:550px;
+    top:90%;
 }
 
 .faq3_container {
-    margin-left:auto;
-    margin-right: auto;
+    margin: 100px auto;
     display: flex;
     flex-direction: column;
     width: 85%;

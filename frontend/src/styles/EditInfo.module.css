@@ -10,13 +10,13 @@
 
 .editbox2{ font-size: 24px; color: rgba(30, 30, 30, 0.8);line-height: 160%; margin-left: 50px; } 
 
-.editbox3{ font-size: 24px; color: rgba(30, 30, 30, 0.8); font-weight: 700; line-height: 160%; padding-left: 5%; margin-top: 30px;} 
+.editbox3{ font-size: 24px; color: rgba(30, 30, 30, 0.8); font-weight: 700; line-height: 160%; padding-left: 5%; width:1300px;} 
 
-.page2box{ position: relative; display: grid; grid-template-columns: 1fr 1fr 1fr; top: 20px; left : 3%; width: 1000px; height: 380px; }
+.page2box{ position: relative; display: grid; grid-template-columns: 1fr 1fr 1fr; top: 20px; margin: 60px 150px; width: auto; height: 380px; }
 
-.page2box2{ width: 300px; height: 380px; background-color: white; margin-left:25px; margin-right:25px; box-shadow: 8px 8px 8px rgba(40, 90, 67, 0.05); border-radius: 12px; position:relative; overflow:hidden; }
+.page2box2{ width: 360px; height: 450px; background-color: white; margin-left:25px; margin-right:25px; box-shadow: 8px 8px 8px rgba(40, 90, 67, 0.05); border-radius: 12px; position:relative; overflow:hidden; }
 
-.page2box2_img1 { position: relative; background-image: url(../assets/img/img_change.png); background-position: center; background-repeat: no-repeat; background-size: contain; width:310px; height:220px; left:0px; right:0px; }
+.page2box2_img1 { position: relative; background-image: url(../assets/img/img_change.png); background-position: center; background-repeat: no-repeat; background-size: contain; width:100%; height:220px; left:0px; right:0px; }
 
 .page2box2_img2 { position: relative; background-image: url(../assets/img/img_chpw.png); background-position: center; background-repeat: no-repeat; background-size: contain; width:310px; height:220px; left:0px; right:0px; }
 
@@ -26,7 +26,7 @@
 
 .page2box2_txt2 { position:relative; top:50px; left:30px; height: 30px; font-size:16px; color: #8b8b8b; }
 
-.edit_form1{ display: flex; flex-direction: column; position: relative; width: 600px; left: 170px; height:100px; margin-top: 60px; margin-bottom: 30px;}
+.edit_form1{ display: flex; flex-direction: column; position: relative; width: 600px; left: 20%; height:100px; margin-top: 60px; margin-bottom: 30px;}
 
 .edit_form1_txt{ position: relative; font-weight: 700; font-size:24px; color:#191919; margin-bottom: 15px; }
 
@@ -40,9 +40,8 @@
     height:30px;}
 
 .button_main {
-    position:relative;
-    left:600px;
-    margin-top:50px;
+    position:fixed;
+    right:4%;
     background-color : #285a43;
     width : 180px;
     height: 40px;
@@ -51,6 +50,7 @@
     color:white;
     font-size:20px;
     font-weight:700;
+    top:90%;
 }
 
 .popup1 {

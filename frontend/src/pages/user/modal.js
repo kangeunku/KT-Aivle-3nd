@@ -38,71 +38,9 @@ const modal = forwardRef((props, ref) =>{
       //alert('모달창 내부 작업을 해도 모달창이 꺼지지 않습니다.');
       props.setModalState(false);
     }
-    
-        // 핫키 생성
-    // const Hotkey_local = () => {
-    //       // 핫키 설정
-    //       const keyMap = {
-    //           enter_key: 'enter',
-    //       };
-  
-    //       const enterClick = () => {
-    //           console.log('enter');
-    //           BtnEvent();
-    //       };
-  
-    //       // 핫키 적용 함수
-    //       const handlers = {
-    //           enter_key: enterClick,
-    //       };
-          
-    //       return (
-    //           <>
-    //               <GlobalHotKeys keyMap={keyMap} handlers={handlers}>
-    //               </GlobalHotKeys>
-    //           </>
-    //       );
-    //   };
-        // 핫키 생성
-        const Hotkey_local = () => {
-          // 핫키 설정
-          const keyMap = {
-              enter_key: 'space+1',
-              spacebar_key: "space+w",
-              // keypress, keydown, keyup.
-              space_down: { sequence: "enter", action: "keydown" }
-          };
-  
-          const handleClick = () => {
-              console.log('space+1');
-              BtnEvent();
-          };
-          const spaceClick = () => {
-              console.log('space + w');
-          };
-          const spacedownClick = () => {
-              console.log('enter down');
-          };
-  
-          // 핫키 적용 함수
-          const handlers = {
-              enter_key: handleClick,
-              spacebar_key: spaceClick,
-              space_down: spacedownClick,
-          };
-          
-          return (
-              <>
-                  <GlobalHotKeys keyMap={keyMap} handlers={handlers}>
-                  </GlobalHotKeys>
-              </>
-          );
-      };
 
       return (
         <>
-          <Hotkey_local/>
-
           <Resultpopup ref={wrapperRef}>
             <br></br>
             <p 

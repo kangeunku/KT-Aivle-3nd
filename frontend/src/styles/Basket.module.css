@@ -9,6 +9,37 @@
     align-items: flex-end;
 }
 
+.bkboxes{
+    display: flex;
+    align-items: center;
+    align-items: flex-end;
+}
+
+.page2logo2 {
+    position: relative;
+    left: 50px;
+    top: 30px;
+    width: 282px;
+    height: 84px;
+    background-image: url(../assets/img/ohsori_logo2.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    justify-content: flex-end;
+}
+
+.bkboxes1{
+    position:relative;
+    left: 50px;
+    top: 30px;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    margin-left: 10px;
+    color:#191919;
+}
+
+
 .bkbox11{
     font-size: 32px;
     font-weight: 700;

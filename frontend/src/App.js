@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
+//useNavigate : https://iridescent-zeal.tistory.com/214
 
 import {  Home, Basket, EditInfo ,Support, Choicelogin, Test } from "./pages";
 import {  Header } from "./components";
@@ -19,8 +21,33 @@ const App = () => {
   const relanding = (value) => {
     setreState(value);
   };
+
+  const relanding = (value) => {
+    setreState(value);
+  };
+  const Navigate = useNavigate();
+
+  const goHome = () => {
+    Navigate('/home');
+  }
+
+  const goBasket = () => {
+    Navigate('/basket');
+  }
+
+  const goEditinfo = () => {
+    Navigate('/editinfo');
+  }
+
+  const goSupport = () => {
+    Navigate('/support');
+  }
+
+  const goTest = () => {
+    Navigate('/test');
+  }
   
-  const Navigate = () => {
+  const Navigate_ = () => {
     return (
       <>
       <Hotkey_global/>
@@ -60,17 +87,24 @@ const App = () => {
     };
 
     const homeClick = () => {
-        console.log('space+q');
+        console.log('space + q');
         setnavState("home");
+        goHome();
     };
     const basketClick = () => {
         console.log('space + w');
+        setnavState("basket");
+        goBasket();
     };
     const editinfoClick = () => {
       console.log('space + e');
+      setnavState("editinfo");
+      goEditinfo();
     };
     const supportClick = () => {
       console.log('space + r');
+      setnavState("support");
+      goSupport();
     };
 
     // 핫키 적용 함수
@@ -107,7 +141,7 @@ const App = () => {
     return (
       <>
         <Hotkey_global/>
-
+        
         <div className='App'>
           <div className="wrap">
             <div className="side">
@@ -115,7 +149,45 @@ const App = () => {
                 {/* <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link> */}
                 <a onClick={() =>{setloginState(false)}}>logo</a>
               </h1>
-              <Navigate></Navigate>
+                <nav className="nav"> 
+                  <ul className="nav_lsit">
+                    <li className={navState === "home" ? "active_list" : null}>
+                      <Link to="/home" onClick={() => setnavState("home")}>검색</Link>
+                    </li>
+                    <li className={navState === "basket" ? "active_list" : null}>
+                      <Link to="/basket" onClick={() => setnavState("basket")}>찜목록</Link>
+                    </li>
+                    <li className={navState === "editinfo" ? "active_list" : null}>
+                      <Link to="/editinfo" onClick={() => setnavState("editinfo")}>회원정보 수정</Link>
+                    </li>
+                    <li className={navState === "support" ? "active_list" : null}>
+                      <Link to="/support" onClick={() => setnavState("support")}>고객센터</Link>
+                    </li>
+                    <li className={navState === "test" ? "active_list" : null}>
+                      <Link to="/test" onClick={() => setnavState("test")}>테스트섹션</Link>
+                    </li>
+                  </ul>
+                </nav>
+                {/* <nav className="nav"> 
+                  <ul className="nav_lsit">
+                    <li className={navState === "home" ? "active_list" : null}>
+                      <button  onClick={() => {goHome(); setnavState("home");}}>검색</button>
+                    </li>
+                    <li className={navState === "basket" ? "active_list" : null}>
+                      <button onClick={() => {goBasket(); setnavState("basket");}}>찜목록</button>
+                    </li>
+                    <li className={navState === "editinfo" ? "active_list" : null}>
+                      <button onClick={() => {goEditinfo(); setnavState("editinfo");}}>회원정보 수정</button>
+                    </li>
+                    <li className={navState === "support" ? "active_list" : null}>
+                      <button onClick={() => {goSupport(); setnavState("support");}}>고객센터</button>
+                    </li>
+                    <li className={navState === "test" ? "active_list" : null}>
+                      <button onClick={() => {goTest(); setnavState("test");}}>테스트섹션</button>
+                    </li>
+                  </ul>
+                </nav> */}
+              {/* <Navigate></Navigate> */}
             </div>
             <section className="content">
               <Header />
@@ -151,7 +223,30 @@ const Popup = ({ handleClose }) => {
       }, 300);
     }
   };
+  // 핫키 생성
+  const Hotkey_modal = () => {
+    // 핫키 설정
+    const keyMap_modal = {
+        enter_key: 'enter',
+    };
+    const closeClick = () => {
+        console.log('enter');
+        closeWithAnimation();
+    };
+    // 핫키 적용 함수
+    const handlers_modal = {
+        enter_key: closeClick,
+    };
+    return (
+        <>
+            <GlobalHotKeys keyMap={keyMap_modal} handlers={handlers_modal}>
+            </GlobalHotKeys>
+        </>
+    );
+  };
   return (
+    <>
+    <Hotkey_modal />
     <div ref={modalRef} className="intor_graphpop">
       <div className="content">
         <h1 className="logo">
@@ -167,6 +262,7 @@ const Popup = ({ handleClose }) => {
         <button onClick={closeWithAnimation} className="start_closing">Close</button>
       </div>
     </div>
+    </>
   );
 };
 
