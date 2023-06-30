@@ -30,11 +30,11 @@ const Login = ({ changeislogn }) => {
             const res = JSON.stringify(response.statusText);
             
             // 로그인 처리및 홈이동
-            changeislogn(true)
-            navigate('/home')
-            // if(res === '"OK"'){
-            //     navigate();
-            // }
+            
+            if(res === '"OK"'){
+                changeislogn(true);
+                navigate('/home');
+            }
             
         })
         .catch(function (error) {
@@ -116,7 +116,7 @@ const Login = ({ changeislogn }) => {
                 <button className="next_step_btn" onClick={() => join_btn()}>로그인</button>
                 {/* <link to="/home" className="next_step_btn">로그인</link> */}
             </div>
-            <button className="next_step_btn" onClick={()=> {join_btn()}} disabled={!isAllFieldsValid}> <strong style={{color:"red"}}>0</strong> 모달<Modal value='login'/></button>
+            <button className="next_step_btn" onClick={()=> {join_btn()}} disabled={!isAllFieldsValid}> <strong style={{color:"white"}}>로그인<Modal value="환영합니다"/></strong>  </button>
             {/* setId() */}
             
         </>

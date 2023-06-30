@@ -192,6 +192,14 @@
   padding: 0 100px;
 }
 
+.box4_idx4{
+  width: 60%;
+  display:flex;
+  justify-content: space-between;
+  margin: 20px auto;
+  padding: 0 100px;
+}
+
 .box4_txt{
   font-size: 32px;
   display:flex;

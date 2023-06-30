@@ -153,7 +153,7 @@ const SecondPage = ({goToThirdPage, goToFourthPage, goToFifthPage}) => {
                     </div>
                     <div className={styles.page2box2} onClick={goToFourthPage}>
                         <img className={styles.page2box2_img2} alt=""  />
-                        <div className={styles.page2box2_txt1}>비밀변호 변경</div>
+                        <div className={styles.page2box2_txt1}>비밀번호 변경</div>
                         <div className={styles.page2box2_txt2}>비밀번호를 변경할 수 있습니다</div>
                     </div>
                     <div className={styles.page2box2} onClick={goToFifthPage}>

@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect, forwardRef } from "react";
 import styles from "../styles/Slider.module.css";
 
-
-
 const select_boxes = {
   0: {
     index: 0,
@@ -22,9 +20,24 @@ const select_boxes = {
 };
 
 
-const Slider = forwardRef((props, ref) =>{
+const Slider = forwardRef(({setPopupState, result}) =>{
 
-  const iData = JSON.parse(localStorage.getItem("imgData"));
+  // console.log('Slider_result', result);
+  // console.log('Slider_result2', typeof(result.img_pathes), result.img_pathes);
+  // console.log('Slider_result3', typeof(result.summary_lst), result.summary_lst);
+  const iData = [];
+  for (let i = 0; i < result.summary_lst.length; i++){
+    const tmp = {};
+    tmp['image'] = result.img_pathes[i];
+    tmp['answer'] = result.summary_lst[i];
+    iData.push(tmp);
+  }
+  // console.log(iData);
+
+  // console.log('options', result.detail.necessary_opt);
+
+
+  const iData_len = result.img_pathes.length;
 
   //슬라이드
   const slideRef = useRef(null);
@@ -60,7 +73,7 @@ const Slider = forwardRef((props, ref) =>{
       setX(-5);
       setIsSlide(true);
       setTimeout(() => {
-        setIndex((prev) => (prev === 8 ? 0 : prev + 1));
+        setIndex((prev) => (prev === iData_len-1 ? 0 : prev + 1));
         setX(0);
         setIsSlide(false);
       }, 300);
@@ -74,7 +87,7 @@ const Slider = forwardRef((props, ref) =>{
 
   const handleClickOutside=(event)=>{
     if(wrapperRef && !wrapperRef.current.contains(event.target)){
-        props.setPopupState(false);
+        setPopupState(false);
     }
   }
 
@@ -85,7 +98,7 @@ const Slider = forwardRef((props, ref) =>{
     setX(-5);
     setIsSlide(true);
     await setTimeout(() => {
-      setIndex((prev) => (prev === 8 ? 0 : prev + 1));
+      setIndex((prev) => (prev === iData_len-1 ? 0 : prev + 1));
       setX(0);
       setIsSlide(false);
     }, 300);
@@ -98,7 +111,7 @@ const Slider = forwardRef((props, ref) =>{
     setX(+5);
     setIsSlide(true);
     await setTimeout(() => {
-      setIndex((prev) => (prev === 0 ? 8 : prev - 1));
+      setIndex((prev) => (prev === 0 ? iData_len-1 : prev - 1));
       setX(0);
       setIsSlide(false);
     }, 300);
@@ -153,7 +166,7 @@ const Slider = forwardRef((props, ref) =>{
 
   function BtnEvent(){
     //alert('모달창 내부 작업을 해도 모달창이 꺼지지 않습니다.');
-    props.setPopupState(false);
+    setPopupState(false);
   }
 
   function OptionSelect({ value, onChange }) {
@@ -199,7 +212,7 @@ const Slider = forwardRef((props, ref) =>{
                 <nav className={styles.box2container} key={cnt}>
                   <img className={`${styles.img} ${styles.previewimg}`}
                     style={{ opacity: 0.5, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
-                    src={iData[(index-cnt >= 0)?index-cnt: 9-cnt+index].image}
+                    src={iData[(index-cnt >= 0)?index-cnt: iData_len-cnt+index].image}
                   />
                 </nav>
               ))}
@@ -215,7 +228,7 @@ const Slider = forwardRef((props, ref) =>{
                 <nav className={styles.box2container} key={cnt}>
                   <img className={`${styles.img} ${styles.previewimg}`}
                     style={{ opacity: 0.5, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
-                    src={iData[(index+cnt <= 8)?index+cnt:cnt+index-9].image}
+                    src={iData[(index+cnt <= iData_len-1)?index+cnt:cnt+index-iData_len].image}
                   />
                 </nav>
               ))}
@@ -234,14 +247,17 @@ const Slider = forwardRef((props, ref) =>{
 
 {/* 옵션과 수량 */}
       <session className={`${styles.box} ${styles.box4}`}>      
+      
+      {result.detail.necessary_opt.map((item) => {
+        // {console.log(item)}
         <div className={styles.box4_idx0}>
           <span className={styles.box4_txt}>필수옵션</span>
           <select className={styles.box4_select}>
-            <option value = "금사과">금사과</option>
-            <option value = "은사과">은사과</option>
-            <option value = "동사과">동사과</option>
+            <option key={item} value = {item}>{item}</option>
           </select>
         </div>
+        })}
+{/*         
         <div className={styles.box4_idx1}>
           <span className={styles.box4_txt}>선택옵션</span>
           <select className={styles.box4_select}>
@@ -254,7 +270,7 @@ const Slider = forwardRef((props, ref) =>{
           <span className={styles.box4_txt}>입력옵션</span>
           <textarea className={styles.box4_txtarea}>
           </textarea>
-        </div>
+        </div> */}
         <div className={styles.box4_idx3}>
           <span className={styles.box4_txt}>수량</span>
           <div className={styles.box4_count}>
@@ -262,6 +278,10 @@ const Slider = forwardRef((props, ref) =>{
             <span>{count}</span>
             <button className={styles.box4_countright} onClick={increaseCount} ></button>
           </div>
+        </div>
+        <div className={styles.box4_idx4}>
+          <span className={styles.box4_txt}>가격</span>
+          <span className={styles.box4_txt}>{count * result.detail.goods_price}원</span>
         </div>
       </session>
 

@@ -44,7 +44,7 @@ def get_details(request):
                         'detail': goods_summary.detail
                         }
         
-        return Response() # 상품 정보 회신
+        return Response(front_result) # 상품 정보 회신
     
     # 상품이 DB에 저장되어 있지 않은 경우 - 크롤링 및 추출 후 DB 저장 및 전달 로직
     except Goods.DoesNotExist:

@@ -9,7 +9,6 @@ const Home = (props) => {
     const [currentPage, setCurrentPage] = useState('first');
     const [inputValue, setInputValue] = useState('');
     const [result, setResult] = useState([]);
-    const [res, setRes] = useState([]);
 
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
@@ -17,11 +16,10 @@ const Home = (props) => {
     
     // 동일한 링크를 클릭시 처음화면으로 초기화
     useEffect(() => {
-        props.relanding(false)
-        setCurrentPage('first')
-        setInputValue('')
-        setResult([])
-        setRes([])
+        props.relanding(false);
+        setCurrentPage('first');
+        setInputValue('');
+        setResult([]);
         setPopupVisible(false);
         setPopupMessage("");
     }, [props.state]);
@@ -43,16 +41,18 @@ const Home = (props) => {
         };
         await axios.post(url, data)
         .then(function (response) {
-            setRes(response.data);
+            setResult(response.data);
             setPopupVisible(false);
         })
         .catch(function (error) {
-            console.log(error);
+            console.log('error', error);
         });
         setCurrentPage('third');
     }
     
     const goToForthPage = async (goods_url) => {
+        setPopupMessage("상품을 분석 중입니다.");
+        setPopupVisible(true);
         try {
             const url = "http://127.0.0.1:8000/v1/detail/";
             const data = {
@@ -60,13 +60,14 @@ const Home = (props) => {
             }
 
             const response = await axios.post(url, data);
-            console.log('goods_detail', response);
+            // console.log('goods_detail', response);
+            setResult(response.data);
 
-            // setCurrentPage('forth');
+            setCurrentPage('forth');
+            setPopupVisible(false);
         } catch (error) {
-            console.log('error');
+            console.log('error', error);
         }
-        setPopupVisible(false);
     };
 
     const returnThirdPage = () => {
@@ -107,8 +108,8 @@ const Home = (props) => {
         <div>
             {currentPage === 'first' && (<FirstPage inputValue={inputValue} handleInputChange={handleInputChange} handleButtonClick={handleButtonClick} popupOn={popupVisible} popupOff={handlePopupClose} message={popupMessage}/>)}
             {currentPage === 'second' && <SecondPage inputValue={inputValue} goToThirdPage={goToThirdPage} result={result} popupOn={popupVisible} popupOff = {handlePopupClose} message={popupMessage}/>}
-            {currentPage === 'third' && <ThirdPage goToForthPage={goToForthPage} result={res} popupOn = {popupVisible} popupOff = {handlePopupClose} message={popupMessage}/>}
-            {currentPage === 'forth' && <ForthPage goToThirdPage={returnThirdPage} result={res} popupOn = {popupVisible} popupOff = {handlePopupClose} message={popupMessage}/>}
+            {currentPage === 'third' && <ThirdPage goToForthPage={goToForthPage} result={result} popupOn = {popupVisible} popupOff = {handlePopupClose} message={popupMessage}/>}
+            {currentPage === 'forth' && <ForthPage goToThirdPage={returnThirdPage} result={result} popupOn = {popupVisible} popupOff = {handlePopupClose} message={popupMessage}/>}
         </div>
     );
 };
@@ -196,7 +197,6 @@ const SecondPage = ({ inputValue, goToThirdPage, result, popupOn, popupOff, mess
             <div>
             <div className={styles.home_mainguide}>상세 검색을 위해 카테고리를 불러오겠습니다.</div>
                 <div className={styles.home_search_box3}>
-                    {/* <CategoryBoxes result = {result}/> */}
                     <CategoryBoxes onItemSelect={handleItemClick} selectedItems={selectedItems} result={result}/>
                 </div>
             </div>
@@ -271,16 +271,16 @@ const imgData = [
     {   image: 'assets/img/apple_info_sample4.jpg',
         answer: '이미지6' },
     {   image: 'assets/img/apple1.jpg',
-    answer: '이미지7' },
+        answer: '이미지7' },
     {   image: 'assets/img/Badger.jpg',
-    answer: '이미지8' },
+        answer: '이미지8' },
     {   image: 'assets/img/LeGOAT.png',
-    answer: '이미지9' },
+        answer: '이미지9' },
     ];
 
 
 // 모달창으로 띄워주기
-const ForthPage = ({goToThirdPage, result}) => {
+const ForthPage = ({goToThirdPage, result, popupOn, popupOff, message}) => {
     const [PopupState, setPopupState] = useState(true);
 
     function OnOffPopup(){
@@ -294,9 +294,10 @@ const ForthPage = ({goToThirdPage, result}) => {
 
     return (
         <div>
-        {PopupState === true?
-        <Slider setPopupState={setPopupState}/>
-        : <ThirdPage goToForthPage={goToThirdPage} result={result}></ThirdPage>}
+            {popupOn && (<Popup onClose={popupOff} message={message} />)}
+            {PopupState === true?
+            <Slider setPopupState={setPopupState} result={result}/>
+            : <ThirdPage goToForthPage={goToThirdPage} result={result}></ThirdPage>}
         </div>
     )
 };
