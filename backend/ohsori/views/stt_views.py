@@ -16,9 +16,9 @@ from symspellpy_ko import KoSymSpell, Verbosity #symspellpy 기반 단어 교정
 from jamo import h2j, j2hcj
 from .unicode import join_jamos # unicode.py 불러오기
 
-@api_view(['GET'])
+@api_view(['POST'])
 def transcribe_streaming(request) -> speech.RecognitionConfig: #stream_file : bs64
-    if request.method == 'GET':
+    if request.method == 'POST':
         """Streams transcription of the given audio file."""
         client = speech.SpeechClient()
         stream_file = request.data.get('bs64')
