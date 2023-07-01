@@ -3,10 +3,12 @@ import { Modal } from "../../components";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import {  Home } from "../../pages";
 import {  Header } from "../../components";
+import { useCookies } from 'react-cookie';
 
 import axios from "axios";
 
 const Login = ({ changeislogn }) => {
+    const [cookies, setCookie, removeCookie] = useCookies(['usercookie']);
     const[form, setFrom] = useState({
         "username": "",
         "password": "",
@@ -15,6 +17,7 @@ const Login = ({ changeislogn }) => {
     });
 
     const navigate = useNavigate();
+
 
     const join_btn = async () => {
         const url = "http://127.0.0.1:8000/v1/login/"
@@ -26,6 +29,12 @@ const Login = ({ changeislogn }) => {
             // console.log(response);
             // console.log(JSON.stringify(response.statusText));
             const res = JSON.stringify(response.statusText);
+            
+            // 나중에 닉네임 전달받으면 넣어줄것
+            let cookie_name = "사과"
+
+            setCookie('usercookienickname', cookie_name, { path: '/' });
+            setCookie('usercookieid', form.username, { path: '/' });
             
             // 로그인 처리및 홈이동
             changeislogn(true)
@@ -82,7 +91,9 @@ const Login = ({ changeislogn }) => {
                 <button className="next_step_btn" onClick={() => join_btn()}>로그인</button>
                 {/* <link to="/home" className="next_step_btn">로그인</link> */}
             </div>
-            <button className="next_step_btn" onClick={()=> {join_btn()}} disabled={!isAllFieldsValid}> <strong style={{color:"red"}}>0</strong> 모달<Modal value='login'/></button>
+            <button className="next_step_btn" onClick={()=> {join_btn()}} disabled={!isAllFieldsValid}> 
+                <strong style={{color:"red"}}>0</strong> 로그인
+            </button>
             {/* setId() */}
             
         </>

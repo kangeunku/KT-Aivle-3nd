@@ -35,6 +35,7 @@ const myfaqData = [
 
 const Support = (props) => {
     const [currentPage, setCurrentPage] = useState('first');
+    const [ result, setResult ] = useState([]);
 
      // 동일한 링크를 클릭시 처음화면으로 초기화
      useEffect(() => {

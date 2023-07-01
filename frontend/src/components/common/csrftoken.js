@@ -3,7 +3,7 @@ import React from 'react';
 
 // https://devdojo.com/ketonemaniac/doing-spring-securitys-csrf-tokens-the-right-way-with-react
 
-function getCookie(name) {
+export function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         let cookies = document.cookie.split(';');
@@ -17,6 +17,15 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+// function getCookie(name) {
+//     var value = "; " + document.cookie;
+//     var parts = value.split("; " + name + "=");
+//     if (parts.length === 2) {
+//       return parts.pop().split(";").shift();
+//     }
+//   }
+
+
 const CSRFToken = () => {
     const csrftoken = getCookie('csrftoken');
     // console.log(csrftoken)
@@ -24,5 +33,6 @@ const CSRFToken = () => {
         <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken || ''}/>
     )
 };
+
 
 export { CSRFToken }
