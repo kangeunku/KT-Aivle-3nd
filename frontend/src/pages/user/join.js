@@ -283,7 +283,7 @@ const Joinsteptwo = ({changeislogn}) => {
     
     const handleNicknameChange = (e) => {
         const nickname = e.target.value;
-        const isValidNickname = nickname.match(/^[a-zA-Z0-9가-힣]*$/) && nickname.length >= 1;
+        const isValidNickname = nickname.match(/^[가-힣]*$/) && nickname.length >= 4;
         setFrom({ ...form, nickname, nickname_val: isValidNickname });
     };
 

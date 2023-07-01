@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styles from "../../styles/Faq.module.css";
+// import ImageUploadPreview from './ImageUploadPreview'
 // import { RequestTTS } from "../../components/common/google_tts";
 // import { TextToSpeech } from "../../components/common/google_tts";
 
@@ -31,6 +32,72 @@ const myfaqData = [
     { index: 3, subject: '부장님 야근 그만하고싶어요ㅠㅅㅠ',  question: '이 노래는 교수님이 쓰라 해서\n 쓰는 노래 솔직히 대충 만들었네\n 다음 주엔 인간적인 양의 과제를\n 받았음 해 그랬음 해 어', answer: '부장님 오늘 휴가입니다' },
     { index: 3, subject: '취업시켜주세요',  question: '제곧내', answer:'' },
 ];
+
+// const ImageUploadPreview = () => {
+//     const [previewImage,setPreviewImage] = useState(null);
+
+//     const handleImageUpload = (e) => {
+//         const file = e.target.files[0];
+//         if (file) {
+//             const reader = new FileReader();
+
+//             reader.onload = () => {
+//                 setPreviewImage(reader.result);
+//             };
+
+//             reader.readAsDataURL(file);
+//         }
+//     };
+
+//     return (
+//         <label htmlFor="fileInput" className={styles.fileimgbut}>
+//             <input type="file" id="fileInput" style = {{display:'none'}} onChange={handleImageUpload} />
+//             {previewImage ? (
+//                 <img src={previewImage} alt="미리보기" style={{width:'100px', height:'100px', border:'1px solid gray'}}  onChange={handleImageUpload} />
+//             ) : (
+//                     <div style = {{width:'100px', height:'100px',border: '1px solid gray', backgroundColor: 'lightgray'}}></div>
+//             )}
+//         </label>
+//     );
+// };
+
+const ImageUploadPreview = () => {
+    const [images, setImages] = useState([]);
+  
+    const handleImageUpload = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+  
+        reader.onload = () => {
+          const newImage = {
+            id: Date.now(),
+            src: reader.result,
+          };
+  
+          setImages((prevImages) => [...prevImages, newImage]);
+        };
+  
+        reader.readAsDataURL(file);
+      }
+    };
+  
+    const renderImageBoxes = () => {
+      return images.map((image) => (
+        <div key={image.id} style={{ width: '100px', height: '100px', border: '1px solid gray', marginRight: '30px' }}>
+          <img src={image.src} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+      ))
+    };
+
+    return (
+        <label htmlFor="fileInput" className={styles.fileimgbut}>
+                <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleImageUpload} />
+                    {renderImageBoxes()}
+                        <div style={{ width: '100px', height: '100px', border: '1px solid gray', backgroundColor: 'lightgray' }}></div>
+        </label>
+    );
+};
 
 const Support = () => {
     const [currentPage, setCurrentPage] = useState('first');
@@ -252,11 +319,13 @@ const ThirdPage = () => {
                         type="content"
                         value={content}
                         onChange={handleContentChange}
-                        placeholder="내용을 입력하세요"
+                        placeholder="우선 접수된 문의 건부터 순차적으로 답변을 드리고 있습니다.
+                        문의 유형과 문의 내용을 상세히 기재해 주시면 더욱 신속히 답변 드릴 수 있습니다."
                     />
                 </div>
                 <div className={styles.faq3_row5}>
                     <div className={styles.faq_row11}>파일 첨부</div>
+                    <ImageUploadPreview />
                 </div>
                 <button className={styles.button_faq} onClick={handleSaveData}>등록하기</button>
                 {jsonData} && <div>저장된 데이터: {jsonData}</div>
