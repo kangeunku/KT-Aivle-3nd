@@ -186,7 +186,7 @@
 
 .home_button1 {
     display:flex;
-    position: absolute;
+    position: relative;
     width: 38px;
     height: 38px;
     background-image: url(../assets/img/search_button2.png);
@@ -194,9 +194,9 @@
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 12px;
-    left:850px;
+    left:90%;
     align-items: center;
-    top: 17px;
+    top: -60px;
     cursor: pointer;
     }
 

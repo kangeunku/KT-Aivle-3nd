@@ -6,7 +6,11 @@ import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Join = ({changeislogn}) => {
+import termsData1 from '../../assets/txt/terms.json'
+import termsData2 from '../../assets/txt/terms2.json'
+
+
+const Join = ({ changeislogn }) => {
     const [joinState, setjoinState] = useState(1);
 
     const next_stage = (txt) => {
@@ -14,36 +18,36 @@ const Join = ({changeislogn}) => {
             console.log("end");
             setjoinState(2);
         }
-        else{
+        else {
             setjoinState(joinState + 1);
         }
     }
 
-        // 핫키 생성
-        const Hotkey_local_1 = () => {
-            // 핫키 설정
-            const keyMap_1 = {
-                enter_key: 'enter'
-            };
-    
-            const nextClick = () => {
-                console.log('enter');
-                if(joinState == 1) next_stage();
-                else if(joinState == 2) next_stage('end');
-            };
-
-            // 핫키 적용 함수
-            const handlers_1 = {
-                enter_key: nextClick,
-            };
-            
-            return (
-                <>
-                    <GlobalHotKeys keyMap={keyMap_1} handlers={handlers_1}>
-                    </GlobalHotKeys>
-                </>
-            );
+    // 핫키 생성
+    const Hotkey_local_1 = () => {
+        // 핫키 설정
+        const keyMap_1 = {
+            enter_key: 'enter'
         };
+
+        const nextClick = () => {
+            console.log('enter');
+            if (joinState == 1) next_stage();
+            else if (joinState == 2) next_stage('end');
+        };
+
+        // 핫키 적용 함수
+        const handlers_1 = {
+            enter_key: nextClick,
+        };
+
+        return (
+            <>
+                <GlobalHotKeys keyMap={keyMap_1} handlers={handlers_1}>
+                </GlobalHotKeys>
+            </>
+        );
+    };
 
     if (joinState == 1) {
         return (
@@ -54,10 +58,10 @@ const Join = ({changeislogn}) => {
             </>
         );
     }
-    else if( joinState === 2 ){
+    else if (joinState === 2) {
         return (
             <>
-                 <Joinsteptwo changeislogn={changeislogn}/>
+                <Joinsteptwo changeislogn={changeislogn} />
                 {/* <button className="next_step_btn" onClick={() => next_stage('end')}>다음</button> */}
             </>
         );
@@ -73,7 +77,7 @@ const Join = ({changeislogn}) => {
 
 const Joinstepone = () => {
     const [ModalState, setModalState] = useState('false'); //모달창의 상태를 보관해 둘 useState입니다.
-    
+
     function OnOffModal() { //모달창 상태를 변경하는 함수입니다.
         if (ModalState === true) {
             setModalState(false);
@@ -81,7 +85,7 @@ const Joinstepone = () => {
             setModalState(true);
         }
     }
-        // 핫키 생성
+    // 핫키 생성
     const Hotkey_local_2 = () => {
         // 핫키 설정
         const keyMap_2 = {
@@ -108,7 +112,7 @@ const Joinstepone = () => {
             spacebar_key: spaceClick,
             space_down: spacedownClick,
         };
-        
+
         return (
             <>
                 <GlobalHotKeys keyMap={keyMap_2} handlers={handlers_2}>
@@ -157,8 +161,8 @@ const Joinstepone = () => {
             {/* <h2 className="subtitle_join">
                 <a>회원가입</a>
             </h2> */}
-            <Hotkey_local_2/>
-            
+            <Hotkey_local_2 />
+
 
             <div className="choice_tab">
                 <h3 className="welcome">
@@ -172,28 +176,30 @@ const Joinstepone = () => {
             </div>
             <ul className="terms_list">
                 <li>
-                {dataLists.map((list) => (
-                    
-                    <div style={{
-                        margin:20
-                    }}>
-                        <label for={list.id}>{list.data}</label>
-                        <input
-                            id={list.id}
-                            key={list.id}
-                            type="checkbox"
-                            className="check_terms"
-                            onChange={(e) => onCheckedElement(e.target.checked, list)}
-                            checked={checkedList.includes(list.id) ? true : false}
-                        />
-                        <button className="terms_show_btn" onClick={OnOffModal}>전문 보기</button>
-                        {ModalState === true ? //모달 상태가 true면 1번, false면 2번이 작동합니다.
-                        <Modal setModalState={setModalState}/> : ""}
-                    </div>
+                    {dataLists.map((list) => (
+                        <div style={{ margin: 20 }}>
+                            <label for={list.id}>{list.data}</label>
+                            <input
+                                id={list.id}
+                                key={list.id}
+                                type="checkbox"
+                                className="check_terms"
+                                onChange={(e) => onCheckedElement(e.target.checked, list)}
+                                checked={checkedList.includes(list.id) ? true : false}
+                            />
+                            <button className="terms_show_btn" onClick={OnOffModal}>전문 보기</button>
+                            {ModalState === true && (
+                                <Modal
+                                    title={list.id === 1 ? "서비스 이용약관" : "개인정보 수집 및 이용에 대한 동의 안내"}
+                                    termsData={list.id === 1 ? termsData1 : termsData2}
+                                    setModalState={setModalState}
+                                />
+                            )}
+                        </div>
 
-                ))
-                }
-                {/* <input type="checkbox" className="check_terms" 
+                    ))
+                    }
+                    {/* <input type="checkbox" className="check_terms" 
                         key={1}
                         onChange={(e)=>onCheckedElement(e.target.checked, dataLists.list)}
                         checked={checkedList.includes(dataLists.list)?true:false}
@@ -202,63 +208,63 @@ const Joinstepone = () => {
                     <button className="terms_show_btn" onClick={OnOffModal}>전문 보기</button>
                     {ModalState === true ? //모달 상태가 true면 1번, false면 2번이 작동합니다.
                     <Modal setModalState={setModalState}/> : ""} */}
-            </li>
-            {/* <li>
+                </li>
+                {/* <li>
                     <input type="checkbox" className="check_terms" />
                     2. 개인정보 수집 및 이용에 대한 동의 안내 (필수)
                     <button className="terms_show_btn" onClick={OnOffModal}>전문 보기</button>
                     {ModalState === true ? //모달 상태가 true면 1번, false면 2번이 작동합니다.
                     <Modal setModalState={setModalState}/> : ""}
                 </li> */}
-            <li>
-                <input type="checkbox" className="check_terms"
-                    onChange={(e) => onCheckedAll(e.target.checked)}
-                    checked={
-                        checkedList.length === 0
-                            ? false
-                            : checkedList.length === dataLists.length
-                                ? true
-                                : false
-                    }
-                />
-                위 약관에 모두 동의합니다.
-            </li>
+                <li>
+                    <input type="checkbox" className="check_terms"
+                        onChange={(e) => onCheckedAll(e.target.checked)}
+                        checked={
+                            checkedList.length === 0
+                                ? false
+                                : checkedList.length === dataLists.length
+                                    ? true
+                                    : false
+                        }
+                    />
+                    위 약관에 모두 동의합니다.
+                </li>
             </ul>
         </>
     );
 }
 
-const Joinsteptwo = ({changeislogn}) => {
-    const navigate = useNavigate(); 
-    const[form, setFrom] = useState({
+const Joinsteptwo = ({ changeislogn }) => {
+    const navigate = useNavigate();
+    const [form, setFrom] = useState({
         "username": "",
         "password": "",
         "password2": "",
         "nickname": "",
-        username_val : false,
-        password_val : false,
-        password2_val : false,
-        nickname_val : false,
+        username_val: false,
+        password_val: false,
+        password2_val: false,
+        nickname_val: false,
     });
 
     const join_btn = async () => {
         // let response_data = Send_api(4, form);
         const url = "http://127.0.0.1:8000/v1/register/"
 
-        await axios.post(url, form, {withCredentials: true})
-        .then(function (response) {
-            // console.log(JSON.stringify(response));
-            const res = JSON.stringify(response.statusText);
-            changeislogn(true);
-            navigate('/home');
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+        await axios.post(url, form, { withCredentials: true })
+            .then(function (response) {
+                // console.log(JSON.stringify(response));
+                const res = JSON.stringify(response.statusText);
+                changeislogn(true);
+                navigate('/home');
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     };
 
     // const join_btn = () => {
-        
+
     //     changeislogn(true)
     //     navigate('/home')
     // }
@@ -280,7 +286,7 @@ const Joinsteptwo = ({changeislogn}) => {
         const isValidUserpw2 = form.password === password2
         setFrom({ ...form, password2, password2_val: isValidUserpw2 });
     };
-    
+
     const handleNicknameChange = (e) => {
         const nickname = e.target.value;
         const isValidNickname = nickname.match(/^[가-힣]*$/) && nickname.length >= 4;
@@ -291,35 +297,35 @@ const Joinsteptwo = ({changeislogn}) => {
 
     return (
         <>
-           <div className="choice_tab">
+            <div className="choice_tab">
                 <h3 className="welcome">
                     개인정보 입력
                 </h3>
                 <p className="index_txt">사용할 아이디/비밀번호/별명을 입력해주세요.</p>
                 <div className="step_two_form">
                     <label>
-                        <h5> <strong style={{color:"red"}}>1</strong> 아이디 입력</h5>
-                        <input type="input" className="input_form" value={form.username} onChange={e=> {setFrom({...form, username: e.target.value}); handleUsernameChange(e);}} placeholder="아이디를 입력해주세요"/>
-                        <p className="input_form_txt" style={{color: form.username_val ? 'green' : 'red'}}>특수문자 사용 불가, 두 글자 이상 </p>
-                    </label> 
+                        <h5> <strong style={{ color: "red" }}>1</strong> 아이디 입력</h5>
+                        <input type="input" className="input_form" value={form.username} onChange={e => { setFrom({ ...form, username: e.target.value }); handleUsernameChange(e); }} placeholder="아이디를 입력해주세요" />
+                        <p className="input_form_txt" style={{ color: form.username_val ? 'green' : 'red' }}>특수문자 사용 불가, 두 글자 이상 </p>
+                    </label>
                     <label>
-                        <h5> <strong style={{color:"red"}}>2</strong> 비밀번호 입력 </h5>
-                        <input type="password" className="input_form" value={form.password} onChange={e=> {setFrom({...form, password: e.target.value}); handleUserpwChange(e);}} placeholder="비밀번호를 입력해주세요"/>
-                        <p className="input_form_txt" style={{color: form.password_val ? 'green' : 'red'}}>4글자 이상으로 </p>
-                    </label> 
+                        <h5> <strong style={{ color: "red" }}>2</strong> 비밀번호 입력 </h5>
+                        <input type="password" className="input_form" value={form.password} onChange={e => { setFrom({ ...form, password: e.target.value }); handleUserpwChange(e); }} placeholder="비밀번호를 입력해주세요" />
+                        <p className="input_form_txt" style={{ color: form.password_val ? 'green' : 'red' }}>4글자 이상으로 </p>
+                    </label>
                     <label>
-                        <h5> <strong style={{color:"red"}}>3</strong> 비밀번호 확인 </h5>
-                        <input type="password" className="input_form" value={form.password2} onChange={e=> {setFrom({...form, password2: e.target.value}); handleUserpw2Change(e);}} placeholder="비밀번호를 다시한번 입력해주세요"/>
-                        <p className="input_form_txt" style={{color: form.password2_val ? 'green' : 'red'}}>앞과 일치하게 입력해주세요 </p>                    
-                    </label> 
+                        <h5> <strong style={{ color: "red" }}>3</strong> 비밀번호 확인 </h5>
+                        <input type="password" className="input_form" value={form.password2} onChange={e => { setFrom({ ...form, password2: e.target.value }); handleUserpw2Change(e); }} placeholder="비밀번호를 다시한번 입력해주세요" />
+                        <p className="input_form_txt" style={{ color: form.password2_val ? 'green' : 'red' }}>앞과 일치하게 입력해주세요 </p>
+                    </label>
                     <label>
-                        <h5> <strong style={{color:"red"}}>4</strong> 별명 입력 </h5>
-                        <input type="input" className="input_form" value={form.nickname}  onChange={e=> {setFrom({...form, nickname: e.target.value}); handleNicknameChange(e);}} placeholder="별명을 입력해주세요"/>
-                        <p className="input_form_txt" style={{color: form.nickname_val ? 'green' : 'red'}}>특수문자는 넣을 수 없습니다 </p>
-                    </label>  
+                        <h5> <strong style={{ color: "red" }}>4</strong> 별명 입력 </h5>
+                        <input type="input" className="input_form" value={form.nickname} onChange={e => { setFrom({ ...form, nickname: e.target.value }); handleNicknameChange(e); }} placeholder="별명을 입력해주세요" />
+                        <p className="input_form_txt" style={{ color: form.nickname_val ? 'green' : 'red' }}>특수문자는 넣을 수 없습니다 </p>
+                    </label>
                 </div>
             </div>
-            <button className="next_step_btn" onClick={()=> join_btn()}> <strong style={{color:"red"}}>0</strong> 회원가입 </button>
+            <button className="next_step_btn" onClick={() => join_btn()}> <strong style={{ color: "red" }}>0</strong> 회원가입 </button>
         </>
     );
 }
