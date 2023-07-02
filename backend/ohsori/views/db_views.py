@@ -2,6 +2,7 @@ from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
+from django.db import connection
 
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
@@ -19,7 +20,6 @@ from ..serializers import GoodsSerialize, BasketsSerialize,QnaSerialize
 from ..models import Goods, Baskets,Qna
 from account.models import Users
 
-@method_decorator(csrf_exempt, name = "dispatch")
 class BasketsAPI(APIView):
     '''
     get으로 요청시 찜목록 모두 조회후 json으로 전달
@@ -30,10 +30,26 @@ class BasketsAPI(APIView):
     '''
     permission_classes = [IsAuthenticated]
     def get(self, request): # 장바구니 페이지 GET 요청시 장바구니에 있는 모든 상품 전달
-        users = Users.objects.get(username = request.user.username)
-        user_baskets = users.baskets.filter(use_yn = 'y')
-        serializer = BasketsSerialize(user_baskets, many = True)
-        return Response(serializer.data)
+        cursor = connection.cursor()
+
+        strSql = f"""select ob.reg_date, og.goods_url, og.goods_name, og.goods_star, og.goods_thumb, gs.whole_summary
+                    from ohsori_basket ob 
+                    INNER join ohsori_good og 
+                    on ob.goods_no = og.goods_no 
+                    INNER join goods_summary gs
+                    on ob.goods_no = gs.goods_no
+                    WHERE ob.username = '{request.user.username}'""" 
+        result = cursor.execute(strSql)
+        goods = cursor.fetchall()
+        basket = {}
+        num = 1
+        for i in goods:
+            temp = {'date' : i[0], 'goods_url' : i[1], 'goods_name' : i[2], 'goods_star' : i[3], 'goods_thumb' : i[4], 'goods_summary':i[5]}
+            basket[num] = temp
+            num += 1
+        # print(goods)
+        # basket = {'reg_data' :}
+        return Response({"goods" : basket})
         
 # @method_decorator(csrf_exempt, name = "dispatch")
 class Baskets_Add_DelAPI(View):
@@ -53,12 +69,17 @@ class Baskets_Add_DelAPI(View):
     def post(self, request): # basket_yn True or False // 요청 params : goods_url
         data = json.loads(request.body)
         baskets = Baskets()
-        baskets.goods_no = Goods.objects.only('goods_no').get(goods_url = data['goods_url'])
-        baskets.username = Users.objects.get(username = request.user.username)
-        baskets.use_yn = 'y'
-        serializer = BasketsSerialize(baskets)
-        baskets.save()
-        return JsonResponse(serializer.data) # 데이터 회신은 필요없음
+        goods_no = Goods.objects.only('goods_no').get(goods_url = data['goods_url'])
+        try:
+            Baskets.objects.get(goods_no = goods_no, username = request.user.username)
+            return JsonResponse({"status" : "이미 존재하는 상품입니다"})
+        except Baskets.DoesNotExist:
+            baskets.goods_no = goods_no
+            baskets.username = Users.objects.get(username = request.user.username)
+            baskets.use_yn = 'y'
+            serializer = BasketsSerialize(baskets)
+            baskets.save()
+            return JsonResponse(serializer.data) # 데이터 회신은 필요없음
     
     def put(self, request): # param : goods_url
         data = json.loads(request.body)

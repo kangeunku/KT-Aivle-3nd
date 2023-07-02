@@ -110,6 +110,7 @@ def save_goods_imgs(goods_url):
     3자리 숫자로 인덱싱에 저장하는 함수 입니다. 그후, 이미지 파일이 저장된 디렉토리에 접근하기 위한 product_id를 반환합니다.
     %주의% 이 함수는 Goods 테이블에 존재하지 않는 상품에 접근할때 사용되어야 합니다.
     '''
+    
     options = Options()
     options.add_argument("--remote-debugging-port=9222")
     options.add_argument('--headless') # 랜더링 없이 브라우저를 컨트롤

@@ -42,6 +42,8 @@ class LoginAPI(KnoxLoginView):
     '''
     프론트에서 POST 요청으로 username, password 전송
     장고에서 유효성 검사 후 로그인
+    
+    return : nickname
     '''
     permission_classes = (permissions.AllowAny,)
 
@@ -49,11 +51,13 @@ class LoginAPI(KnoxLoginView):
         serializer = AuthTokenSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.validated_data['user']
+            
             # 로그인한 계정이 use_yn = "n" 인 경우 탈퇴한 회원으로 로그인 못함
             if user.use_yn == 'n':
                 return Response({"message": "탈퇴한 회원입니다."}, status=status.HTTP_401_UNAUTHORIZED)
+            
             login(request, user)
-            return Response({"message" : f"{user.nickname}님 환영합니다"})
+            return Response({"nickname" : user.nickname})
         
         else:
             return Response({"로그인 실패" : "계정이 옳바르지 않습니다"})
