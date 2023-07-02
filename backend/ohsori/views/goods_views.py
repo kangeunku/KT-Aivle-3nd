@@ -36,7 +36,13 @@ def get_details(request):
         summary_lst, whole_summary = goods_summary.summary['summary_lst'], goods_summary.whole_summary
         
         img_pathes_front = [img_pathes[idx] for idx, value in enumerate(is_show) if value != 0]
+        img_pathes_front = ['http://127.0.0.1:8000/media/data/images/'
+                            + value.split('\\')[-2] + '/' 
+                            + value.split('\\')[-1]
+                            for value in img_pathes_front]
+        
         summary_lst_front = [summary_lst[idx] for idx, value in enumerate(is_show) if value != 0]
+        
         
         front_result = {'img_pathes': img_pathes_front,
                         'summary_lst': summary_lst_front,
