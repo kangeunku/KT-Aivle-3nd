@@ -1,43 +1,6 @@
 import { useState, useRef, useEffect, forwardRef } from "react";
 import styles from "../styles/Slider.module.css";
 
-const WantedImg = [
-  "assets/img/apple_info_sample.jpg",
-  "assets/img/apple_info_sample0.jpg",
-  "assets/img/apple_info_sample1.jpg",
-  "assets/img/apple_info_sample2.jpg",
-  "assets/img/apple_info_sample3.jpg",
-  "assets/img/apple_info_sample4.jpg",
-  "assets/img/apple1.jpg",
-  "assets/img/Badger.jpg",
-  "assets/img/LeGOAT.png",
-];
-
-const wantedTitle = [
-  "오전 9시 이전 주문건 당일배송",
-  "2022 한국 소비자 산업평가 사과 부문 우수상 수상!",
-  "사과내부의 당분이 한곳에 모여 꿀처럼 보이는 '밀병'",
-  "상품 수령하신 후 냉장보관 후에 드셔야 더욱 맛있습니다.",
-  "홈골농원의 사과는 산딸기, 송이버섯 등 천연 식품이 자라는 자연환경에서 재배되고 있습니다.",
-  "기스 사과 예시",
-  "apple",
-  "오소리",
-  "농농",
-];
-
-const wantedDes = [
-  "수령하신 상품에 문제가 있을 경우 100% 해결해드립니다.",
-  "한국 소비자 산업평가 식품 분야 우수업체 홈골농원",
-  "사과내부 꿀이 없다는 사유로 반품이 불가합니다.",
-  "사과에 문제가 있을 경우 010-5080-6716 번호로 사진 전송",
-  "일교차가 커 과육과 당도가 뛰어난 사과!",
-  "사과 내부 꿀이 없는 것은 기스에 해당하지 않습니다.",
-  "사과",
-  "발자국",
-  "구구",
-];
-// 0은 필수옵션 셀렉트, 1은 선택옵션 셀렉트, 2는 직접 입력할 수 있는 옵션 3은 수량 +-하는것 
-
 const select_boxes = {
   0: {
     index: 0,
@@ -56,12 +19,25 @@ const select_boxes = {
   }
 };
 
-// const btnNum = [
-//     "assets/img/leftBtn.jpg",
-//     "assets/img/rightBtn.jpg"
-// ]
 
-const Slider = forwardRef((props, ref) =>{
+const Slider = forwardRef(({setPopupState, result}) =>{
+
+  // console.log('Slider_result', result);
+  // console.log('Slider_result2', typeof(result.img_pathes), result.img_pathes);
+  // console.log('Slider_result3', typeof(result.summary_lst), result.summary_lst);
+  const iData = [];
+  for (let i = 0; i < result.summary_lst.length; i++){
+    const tmp = {};
+    tmp['image'] = result.img_pathes[i];
+    tmp['answer'] = result.summary_lst[i];
+    iData.push(tmp);
+  }
+  // console.log(iData);
+
+  // console.log('options', result.detail.necessary_opt);
+
+
+  const iData_len = result.img_pathes.length;
 
   //슬라이드
   const slideRef = useRef(null);
@@ -97,7 +73,7 @@ const Slider = forwardRef((props, ref) =>{
       setX(-5);
       setIsSlide(true);
       setTimeout(() => {
-        setIndex((prev) => (prev === 8 ? 0 : prev + 1));
+        setIndex((prev) => (prev === iData_len-1 ? 0 : prev + 1));
         setX(0);
         setIsSlide(false);
       }, 300);
@@ -111,7 +87,7 @@ const Slider = forwardRef((props, ref) =>{
 
   const handleClickOutside=(event)=>{
     if(wrapperRef && !wrapperRef.current.contains(event.target)){
-        props.setPopupState(false);
+        setPopupState(false);
     }
   }
 
@@ -122,7 +98,7 @@ const Slider = forwardRef((props, ref) =>{
     setX(-5);
     setIsSlide(true);
     await setTimeout(() => {
-      setIndex((prev) => (prev === 8 ? 0 : prev + 1));
+      setIndex((prev) => (prev === iData_len-1 ? 0 : prev + 1));
       setX(0);
       setIsSlide(false);
     }, 300);
@@ -135,7 +111,7 @@ const Slider = forwardRef((props, ref) =>{
     setX(+5);
     setIsSlide(true);
     await setTimeout(() => {
-      setIndex((prev) => (prev === 0 ? 8 : prev - 1));
+      setIndex((prev) => (prev === 0 ? iData_len-1 : prev - 1));
       setX(0);
       setIsSlide(false);
     }, 300);
@@ -190,7 +166,7 @@ const Slider = forwardRef((props, ref) =>{
 
   function BtnEvent(){
     //alert('모달창 내부 작업을 해도 모달창이 꺼지지 않습니다.');
-    props.setPopupState(false);
+    setPopupState(false);
   }
 
   function OptionSelect({ value, onChange }) {
@@ -214,7 +190,7 @@ const Slider = forwardRef((props, ref) =>{
 {/*메인 슬라이드 */}
       <session className={`${styles.box} ${styles.box1}`}>
 
-        <img className={styles.slide1} src={WantedImg[index]} />
+        <img className={styles.slide1} src={iData[index].image} />
         <button className={styles.button_left} onClick={decreaseClick} />
         <button className={styles.button_right} onClick={increaseClick} />
       </session>
@@ -236,7 +212,7 @@ const Slider = forwardRef((props, ref) =>{
                 <nav className={styles.box2container} key={cnt}>
                   <img className={`${styles.img} ${styles.previewimg}`}
                     style={{ opacity: 0.5, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
-                    src={WantedImg[(index-cnt >= 0)?index-cnt: 9-cnt+index]}
+                    src={iData[(index-cnt >= 0)?index-cnt: iData_len-cnt+index].image}
                   />
                 </nav>
               ))}
@@ -244,7 +220,7 @@ const Slider = forwardRef((props, ref) =>{
           <nav className={styles.imgwrapper}>
               <img className={styles.img}
                 style={{ opacity: 1, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
-                src={WantedImg[index]}
+                src={iData[index].image}
               />
           </nav>
           {/*컨테이너 왼쪽 이미지*/}
@@ -252,7 +228,7 @@ const Slider = forwardRef((props, ref) =>{
                 <nav className={styles.box2container} key={cnt}>
                   <img className={`${styles.img} ${styles.previewimg}`}
                     style={{ opacity: 0.5, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
-                    src={WantedImg[(index+cnt <= 8)?index+cnt:cnt+index-9]}
+                    src={iData[(index+cnt <= iData_len-1)?index+cnt:cnt+index-iData_len].image}
                   />
                 </nav>
               ))}
@@ -263,22 +239,25 @@ const Slider = forwardRef((props, ref) =>{
       
 {/*대체텍스트 요약 */}
       <session className={`${styles.box} ${styles.box3}`}>
-            <span className={styles.minititle}>{wantedTitle[index]}</span>
-            <span className={styles.minides}>{wantedDes[index]}</span>
+            <span className={styles.minititle}>{iData[index].answer}</span>
+            <span className={styles.minides}>{iData[index].answer}</span>
       </session>
 
       <span className={styles.popuptxt}>Option</span>
 
 {/* 옵션과 수량 */}
       <session className={`${styles.box} ${styles.box4}`}>      
+      
+      {result.detail.necessary_opt.map((item) => {
+        // {console.log(item)}
         <div className={styles.box4_idx0}>
           <span className={styles.box4_txt}>필수옵션</span>
           <select className={styles.box4_select}>
-            <option value = "금사과">금사과</option>
-            <option value = "은사과">은사과</option>
-            <option value = "동사과">동사과</option>
+            <option key={item} value = {item}>{item}</option>
           </select>
         </div>
+        })}
+{/*         
         <div className={styles.box4_idx1}>
           <span className={styles.box4_txt}>선택옵션</span>
           <select className={styles.box4_select}>
@@ -291,7 +270,7 @@ const Slider = forwardRef((props, ref) =>{
           <span className={styles.box4_txt}>입력옵션</span>
           <textarea className={styles.box4_txtarea}>
           </textarea>
-        </div>
+        </div> */}
         <div className={styles.box4_idx3}>
           <span className={styles.box4_txt}>수량</span>
           <div className={styles.box4_count}>
@@ -299,6 +278,10 @@ const Slider = forwardRef((props, ref) =>{
             <span>{count}</span>
             <button className={styles.box4_countright} onClick={increaseCount} ></button>
           </div>
+        </div>
+        <div className={styles.box4_idx4}>
+          <span className={styles.box4_txt}>가격</span>
+          <span className={styles.box4_txt}>{count * result.detail.goods_price}원</span>
         </div>
       </session>
 

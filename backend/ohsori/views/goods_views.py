@@ -24,14 +24,35 @@ from ..models import Goods, Goods_summary
 from ..serializers import GoodsSerialize
     
         
-@api_view(['GET'])
+@api_view(['POST'])
 def get_details(request):
+    # 상품이 이미 DB에 저장되어 있는 경우 - 조회 및 필요정보 추출 로직
     try:
         goods_url = request.data.get('goods_url')
         goods = Goods.objects.get(goods_url = goods_url)
-        serializer = GoodsSerialize(goods)
-        return Response(serializer.data, status = status.HTTP_200_OK) # 상품 정보 회신
+        goods_summary = Goods_summary.objects.get(goods_no=goods.goods_no)
+        
+        is_show, img_pathes = goods_summary.summary['is_show'], goods_summary.summary['img_pathes']
+        summary_lst, whole_summary = goods_summary.summary['summary_lst'], goods_summary.whole_summary
+        
+        img_pathes_front = [img_pathes[idx] for idx, value in enumerate(is_show) if value != 0]
+        img_pathes_front = ['http://127.0.0.1:8000/media/data/images/'
+                            + value.split('\\')[-2] + '/' 
+                            + value.split('\\')[-1]
+                            for value in img_pathes_front]
+        
+        summary_lst_front = [summary_lst[idx] for idx, value in enumerate(is_show) if value != 0]
+        
+        
+        front_result = {'img_pathes': img_pathes_front,
+                        'summary_lst': summary_lst_front,
+                        'whole_summary': whole_summary,
+                        'detail': goods_summary.detail
+                        }
+        
+        return Response(front_result) # 상품 정보 회신
     
+    # 상품이 DB에 저장되어 있지 않은 경우 - 크롤링 및 추출 후 DB 저장 및 전달 로직
     except Goods.DoesNotExist:
         goods_url = request.data.get('goods_url')
         # 상세 이미지 저장 후 product_id 가져오기
@@ -40,13 +61,18 @@ def get_details(request):
         result = {'detail_options' : get_goods_options(goods_url),
                 'output' : ocr2summary_premium(product_id),
                 }
-    # DB로 가기
+        
+        goods_name, goods_star = result['detail_options']['goods_name'], result['detail_options']['goods_star']
+        goods_price, goods_thumb = int(result['detail_options']['goods_price'].replace(',', '')), result['detail_options']['goods_thumb']
+        img_pathes, is_show = result['output']['img_pathes'], result['output']['is_show']
+        summary_lst, final_summary = result['output']['summary_lst'], result['output']['final_summary']
+        # DB로 가기
         goods = Goods() 
         goods.goods_url = goods_url
-        goods.goods_name = result['detail_options']['goods_name']
-        goods.goods_star = result['detail_options']['goods_star']
-        goods.goods_price = int(result['detail_options']['goods_price'].replace(',', ''))
-        goods.goods_thumb = result['detail_options']['goods_thumb']
+        goods.goods_name = goods_name
+        goods.goods_star = goods_star
+        goods.goods_price = goods_price
+        goods.goods_thumb = goods_thumb
         goods.use_yn = "y"
         goods.save()
         
@@ -54,27 +80,23 @@ def get_details(request):
         # goods_no = Goods.objects.get(goods_no = Goods.objects.get(goods_url = goods_url).only('goods_no'))
         goods_summary = Goods_summary()
         goods_summary.goods_no = goods_no
-        goods_summary.summary = {'is_show' : result['output']['is_show'],
-                                'summary_lst' : result['output']['summary_lst']}
-        goods_summary.whole_summary = result['output']['final_summary']
+        goods_summary.summary = {'is_show' : is_show,
+                                'summary_lst' : summary_lst,
+                                'img_pathes': img_pathes}
+        goods_summary.whole_summary = final_summary
         goods_summary.detail = result['detail_options']
         goods_summary.save()
 
-        return Response(result) # 프론트로가기
-# {"goods_url":""}
+        # 프론트로가기
+        img_pathes_front = [img_pathes[idx] for idx, value in enumerate(is_show) if value != 0]
+        summary_lst_front = [summary_lst[idx] for idx, value in enumerate(is_show) if value != 0]
+        front_result = {'img_pathes': img_pathes_front,
+                        'summary_lst': summary_lst_front,
+                        'whole_summary': final_summary,
+                        'detail': result['detail_options'],
+                        }
 
-
-# @api_view(['GET', 'POST'])
-# def img_preprocess(request):
-#     if request.method == 'GET':
-#         return Response({'status' : '''이미지 파일이 전처리 되어 텍스트로 요약 되기까지의 로직의 입구입니다. 찜 목록에서 접근하는 것이 올바른 경로입니다.'''})
-#     else:
-#         product_id = request.data.get('product_id')
-        
-#         # Goods 테이블 에서 정보를 얻어 와서 담아주어야 할 수도 있다.
-#         result = {'output' : ocr2summary(product_id)}
-#         return Response(result)
-# {"product_id":"5811396719"}
+        return Response(front_result) 
 
 
 #######################################################
@@ -492,7 +514,7 @@ def ocr2summary_premium(product_id):
     final_summary = request_summary(whole_summary, 3)
     
     return {
-            # 'img_pathes' : img_pathes, # 처리 순서 확인용
+            'img_pathes' : img_pathes, # 상품 상세 이미지가 저장된 경로가 담긴 리스트
             'text_lst' : sentence_lst, # 분할된 이미지에서 추출된 텍스트
             'summary_lst' : summary_lst, # 분할된 이미지별 요약 텍스트
             'is_show' : is_show, # 요약 텍스트 유무에 따른 사용 여부 결정 리스트

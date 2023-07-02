@@ -90,27 +90,23 @@ const Joinstepone = () => {
         // 핫키 설정
         const keyMap_2 = {
             space1_key: 'space+1',
-            spacebar_key: "space+w",
-            // keypress, keydown, keyup.
-            space_down: { sequence: "space", action: "keydown" }
+            space2_key: "space+2"
         };
 
         const termClick = () => {
             console.log('space+1');
             OnOffModal();
         };
-        const spaceClick = () => {
+        const checkboxClick = () => {
             console.log('space + w');
-        };
-        const spacedownClick = () => {
-            console.log('space down');
+            document.getElementById('Allcheckbox').focus(); 
+            //모두 동의로 포커스 이동 후 space로 check -> tab 눌러 다음 버튼으로 이동 -> enter
         };
 
         // 핫키 적용 함수
         const handlers_2 = {
             space1_key: termClick,
-            spacebar_key: spaceClick,
-            space_down: spacedownClick,
+            space2_key: checkboxClick,
         };
 
         return (
@@ -294,7 +290,60 @@ const Joinsteptwo = ({ changeislogn }) => {
     };
 
     const isAllFieldsValid = form.username_val && form.password_val && form.password2_val && form.nickname_val;
+        
+        // 핫키 생성
+        const Hotkey_local_3 = () => {
+            // 핫키 설정
+            const keyMap_3 = {
+                space1_key: 'space+1',
+                space2_key: "ctrl+q",
+                space3_key: 'space+3',
+                space4_key: "space+4",
+                // enter_key: "alt+ctrl"
+            };
+            
+            // const EnterClick = () => {
+            //     const inputRef = useRef(null);
+            //     console.log('enter');
+            //     if (inputRef.current) {
+            //         inputRef.current.blur();
+            //     }
+            // }
+            const idinputClick = () => {
+                console.log('idinputClick');
+                document.getElementById('id').focus();
+            };
 
+            // document.activeElement.
+            const pwinputClick = () => {
+                console.log('space + 2');
+                document.getElementById('pw1').focus();
+            };
+            const pwinputClick_ = () => {
+                console.log('space + 3');
+                document.getElementById('pw2').focus();
+            };
+            const nickClick = () => {
+                console.log('space + 4');
+                document.getElementById('nick').focus();
+            }
+    
+            // 핫키 적용 함수
+            const handlers_3 = {
+                space1_key: idinputClick,
+                space2_key: pwinputClick,
+                space3_key: pwinputClick_,
+                space4_key: nickClick,
+                // enter_key: EnterClick
+            };
+            
+            return (
+                <>
+                    <GlobalHotKeys keyMap={keyMap_3} handlers={handlers_3}>
+                    </GlobalHotKeys>
+                </>
+            );
+        };
     return (
         <>
             <div className="choice_tab">

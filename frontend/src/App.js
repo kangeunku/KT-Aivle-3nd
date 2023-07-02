@@ -1,42 +1,91 @@
-import React, { useState, useRef } from "react";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 
 import { Home, Basket, EditInfo, Support, Choicelogin, Test } from "./pages";
 import { Header } from "./components";
 import { Logoslide } from "./components/app/logoslide"
 
 
-import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
+import { GlobalHotKeys } from 'react-hotkeys';
+// import getCookie from "./components/common/csrftoken"
 
 
 const App = () => {
   const [islogin, setloginState] = useState(false);
   const [navState, setnavState] = useState("home");
+  const [reState, setreState] = useState(false);
 
-  const changeislogn = (value) => {
-    setloginState(value);
+  const changeislogin = (value) => {
+      setloginState(value);
   };
 
+  const relanding = (value) => {
+    setreState(value);
+  };
 
-  const Navigate = () => {
+  useEffect(() => {
+    if((getCookie("sessionid") != undefined) && (getCookie("usercookieid") != undefined) &&(getCookie("usercookienickname") != undefined)){
+      changeislogin(true)
+    }
+    else{
+      changeislogin(false)
+    }
+  }, [islogin]);
 
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        let cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].replace(' ', '');
+             if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
+  const Navigate = useNavigate();
+
+  const goHome = () => {
+    Navigate('/home');
+  }
+
+  const goBasket = () => {
+    Navigate('/basket');
+  }
+
+  const goEditinfo = () => {
+    Navigate('/editinfo');
+  }
+
+  const goSupport = () => {
+    Navigate('/support');
+  }
+
+  const goTest = () => {
+    Navigate('/test');
+  }
+  
+  const ReNavigate = () => {
     return (
       <>
         <Hotkey_global />
         <nav className="nav">
           <ul className="nav_lsit">
             <li className={navState === "home" ? "active_list" : null}>
-              <Link to="/home" onClick={() => setnavState("home")}>검색</Link>
+              <Link to="/home" onClick={() => navState === "home" ?  relanding(true) : setnavState("home") }>검색</Link>
             </li>
             <li className={navState === "basket" ? "active_list" : null}>
-              <Link to="/basket" onClick={() => setnavState("basket")}>찜목록</Link>
+              <Link to="/basket" onClick={() => navState === "basket" ? relanding(true) :setnavState("basket")}>찜목록</Link>
             </li>
             <li className={navState === "editinfo" ? "active_list" : null}>
-              <Link to="/editinfo" onClick={() => setnavState("editinfo")}>회원정보 수정</Link>
+              <Link to="/editinfo" onClick={() => navState === "editinfo" ? relanding(true) :setnavState("editinfo")}>회원정보 수정</Link>
             </li>
             <li className={navState === "support" ? "active_list" : null}>
-              <Link to="/support" onClick={() => setnavState("support")}>고객센터</Link>
+              <Link to="/support" onClick={() => navState === "support" ? relanding(true) :setnavState("support")}>고객센터</Link>
             </li>
             {/* <li className={navState === "test" ? "active_list" : null}>
               <Link to="/test" onClick={() => setnavState("test")}>테스트섹션</Link>
@@ -60,17 +109,24 @@ const App = () => {
     };
 
     const homeClick = () => {
-      console.log('space+q');
-      setnavState("home");
+        console.log('space + q');
+        setnavState("home");
+        goHome();
     };
     const basketClick = () => {
-      console.log('space + w');
+        console.log('space + w');
+        setnavState("basket");
+        goBasket();
     };
     const editinfoClick = () => {
       console.log('space + e');
+      setnavState("editinfo");
+      goEditinfo();
     };
     const supportClick = () => {
       console.log('space + r');
+      setnavState("support");
+      goSupport();
     };
 
     // 핫키 적용 함수
@@ -98,7 +154,7 @@ const App = () => {
             <Modal></Modal>
             <Link to="/home" onClick={() => { setnavState("home"); setloginState(true) }}></Link>
           </h1>
-          <Choicelogin changeislogn={changeislogn} />
+          <Choicelogin changeislogn={changeislogin}/>
         </div>
       </div>
     )
@@ -106,8 +162,8 @@ const App = () => {
   else {
     return (
       <>
-        <Hotkey_global />
-
+        <Hotkey_global/>
+        
         <div className='App'>
           <div className="wrap">
             <div className="side">
@@ -115,17 +171,17 @@ const App = () => {
                 {/* <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link> */}
                 <a onClick={() => { setloginState(false) }}>logo</a>
               </h1>
-              <Navigate></Navigate>
+                <ReNavigate></ReNavigate>
             </div>
             <section className="content">
-              <Header />
+              <Header changeislogn={changeislogin} />
               <div className="container">
                 <Routes>
                   {/* 라우터가 적용될 페이지 */}
-                  <Route path="/home" element={<Home />} />
-                  <Route path="/basket" element={<Basket />} />
-                  <Route path="/editinfo" element={<EditInfo />} />
-                  <Route path="/support" element={<Support />} />
+                  <Route path="/home" element={<Home state={reState} relanding={relanding} />} />
+                  <Route path="/basket" element={<Basket state={reState} relanding={relanding} />} />
+                  <Route path="/editinfo" element={<EditInfo state={reState} relanding={relanding} changeislogin={changeislogin}/>} />
+                  <Route path="/support" element={<Support state={reState} relanding={relanding} />} />
                   {/* <Route path="/test" element={<Test />} /> */}
                 </Routes>
               </div>
@@ -151,7 +207,30 @@ const Popup = ({ handleClose }) => {
       }, 300);
     }
   };
+  // 핫키 생성
+  const Hotkey_modal = () => {
+    // 핫키 설정
+    const keyMap_modal = {
+        enter_key: 'enter',
+    };
+    const closeClick = () => {
+        console.log('enter');
+        closeWithAnimation();
+    };
+    // 핫키 적용 함수
+    const handlers_modal = {
+        enter_key: closeClick,
+    };
+    return (
+        <>
+            <GlobalHotKeys keyMap={keyMap_modal} handlers={handlers_modal}>
+            </GlobalHotKeys>
+        </>
+    );
+  };
   return (
+    <>
+    <Hotkey_modal />
     <div ref={modalRef} className="intor_graphpop">
       <div className="content">
         <h1 className="logo">
@@ -168,6 +247,7 @@ const Popup = ({ handleClose }) => {
         <button onClick={closeWithAnimation} className="start_closing">Close</button>
       </div>
     </div>
+    </>
   );
 };
 

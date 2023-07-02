@@ -3,8 +3,15 @@ import styles from "../../styles/EditInfo.module.css";
 import { useNavigate  } from "react-router-dom";
 import axios from "axios";
 
-const EditInfo = () => {
+const EditInfo = (props) => {
     const [currentPage, setCurrentPage] = useState('first');
+
+    // 동일한 링크를 클릭시 처음화면으로 초기화
+    useEffect(() => {
+        props.relanding(false);
+        setCurrentPage('first');
+        console.log("choicelogin")
+    }, [props.state]);
 
     const goToSecondPage = () => {
         setCurrentPage('second');
@@ -34,7 +41,7 @@ const EditInfo = () => {
         )}
         {currentPage === 'third' && <ThirdPage goToSecondPage={goToSecondPage}/>}
         {currentPage === 'fourth' && <FourthPage goToSecondPage={goToSecondPage}/>}
-        {currentPage === 'fifth' && <FifthPage />}
+        {currentPage === 'fifth' && <FifthPage  changeislogin={props.changeislogin}/>}
         </div>
     );
 };
@@ -67,7 +74,7 @@ const submitPassword = async (password) => {
         };
 
         const response = await axios.post(url, data, {withCredentials: true});
-        console.log(response.statusText);
+        // console.log(response.statusText);
 
         if (response.statusText === 'OK'){
             return true;
@@ -77,6 +84,7 @@ const submitPassword = async (password) => {
     } catch (error) {
         console.error(error);
     }
+    return true
 };
 
 const FirstPage = ({goToSecondPage}) => {
@@ -145,7 +153,7 @@ const SecondPage = ({goToThirdPage, goToFourthPage, goToFifthPage}) => {
                     </div>
                     <div className={styles.page2box2} onClick={goToFourthPage}>
                         <img className={styles.page2box2_img2} alt=""  />
-                        <div className={styles.page2box2_txt1}>비밀변호 변경</div>
+                        <div className={styles.page2box2_txt1}>비밀번호 변경</div>
                         <div className={styles.page2box2_txt2}>비밀번호를 변경할 수 있습니다</div>
                     </div>
                     <div className={styles.page2box2} onClick={goToFifthPage}>
@@ -160,7 +168,6 @@ const SecondPage = ({goToThirdPage, goToFourthPage, goToFifthPage}) => {
 };
 
 const ThirdPage = ({goToSecondPage}) => {
-
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
     const [nicknameval, setNicknameval] = useState("");
@@ -169,7 +176,7 @@ const ThirdPage = ({goToSecondPage}) => {
         try {
             const url = "http://127.0.0.1:8000/v1/setnickname/";
             const data = {
-                'nickname': nicknameval,
+                'nickname': '"' + nicknameval + '"',
             };
             const response = await axios.post(url, data, {withCredentials: true});
             // console.log(response.statusText);
@@ -191,7 +198,6 @@ const ThirdPage = ({goToSecondPage}) => {
         goToSecondPage();
     };
 
-
     //닉네임 enteredNickname은 입력된 닉네임으로한다
     const handleNicknameChange = (event) => {
         const enteredNickname = event.target.value;
@@ -199,7 +205,7 @@ const ThirdPage = ({goToSecondPage}) => {
     };
     
     // 닉네임 유효성 검사. 지금은 4글자 이상으로 해뒀고 회의후 바꾸기
-    const isNicknameValid = nicknameval.length >= 4;
+    const isNicknameValid = nicknameval.match(/^[가-힣]*$/) && nicknameval.length >= 2;
 
     return(
         <div>
@@ -231,7 +237,7 @@ const ThirdPage = ({goToSecondPage}) => {
                         {isNicknameValid && (
                             <input
                                 type="checkbox"
-                                checked={isNicknameValid}
+                                // checked={isNicknameValid}
                                 className={styles.edit_form1_checkbox}
                             />
                         )}
@@ -247,7 +253,7 @@ const ThirdPage = ({goToSecondPage}) => {
     );
 };
 
-const FourthPage = (goToSecondPage) => {
+const FourthPage = ({goToSecondPage, changeislogin}) => {
 
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
@@ -349,7 +355,7 @@ const FourthPage = (goToSecondPage) => {
     );
 };
 
-const FifthPage = () => {
+const FifthPage = ({changeislogin}) => {
 
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
@@ -370,6 +376,7 @@ const FifthPage = () => {
             if (response.statusText === 'OK') {
                 setPopupMessage(message);
                 setPopupVisible(true);
+                
             } else {
                 setPopupVisible(false);
             }
@@ -380,7 +387,8 @@ const FifthPage = () => {
 
     const handlePopupClose = () => {
         setPopupVisible(false);
-        navigate('/home'); // 은호님 헬프
+        navigate('/home'); 
+        changeislogin(false);
     };
 
     return(
