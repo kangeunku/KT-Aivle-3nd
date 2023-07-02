@@ -174,5 +174,12 @@ CORS_ALLOWED_ORIGINS = [
   "http://127.0.0.1:8000",
 ]
 # csrf을 허용하는 코드
+# 서버올리면 필히 수정 필요
+# https://docs.djangoproject.com/en/4.0/ref/settings/#std-setting-CSRF_TRUSTED_ORIGINS
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000", "http://127.0.0.1:8000"]#, "http://localhost:3000",]
 
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000", "http://127.0.0.1:8000"]
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
+# js에서 쿠키 접근가능하게
+CSRF_COOKIE_HTTPONLY = False
+SESSION_COOKIE_HTTPONLY = False

@@ -1,11 +1,11 @@
-import React, { useState, useRef } from "react";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
-//useNavigate : https://iridescent-zeal.tistory.com/214
+import React, { useState, useRef, useEffect } from "react";
+import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 
 import {  Home, Basket, EditInfo ,Support, Choicelogin, Test } from "./pages";
 import {  Header } from "./components";
 
-import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
+import { GlobalHotKeys } from 'react-hotkeys';
+// import getCookie from "./components/common/csrftoken"
 
 
 const App = () => {
@@ -20,6 +20,30 @@ const App = () => {
   const relanding = (value) => {
     setreState(value);
   };
+
+  useEffect(() => {
+    if((getCookie("sessionid") != undefined) && (getCookie("usercookieid") != undefined) &&(getCookie("usercookienickname") != undefined)){
+      changeislogin(true)
+    }
+    else{
+      changeislogin(false)
+    }
+  }, [islogin]);
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        let cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].replace(' ', '');
+             if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
   const Navigate = useNavigate();
 
@@ -148,7 +172,7 @@ const App = () => {
                 <ReNavigate></ReNavigate>
             </div>
             <section className="content">
-              <Header />
+              <Header changeislogn={changeislogin} />
               <div className="container">
                 <Routes>
                   {/* 라우터가 적용될 페이지 */}
