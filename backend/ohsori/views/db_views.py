@@ -26,22 +26,7 @@ class BasketsAPI(APIView):
     
     params : X
     
-    returns : [
-	{
-		"basket_no": 1,
-		"reg_date": "2023-07-02T21:46:11.716917+09:00",
-		"use_yn": "y",
-		"username": "test1223",
-		"goods_no": 4
-	},
- {
-		"basket_no": 2,
-		"reg_date": "2023-07-02T21:46:11.716917+09:00",
-		"use_yn": "y",
-		"username": "test1223",
-		"goods_no": 4
-	} ...
-]
+    returns : 계정에 해당하는 모든 Basket info
     '''
     permission_classes = [IsAuthenticated]
     def get(self, request): # 장바구니 페이지 GET 요청시 장바구니에 있는 모든 상품 전달
@@ -91,6 +76,18 @@ class QnaAPI(APIView):
     GET으로 요청시 Qna목록 모두 조회후 json으로 전달
     POST로 type, subject, question, imgfile(선택) 전달 시 개별 Qna 생성
     PUT으로 qna_no 전달 시 해당 질문의 use_yn을 n으로 변경
+    
+    GET
+    params : X
+    return : 모든 계정에 해당하는 Qna 인포
+     
+    POST
+    param : type, subject, question, imgfile(선택)
+    return : DB에 qna 생성
+    
+    PUT
+    param : qna_no
+    return : qna_no에 해당하는 질문 use_yn = 'n 변경
     '''
     permission_classes = [IsAuthenticated]
     def get(self, request): # 장바구니 페이지 GET 요청시 장바구니에 있는 모든 상품 전달
