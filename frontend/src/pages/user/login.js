@@ -82,7 +82,7 @@ const Login = ({ changeislogn }) => {
                 <button className="next_step_btn" onClick={() => join_btn()}>로그인</button>
                 {/* <link to="/home" className="next_step_btn">로그인</link> */}
             </div>
-            <button className="next_step_btn" onClick={()=> {join_btn()}} disabled={!isAllFieldsValid}> <strong style={{color:"red"}}>0</strong> 모달<Modal value='login'/></button>
+            <button className="next_step_btn" onClick={()=> {join_btn()}} disabled={!isAllFieldsValid}> <strong style={{color:"red"}}>0</strong> 모달</button>
             {/* setId() */}
             
         </>

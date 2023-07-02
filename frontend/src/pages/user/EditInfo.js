@@ -122,7 +122,7 @@ const FirstPage = ({goToSecondPage}) => {
                     <input className={styles.edit_form1_input} type="password" placeholder="비밀번호를 입력해주세요" value={password} onChange={(e) => setPassword(e.target.value)}></input>
                 </div>
                 <button className={styles.button_main} onClick={handlePasswordSubmit}>
-                    <div>백엔드입력</div>
+                    <div>입력</div>
                 </button>
             </div>
         </div>

@@ -1,8 +1,10 @@
 import React, { useState, useRef } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 
-import {  Home, Basket, EditInfo ,Support, Choicelogin, Test } from "./pages";
-import {  Header } from "./components";
+import { Home, Basket, EditInfo, Support, Choicelogin, Test } from "./pages";
+import { Header } from "./components";
+import { Logoslide } from "./components/app/logoslide"
+
 
 import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
 
@@ -12,17 +14,17 @@ const App = () => {
   const [navState, setnavState] = useState("home");
 
   const changeislogn = (value) => {
-      setloginState(value);
+    setloginState(value);
   };
-  
-  
+
+
   const Navigate = () => {
-    
-    
+
+
     return (
       <>
-      <Hotkey_global/>
-        <nav className="nav"> 
+        <Hotkey_global />
+        <nav className="nav">
           <ul className="nav_lsit">
             <li className={navState === "home" ? "active_list" : null}>
               <Link to="/home" onClick={() => setnavState("home")}>검색</Link>
@@ -42,27 +44,27 @@ const App = () => {
           </ul>
         </nav>
       </>
-      );
+    );
   }
-  
+
   // 핫키 생성
   const Hotkey_global = () => {
     // 핫키 설정
     const keyMap_g = {
-        spaceQ_key: 'space+q',
-        spaceW_key: "space+w",
-        spaceE_key: "space+e",
-        spaceR_key: "space+r",
-        // keypress, keydown, keyup.
-        // space_down: { sequence: "space", action: "keydown" }
+      spaceQ_key: 'space+q',
+      spaceW_key: "space+w",
+      spaceE_key: "space+e",
+      spaceR_key: "space+r",
+      // keypress, keydown, keyup.
+      // space_down: { sequence: "space", action: "keydown" }
     };
 
     const homeClick = () => {
-        console.log('space+q');
-        setnavState("home");
+      console.log('space+q');
+      setnavState("home");
     };
     const basketClick = () => {
-        console.log('space + w');
+      console.log('space + w');
     };
     const editinfoClick = () => {
       console.log('space + e');
@@ -73,45 +75,45 @@ const App = () => {
 
     // 핫키 적용 함수
     const handlers_g = {
-        spaceQ_key:homeClick,
-        spaceW_key:basketClick,
-        spaceE_key:editinfoClick,
-        spaceR_key:supportClick
+      spaceQ_key: homeClick,
+      spaceW_key: basketClick,
+      spaceE_key: editinfoClick,
+      spaceR_key: supportClick
     };
-    
+
     return (
-        <>
-            <GlobalHotKeys keyMap={keyMap_g} handlers={handlers_g}>
-            </GlobalHotKeys>
-        </>
-      );
-    };
-  if (islogin == false){
+      <>
+        <GlobalHotKeys keyMap={keyMap_g} handlers={handlers_g}>
+        </GlobalHotKeys>
+      </>
+    );
+  };
+  if (islogin == false) {
     return (
       <div className='App'>
         <div className="index_wrap">
           <h1 className="logo">
             {/* <a onClick={() =>{setloginState(true)}}>logo</a> */}
-            
-          <Modal></Modal>
-          <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link>
+
+            <Modal></Modal>
+            <Link to="/home" onClick={() => { setnavState("home"); setloginState(true) }}></Link>
           </h1>
-          <Choicelogin changeislogn={changeislogn}/>
+          <Choicelogin changeislogn={changeislogn} />
         </div>
       </div>
     )
   }
-  else{
+  else {
     return (
       <>
-        <Hotkey_global/>
+        <Hotkey_global />
 
         <div className='App'>
           <div className="wrap">
             <div className="side">
               <h1 className="logo">
                 {/* <Link to="/home" onClick={() => {setnavState("home"); setloginState(true)}}></Link> */}
-                <a onClick={() =>{setloginState(false)}}>logo</a>
+                <a onClick={() => { setloginState(false) }}>logo</a>
               </h1>
               <Navigate></Navigate>
             </div>
@@ -153,15 +155,16 @@ const Popup = ({ handleClose }) => {
     <div ref={modalRef} className="intor_graphpop">
       <div className="content">
         <h1 className="logo">
-              <a>logo</a>
+          <a>logo</a>
         </h1>
         <p>복잡한 쇼핑 정보를 <br />간단하게 알고 싶다면?</p>
         <p>ARS를 통한 음성인식 주문 시스템</p>
         <p>대체텍스트 제공과 요약</p>
         <p>
-          상품 검색부터 옵션 선택까지 10분이면 가능<br/> 
+          상품 검색부터 옵션 선택까지 10분이면 가능<br />
           상품 이미지 대체텍스트 제공과 요약으로 중요한 정보만 쏙!
         </p>
+        {Logoslide}
         <button onClick={closeWithAnimation} className="start_closing">Close</button>
       </div>
     </div>
