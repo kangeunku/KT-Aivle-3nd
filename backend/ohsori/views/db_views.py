@@ -23,6 +23,25 @@ from account.models import Users
 class BasketsAPI(APIView):
     '''
     get으로 요청시 찜목록 모두 조회후 json으로 전달
+    
+    params : X
+    
+    returns : [
+	{
+		"basket_no": 1,
+		"reg_date": "2023-07-02T21:46:11.716917+09:00",
+		"use_yn": "y",
+		"username": "test1223",
+		"goods_no": 4
+	},
+ {
+		"basket_no": 2,
+		"reg_date": "2023-07-02T21:46:11.716917+09:00",
+		"use_yn": "y",
+		"username": "test1223",
+		"goods_no": 4
+	} ...
+]
     '''
     permission_classes = [IsAuthenticated]
     def get(self, request): # 장바구니 페이지 GET 요청시 장바구니에 있는 모든 상품 전달
@@ -36,6 +55,14 @@ class Baskets_Add_DelAPI(View):
     '''
     POST로 goods_url 전달시 찜 목록에 상품 추가 
     PUT으로 goods_url 전달 시 찜 목록에서 상품 제거 <-- 찜 목록에 상품이 추가되어 있어야 함
+    
+    POST
+    Input params : goods_url
+    return : user_basket에 상품 정보 추가
+    
+    PUT
+    Input params : goods_url
+    return : user_basket에서 해당 goods_url의 상품 use_yn = 'n 처리
     '''    
     permission_classes = [IsAuthenticated]
     def post(self, request): # basket_yn True or False // 요청 params : goods_url
@@ -50,7 +77,8 @@ class Baskets_Add_DelAPI(View):
     
     def put(self, request): # param : goods_url
         data = json.loads(request.body)
-        basket = Baskets.objects.get(goods_url = data['goods_url'])
+        goods_no = Goods.objects.only('goods_no').get(goods_url = data['goods_url'])
+        basket = Baskets.objects.get(goods_no = goods_no, username = request.user.username)
         basket.use_yn = "n"
         basket.save()
         serializer = BasketsSerialize(basket)
