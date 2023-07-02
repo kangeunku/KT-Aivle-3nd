@@ -32,12 +32,24 @@ class BasketsAPI(APIView):
     def get(self, request): # 장바구니 페이지 GET 요청시 장바구니에 있는 모든 상품 전달
         cursor = connection.cursor()
 
-        strSql = f"select ob.*, og.* from ohsori_basket ob INNER join ohsori_good og on ob.goods_no = og.goods_no WHERE ob.username = '{request.user.username}'" 
+        strSql = f"""select ob.reg_date, og.goods_url, og.goods_name, og.goods_star, og.goods_thumb, gs.whole_summary
+                    from ohsori_basket ob 
+                    INNER join ohsori_good og 
+                    on ob.goods_no = og.goods_no 
+                    INNER join goods_summary gs
+                    on ob.goods_no = gs.goods_no
+                    WHERE ob.username = '{request.user.username}'""" 
         result = cursor.execute(strSql)
         goods = cursor.fetchall()
-        
-        print(goods)
-        return Response({"goods" : goods})
+        basket = {}
+        num = 1
+        for i in goods:
+            temp = {'date' : i[0], 'goods_url' : i[1], 'goods_name' : i[2], 'goods_star' : i[3], 'goods_thumb' : i[4], 'goods_summary':i[5]}
+            basket[num] = temp
+            num += 1
+        # print(goods)
+        # basket = {'reg_data' :}
+        return Response({"goods" : basket})
         
 # @method_decorator(csrf_exempt, name = "dispatch")
 class Baskets_Add_DelAPI(View):
