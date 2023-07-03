@@ -8,11 +8,12 @@ import { useNavigate } from "react-router-dom";
 
 import termsData1 from '../../assets/txt/terms.json'
 import termsData2 from '../../assets/txt/terms2.json'
+import { useCookies } from 'react-cookie';
 
 
 const Join = ({ changeislogn }) => {
     const [joinState, setjoinState] = useState(1);
-
+    
     const next_stage = (txt) => {
         if (txt === 'end') {
             console.log("end");
@@ -231,6 +232,7 @@ const Joinstepone = () => {
 }
 
 const Joinsteptwo = ({ changeislogn }) => {
+    const [cookies, setCookie] = useCookies(['usercookie']);
     const navigate = useNavigate();
     const [form, setFrom] = useState({
         "username": "",
@@ -246,13 +248,19 @@ const Joinsteptwo = ({ changeislogn }) => {
     const join_btn = async () => {
         // let response_data = Send_api(4, form);
         const url = "http://127.0.0.1:8000/v1/register/"
-
+        console.log(form)
         await axios.post(url, form, { withCredentials: true })
             .then(function (response) {
                 // console.log(JSON.stringify(response));
                 const res = JSON.stringify(response.statusText);
-                changeislogn(true);
-                navigate('/home');
+                console.log(res)
+                setCookie('usercookienickname', form.nickname, { path: '/' });
+                setCookie('usercookieid', form.username, { path: '/' });
+                if(res === '"OK"'){
+                    changeislogn(true);
+                    navigate('/home');
+                }
+
             })
             .catch(function (error) {
                 console.log(error);
@@ -370,7 +378,7 @@ const Joinsteptwo = ({ changeislogn }) => {
                     <label>
                         <h5> <strong style={{ color: "red" }}>4</strong> 별명 입력 </h5>
                         <input type="input" className="input_form" value={form.nickname} onChange={e => { setFrom({ ...form, nickname: e.target.value }); handleNicknameChange(e); }} placeholder="별명을 입력해주세요" />
-                        <p className="input_form_txt" style={{ color: form.nickname_val ? 'green' : 'red' }}>특수문자는 넣을 수 없습니다 </p>
+                        <p className="input_form_txt" style={{ color: form.nickname_val ? 'green' : 'red' }}>한국어로만 입력해주세요 </p>
                     </label>
                 </div>
             </div>
