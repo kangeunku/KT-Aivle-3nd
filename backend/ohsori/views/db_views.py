@@ -32,19 +32,20 @@ class BasketsAPI(APIView):
     def get(self, request): # 장바구니 페이지 GET 요청시 장바구니에 있는 모든 상품 전달
         cursor = connection.cursor()
 
-        strSql = f"""select ob.reg_date, og.goods_url, og.goods_name, og.goods_star, og.goods_thumb, gs.whole_summary
+        strSql = f"""select ob.reg_date, og.goods_url, og.goods_name, og.goods_star, og.goods_thumb, og.goods_price, gs.whole_summary
                     from ohsori_basket ob 
                     INNER join ohsori_good og 
                     on ob.goods_no = og.goods_no 
                     INNER join goods_summary gs
                     on ob.goods_no = gs.goods_no
-                    WHERE ob.username = '{request.user.username}'""" 
+                    WHERE ob.username = '{request.user.username}' and ob.use_yn = 'y'""" 
         result = cursor.execute(strSql)
         goods = cursor.fetchall()
+        
         basket = {}
         num = 1
         for i in goods:
-            temp = {'date' : i[0], 'goods_url' : i[1], 'goods_name' : i[2], 'goods_star' : i[3], 'goods_thumb' : i[4], 'goods_summary':i[5]}
+            temp = {'date' : i[0], 'goods_url' : i[1], 'goods_name' : i[2], 'goods_star' : i[3], 'goods_thumb' : i[4], 'goods_price' :i[5], 'goods_summary':i[6]}
             basket[num] = temp
             num += 1
         # print(goods)
@@ -71,7 +72,9 @@ class Baskets_Add_DelAPI(View):
         baskets = Baskets()
         goods_no = Goods.objects.only('goods_no').get(goods_url = data['goods_url'])
         try:
-            Baskets.objects.get(goods_no = goods_no, username = request.user.username)
+            baskets1 = Baskets.objects.get(goods_no = goods_no, username = request.user.username)
+            baskets1.use_yn = 'y'
+            baskets1.save()
             return JsonResponse({"status" : "이미 존재하는 상품입니다"})
         except Baskets.DoesNotExist:
             baskets.goods_no = goods_no
