@@ -1,14 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Join } from "./join";
 import { Login } from "./login";
 
 import {useNavigate} from "react-router-dom"
 import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
 
+import { TextToSpeech } from "../../components";
+
 const Choicelogin = ({ changeislogn }) => {
     const [navState, setnavState] = useState("choicelogin");
 
+    // tts 상태 지정
+    const [starttts, setstarttts] = useState(false);
+    const ref_tts = useRef(starttts);
+
     const Navigate = useNavigate();
+
+    const ttsStart = () => {
+        ref_tts.current = true;
+    };
 
     const goJoin = () => {
         Navigate('/join');
@@ -22,7 +32,8 @@ const Choicelogin = ({ changeislogn }) => {
     // 핫키 설정
     const keyMap_cl = {
         space1_key: 'space+1',
-        space2_key: "space+2"
+        space2_key: "space+2",
+        need_tts: "space+q",
         // keypress, keydown, keyup.
         // space_down: { sequence: "space", action: "keydown" }
     };
@@ -37,11 +48,17 @@ const Choicelogin = ({ changeislogn }) => {
         setnavState("login");
         goLogin();
     };
-
+    
+    const need_tts = () => {
+        ttsStart();
+        setstarttts(ref_tts.current);
+    }
+    
     // 핫키 적용 함수
     const handlers_cl = {
         space1_key:joinClick,
         space2_key:loginClick,
+        need_tts:need_tts,
     };
     
     return (
@@ -51,8 +68,10 @@ const Choicelogin = ({ changeislogn }) => {
         </>
       );
     };
-
+    const tts_choice_type =`두번째다 임뫄`
+    
     if(navState == 'choicelogin'){
+        
         return (
             <>
             <Hotkey_choicelogin />
@@ -81,6 +100,7 @@ const Choicelogin = ({ changeislogn }) => {
                     </a>
                 </div>
             </div>
+            {starttts && <TextToSpeech value={tts_choice_type} />}
             </>
         );
     }
