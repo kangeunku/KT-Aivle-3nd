@@ -32,7 +32,7 @@ class BasketsAPI(APIView):
     def get(self, request): # 장바구니 페이지 GET 요청시 장바구니에 있는 모든 상품 전달
         cursor = connection.cursor()
 
-        strSql = f"""select ob.reg_date, og.goods_url, og.goods_name, og.goods_star, og.goods_thumb, gs.whole_summary
+        strSql = f"""select ob.reg_date, og.goods_url, og.goods_name, og.goods_star, og.goods_thumb, og.goods_price, gs.whole_summary
                     from ohsori_basket ob 
                     INNER join ohsori_good og 
                     on ob.goods_no = og.goods_no 
@@ -41,10 +41,11 @@ class BasketsAPI(APIView):
                     WHERE ob.username = '{request.user.username}'""" 
         result = cursor.execute(strSql)
         goods = cursor.fetchall()
+        
         basket = {}
         num = 1
         for i in goods:
-            temp = {'date' : i[0], 'goods_url' : i[1], 'goods_name' : i[2], 'goods_star' : i[3], 'goods_thumb' : i[4], 'goods_summary':i[5]}
+            temp = {'date' : i[0], 'goods_url' : i[1], 'goods_name' : i[2], 'goods_star' : i[3], 'goods_thumb' : i[4], 'goods_price' :i[5], 'goods_summary':i[6]}
             basket[num] = temp
             num += 1
         # print(goods)
