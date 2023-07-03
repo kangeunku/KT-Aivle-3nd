@@ -81,6 +81,7 @@ import React, { useEffect, useState } from "react";
 const TextToSpeech = ({value, onComplete}) => {
     var input = value;
     const [ audioSource, setAudioSource ] = useState('');
+    const [audioUrl, setAudioUrl] = useState();
 
     useEffect(() => {
         requestTTS(input);
@@ -118,42 +119,29 @@ const TextToSpeech = ({value, onComplete}) => {
     }
 
     const requestTTS = async (input) => {
-        var text = '';
-        
+        var text = '';        
         await reqTTS(input)
             .then(data => {
                 text = data
             });
-        var binary_string = window.atob(text);
-        var len = binary_string.length;
-        var bytes = new Uint8Array(len);
-        for (var i = 0; i < len; i++) {
-            bytes[i] = binary_string.charCodeAt(i);
-        }
-
-        const audioContext = getAudioContext();        
-        
-        // makeAudio(response)
-        const audioBuffer = await audioContext.decodeAudioData(bytes.buffer);
-
-        const source = audioContext.createBufferSource();
-        source.buffer = audioBuffer;
-        source.connect(audioContext.destination);
-        source.start();
-        // console.log('source : ', source)
-        // URL.getAudioContext
-        setAudioSource(source);
-        onComplete(audioSource);
-    }
+        const base64ToBlob = (base64, type) => {
+            const binaryString = window.atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return new Blob([bytes.buffer], { type });
+        };
+            
+        const blob = base64ToBlob(text, "audio/wav");
+        const url = URL.createObjectURL(blob);
+        setAudioUrl(url);
+    }       
     
-    const getAudioContext = () => {
-        AudioContext = window.AudioContext; /* || window.webkitAudioContext */
-        const audioContent = new AudioContext();
-        return audioContent;
-    }
-
-    return(
+    return (
         <>
+        <audio src={audioUrl} autoPlay/>
         </>
     )
 }

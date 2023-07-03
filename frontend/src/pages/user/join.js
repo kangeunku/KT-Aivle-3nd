@@ -293,7 +293,7 @@ const Joinsteptwo = ({ changeislogn }) => {
 
     const handleNicknameChange = (e) => {
         const nickname = e.target.value;
-        const isValidNickname = nickname.match(/^[가-힣]*$/) && nickname.length >= 4;
+        const isValidNickname = nickname.match(/^[가-힣]*$/) && nickname.length >= 2;
         setFrom({ ...form, nickname, nickname_val: isValidNickname });
     };
 
@@ -386,7 +386,6 @@ const Joinsteptwo = ({ changeislogn }) => {
         </>
     );
 }
-
 
 // export default Input;
 

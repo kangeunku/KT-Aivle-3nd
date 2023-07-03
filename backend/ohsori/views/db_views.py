@@ -38,7 +38,7 @@ class BasketsAPI(APIView):
                     on ob.goods_no = og.goods_no 
                     INNER join goods_summary gs
                     on ob.goods_no = gs.goods_no
-                    WHERE ob.username = '{request.user.username}'""" 
+                    WHERE ob.username = '{request.user.username}' and ob.use_yn = 'y'""" 
         result = cursor.execute(strSql)
         goods = cursor.fetchall()
         
@@ -72,7 +72,9 @@ class Baskets_Add_DelAPI(View):
         baskets = Baskets()
         goods_no = Goods.objects.only('goods_no').get(goods_url = data['goods_url'])
         try:
-            Baskets.objects.get(goods_no = goods_no, username = request.user.username)
+            baskets1 = Baskets.objects.get(goods_no = goods_no, username = request.user.username)
+            baskets1.use_yn = 'y'
+            baskets1.save()
             return JsonResponse({"status" : "이미 존재하는 상품입니다"})
         except Baskets.DoesNotExist:
             baskets.goods_no = goods_no
