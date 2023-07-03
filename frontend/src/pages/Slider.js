@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, forwardRef } from "react";
 import styles from "../styles/Slider.module.css";
+import axios from "axios";
 
 const select_boxes = {
   0: {
@@ -20,7 +21,7 @@ const select_boxes = {
 };
 
 
-const Slider = forwardRef(({setPopupState, result}) =>{
+const Slider = forwardRef(({setPopupState, result, goods_url}) =>{
 
   // console.log('Slider_result', result);
   // console.log('Slider_result2', typeof(result.img_pathes), result.img_pathes);
@@ -35,6 +36,7 @@ const Slider = forwardRef(({setPopupState, result}) =>{
   // console.log(iData);
 
   // console.log('options', result.detail.necessary_opt);
+  // console.log('goods_url', goods_url);
 
 
   const iData_len = result.img_pathes.length;
@@ -82,7 +84,7 @@ const Slider = forwardRef(({setPopupState, result}) =>{
       clearTimeout(autoPage);
     };
   }, [index, isClick]);
-  console.log(`브라우저 사이즈 : ${windowWidth}`);
+  // console.log(`브라우저 사이즈 : ${windowWidth}`);
 
 
   const handleClickOutside=(event)=>{
@@ -120,7 +122,7 @@ const Slider = forwardRef(({setPopupState, result}) =>{
   const onMouseDown = (event) => {
     setIsClick(true);
     setMouseDownClientX(event.pageX);
-    console.log(slideRef);
+    // console.log(slideRef);
   };
   const onMouseLeave = (event) => {
     setIsClick(false);
@@ -164,10 +166,23 @@ const Slider = forwardRef(({setPopupState, result}) =>{
   };
 
 
-  function BtnEvent(){
+  const BtnEvent = async () => {
     //alert('모달창 내부 작업을 해도 모달창이 꺼지지 않습니다.');
-    setPopupState(false);
-  }
+    // setPopupState(false);
+
+    try{
+      const url = "http://127.0.0.1:8000/v1/basket_change/";
+      const data = {
+          "goods_url": goods_url,
+      }
+      // setGoods_url(url);
+
+      const response = await axios.post(url, data, {withCredentials:true});
+      // console.log('handleDeleteList', response);
+    } catch (error) {
+        console.log('error', error);
+    }
+  };
 
   function OptionSelect({ value, onChange }) {
     return (
@@ -252,9 +267,9 @@ const Slider = forwardRef(({setPopupState, result}) =>{
         // {console.log(item)}
         <div className={styles.box4_idx0}>
           <span className={styles.box4_txt}>필수옵션</span>
-          <select className={styles.box4_select}>
-            <option key={item} value = {item}>{item}</option>
-          </select>
+          {/* <select className={styles.box4_select}> */}
+            <p>{item}</p>
+          {/* </select> */}
         </div>
         })}
 {/*         
