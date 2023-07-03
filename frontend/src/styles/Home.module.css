@@ -1,16 +1,23 @@
 .home_container {
     position: relative;
-    padding:30px 50px 0px;
+    padding:0px 50px;
     height: 879px;
 }
 
 .homebox1{
+    border-top: 50px solid white;
+    background-color: white;
+    position:fixed;
     display: flex;
+    z-index: 100;
+    width: 100%;
     align-items: center;
     align-items: flex-end;
+    top:60px;
 }
 
 .homebox2{
+    top:90px;
     position: relative;
     bottom : 0px;
     width: 75%;
@@ -181,7 +188,7 @@
         width:65%;
         height: 70px;
         left:150px;
-        top: 50px;
+        top: 150px;
     }
 
 .home_button1 {
@@ -279,27 +286,52 @@
 
 .home_button2 {
     position: absolute;
-    left:80%;
-    top:666px;
+    left:75%;
+    top:85%;
     background-color : #285a43;
-    width : 180px;
-    height: 40px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    width : 360px;
+    height: 80px;
+    box-shadow: 8px 8px 8px rgba(40, 90, 67, 0.25);
     border-radius: 10px;
     color:white;
-    font-size:20px;
+    font-size:32px;
     font-weight:700;
     text-align: center;
     padding:10px;
 }
 
 .catebox_body {
-    overflow-y: auto;
-    max-height: 350px;
+    display:flex;
+    flex-wrap:wrap;
 }
 
 .catebox_box1{
-    margin-bottom: "30px"
+    margin-bottom: "30px";
+    width:100%;
+}
+
+.selected_items_box{
+    margin:auto;
+    width:95%;
+    min-height: 80px;
+    border-radius: 10px;
+    background-color: rgba(140, 140, 140, 0.05);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 250%;
+    margin-bottom:20px;
+    text-decoration: underline;
+}
+
+.selected_items_opt{
+    display: inline-block;
+    padding: 0 30px;
+    border-radius: 2px;
+    font-size: 24px;
+    cursor: pointer;
 }
 
 .catebox_index1{
@@ -310,21 +342,23 @@
 
 .catebox_index2 {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    font-size: 16px;
+    font-size: 24px;
+    line-height: 200%;
     width: 95%;
-    height: 50px;
-    margin-left: 30px;
-    margin-top: 10px;
-    margin-bottom: 20px;
+    height: auto;
+    margin: 10px 0 20px 30px;
+    padding: 20px;
     background-color: rgb(225, 243, 217);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
 }
 
 .catebox_index3 {
-    margin: 0 5px;
+    margin: 0 20px;
     margin-left: 20px;
+    display: inline-block;
 }
 
 .selected { 
