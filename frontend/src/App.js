@@ -178,6 +178,7 @@ const App = () => {
               <div className="container">
                 <Routes>
                   {/* 라우터가 적용될 페이지 */}
+                  <Route path="/" element={<Home state={reState} relanding={relanding} />} />
                   <Route path="/home" element={<Home state={reState} relanding={relanding} />} />
                   <Route path="/basket" element={<Basket state={reState} relanding={relanding} />} />
                   <Route path="/editinfo" element={<EditInfo state={reState} relanding={relanding} changeislogin={changeislogin}/>} />

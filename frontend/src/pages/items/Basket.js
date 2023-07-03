@@ -12,15 +12,16 @@ const Basket = (props) => {
 
     // 동일한 링크를 클릭시 처음화면으로 초기화
     useEffect(() => {
+        goToFirstPage();
+    },[]);
+
+    useEffect(() => {
         props.relanding(false);
         setCurrentPage('first');
     }, [props.state]);
 
-    useEffect(() => {
-        goToFirstPage();
-    },[]);
-
     const handleDeleteList = async (url) => {
+        // 찜 목록 삭제
         try{
             const url = "http://127.0.0.1:8000/v1/basket_change/";
             const data = {
@@ -36,8 +37,8 @@ const Basket = (props) => {
         }
     };
     
-
     const goToSecondPage = async (goods_url) => {
+        // 상품 상세 페이지로 이동
         await new Promise(resolve => setTimeout(resolve, 30));
 
         try {
@@ -55,17 +56,17 @@ const Basket = (props) => {
     };
 
     const goToFirstPage = async() => {
+        // 찜목록 조회
         try{
             const url = "http://127.0.0.1:8000/v1/basket/";
 
             const response = await axios.get(url, {withCredentials: true});
             setResult(response.data);
-            console.log('list', response);
-
+            console.log('list', response.data);
+            setCurrentPage('first');
         } catch (error) {
             console.log('error', error);
         }
-        setCurrentPage('first');
     };
 
     return (
@@ -76,8 +77,27 @@ const Basket = (props) => {
     );
 };
 
-const FirstPage =({goToSecondPage}) => {
-    // 핫키 생성
+const FirstPage =({goToSecondPage, handleDeleteList, result}) => {
+    // console.log("찜 목록 리스트")
+    let test = null;
+    if (result)
+    {
+        Object.values(result).map((item) => {
+            Object.values(item).map((content) => {
+                test = content;
+                
+                // console.log('content', content);
+                // console.log('date', content.date);
+                // console.log('goods_url', content.goods_url);
+                // console.log('goods_star', content.goods_star);
+                // console.log('goods_thumb', content.goods_thumb);
+                // console.log('goods_summary', content.goods_summary);
+            });
+        });
+        // console.log('test', test);
+    }    
+    
+    
     const Hotkey_basket = () => {
         // 핫키 설정
         const keyMap_b1 = {
@@ -117,17 +137,31 @@ const FirstPage =({goToSecondPage}) => {
             </div>
             <div className={styles.bk_body}>
                 <div className={styles.bklist}>
-                    <div className={styles.bklist_img}>이미지가들어갑니당</div>
-                    <div className={styles.bklist_com}>
-                        <div className={styles.bklist_name}>아이템이름</div>
-                        <div className={styles.bklist_txt}>추가적 설명</div>
-                        <div className={styles.bklist_price}>(가격)원</div>
-                    </div>
+                    {result &&
+                        Object.values(result).map((item) => {
+                            Object.values(item).map((content) => {
+                                
+                                {console.log(content.goods_thumb)}
+                                {console.log(content.goods_name)}
+                                {console.log(content.goods_summary)}
+                                {console.log(content.goods_name)}
+
+                                <div>
+                                    {/* <img className={styles.bklist_img} src="https://shop-phinf.pstatic.net/20230504_180/1683187467116KRcmO_PNG/10308205791871900_1467586958.png?type=m510"/> */}
+                                    <div className={styles.bklist_com}>
+                                        <div className={styles.bklist_name}>델몬트드링크팩 190ml 오렌지＋포도＋사과+망고 과즙음료</div>
+                                        <div className={styles.bklist_txt}></div>
+                                        <div className={styles.bklist_price}>12800원</div>
+                                    </div>
+                                </div>
+                            })
+                        })
+                    }
                     <div className={styles.bklist_btbox}>
                         <button className={styles.bklist_bt1} id="more" onClick={()=>{ goToSecondPage() }}>
                             <div className={styles.bklist_btfont} style={{color:"#b4e0a0"}}>더 보기</div>
                         </button>
-                        <button className={styles.bklist_bt2} id="delete">
+                        <button className={styles.bklist_bt2} id="delete" onClick={handleDeleteList}>
                             <div className={styles.bklist_btfont} style={{color:"#dd7878"}}>삭제</div>
                         </button>
                     </div>
