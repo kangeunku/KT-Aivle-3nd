@@ -35,6 +35,7 @@
     border: #285A43 solid 1.5px;
     border-radius: 20px;
     box-shadow: 8px 8px 8px rgba(40, 90, 67, 0.25);
+    cursor: pointer;
 }
 
 .goodsbox1 {
@@ -215,13 +216,14 @@
     }
 
 .home_search_contained{
-        display:flex;
-        flex-direction: column;
-        position: relative;
-        width:80%;
-        height:100px;
-        left:70px;
-        top:50px;
+    position: relative;
+    position: fixed;
+    width: 100%;
+    height: 70px;
+    background-color: white;
+    border-Radius: 12px;
+    top: 150px;
+    z-index: 100;
     }
 
 .home_main_guide {
@@ -232,21 +234,19 @@
     }
 
 .home_search_box2{
-    display:flex;
-    flex-direction: row;
+    display: flex;
+    place-items: center start;
+    font-Size: 24px;
+    border: 3px solid rgba(25, 25, 25, 0.5);
     position: relative;
-    width: 100%;
-    height:100%;
-    bottom:0px;
-    border: 5px solid #285A43;
-    border-Radius: 20px;
+    width: 60%;
+    height: 100%;
+    border-Radius: 12px;
+    left:70px;
     }
     
 .home_img2 {
     display: absolute;
-    top: 50%;
-    left: 4%;
-    transform: translate(-50%, -50%);
     flex-direction: column;
     position: relative;
     width:40px;
@@ -259,11 +259,14 @@
 
 .home_search_box2_txt {
     position:relative;
-    margin-Top:4px;
-    flex:1;
+    width:600px;
+    height:50px;
+    background-color: white;
     font-size: 32px;
     font-weight: 800;
     left:3%;
+    align-items: center;
+    display: flex;
 }
 
 .home_mainguide{
@@ -302,6 +305,8 @@
 
 .catebox_body {
     display:flex;
+    position:relative;
+    top:150px;
     flex-wrap:wrap;
 }
 
@@ -311,11 +316,12 @@
 }
 
 .selected_items_box{
+    position:fixed;
     margin:auto;
-    width:95%;
+    width:70%;
     min-height: 80px;
     border-radius: 10px;
-    background-color: rgba(140, 140, 140, 0.05);
+    background-color: rgba(249, 249, 249);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -324,6 +330,7 @@
     line-height: 250%;
     margin-bottom:20px;
     text-decoration: underline;
+    top:220px;
 }
 
 .selected_items_opt{

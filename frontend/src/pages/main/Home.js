@@ -191,7 +191,6 @@ const SecondPage = ({ inputValue, goToThirdPage, result, popupOn, popupOff, mess
             <Hotkey_h2 />
             <div className={styles.home_container2}>
                 <div className={styles.home_search_contained}>
-                    <p className={styles.home_main_guide}>상품을 검색하세요</p>
                     <div className={styles.home_search_box2} >
                         <div className={styles.home_img2} alt="웹 페이지 이미지" />
                         <div className={styles.home_search_box2_txt}>{inputValue}</div>
@@ -227,7 +226,7 @@ const ThirdPage = ({ goToForthPage, result, popupOn, popupOff, message }) => {
             </div>
             <div className={styles.homebox2}>
                 {result.map((item) => (
-                    <div className={styles.goodsbox}>
+                    <div className={styles.goodsbox} onClick={() => { goToForthPage(item.link) }}>
                         <div className={styles.goodsbox1} key={item.productId}>
                             {/* <img className={styles.goodsimage} src={"https://shop-phinf.pstatic.net/20221021_183/1666336371323nsBJM_JPEG/67472269985761665_608306589.jpg?type=m510"} alt="추천 상품 이미지1"/> */}
                             <img className={styles.goodsimage} src={item.image} />
