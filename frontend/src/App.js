@@ -14,6 +14,7 @@ const App = () => {
   const [islogin, setloginState] = useState(false);
   const [navState, setnavState] = useState("home");
   const [reState, setreState] = useState(false);
+  const location = useLocation();
 
   const changeislogin = (value) => {
       setloginState(value);
@@ -31,6 +32,12 @@ const App = () => {
       changeislogin(false)
     }
   }, [islogin]);
+
+  useEffect(() => {
+    let local_loc = location.pathname
+    let replaced_str = local_loc.replace('/', '');
+    setnavState(replaced_str)
+  }, [navState]);
 
   function getCookie(name) {
     let cookieValue = null;
@@ -87,9 +94,9 @@ const App = () => {
             <li className={navState === "support" ? "active_list" : null}>
               <Link to="/support" onClick={() => navState === "support" ? relanding(true) :setnavState("support")}>고객센터</Link>
             </li>
-            {/* <li className={navState === "test" ? "active_list" : null}>
+            <li className={navState === "test" ? "active_list" : null}>
               <Link to="/test" onClick={() => setnavState("test")}>테스트섹션</Link>
-            </li> */}
+            </li>
           </ul>
         </nav>
       </>
@@ -183,7 +190,7 @@ const App = () => {
                   <Route path="/basket" element={<Basket state={reState} relanding={relanding} />} />
                   <Route path="/editinfo" element={<EditInfo state={reState} relanding={relanding} changeislogin={changeislogin}/>} />
                   <Route path="/support" element={<Support state={reState} relanding={relanding} />} />
-                  {/* <Route path="/test" element={<Test />} /> */}
+                  <Route path="/test" element={<Test />} />
                 </Routes>
               </div>
             </section>
