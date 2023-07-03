@@ -369,7 +369,8 @@
     position: fixed;
     width: 60px;
     height: 60px;
-    background-color: midnightblue;
+    background-image: url(../assets/img/foot.png);
+    background-repeat: no-repeat;
     top:70%;
     left:50%;
     transform: translate(-50%, -50%);

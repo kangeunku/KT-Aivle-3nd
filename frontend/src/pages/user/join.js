@@ -285,7 +285,7 @@ const Joinsteptwo = ({ changeislogn }) => {
 
     const handleNicknameChange = (e) => {
         const nickname = e.target.value;
-        const isValidNickname = nickname.match(/^[가-힣]*$/) && nickname.length >= 4;
+        const isValidNickname = nickname.match(/^[가-힣]*$/) && nickname.length >= 2;
         setFrom({ ...form, nickname, nickname_val: isValidNickname });
     };
 
@@ -370,7 +370,7 @@ const Joinsteptwo = ({ changeislogn }) => {
                     <label>
                         <h5> <strong style={{ color: "red" }}>4</strong> 별명 입력 </h5>
                         <input type="input" className="input_form" value={form.nickname} onChange={e => { setFrom({ ...form, nickname: e.target.value }); handleNicknameChange(e); }} placeholder="별명을 입력해주세요" />
-                        <p className="input_form_txt" style={{ color: form.nickname_val ? 'green' : 'red' }}>특수문자는 넣을 수 없습니다 </p>
+                        <p className="input_form_txt" style={{ color: form.nickname_val ? 'green' : 'red' }}>특수문자 사용 불가, 두 글자 이상 </p>
                     </label>
                 </div>
             </div>
