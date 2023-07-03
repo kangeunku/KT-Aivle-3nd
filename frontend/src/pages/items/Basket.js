@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useDebugValue } from "react";
+import React, { useState, useEffect, useNavigate } from "react";
 import { Stt_common, Hotkey_start } from '../../components';
 import styles from "../../styles/Basket.module.css";
 import Slider from "../Slider";
@@ -8,7 +8,6 @@ import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
 const Basket = (props) => {
     const [ currentPage, setCurrentPage ] = useState('first');
     const [ result, setResult ] = useState();
-    const [ goods_url, setGoods_url ] = useState();
 
     // 동일한 링크를 클릭시 처음화면으로 초기화
     useEffect(() => {
@@ -19,19 +18,18 @@ const Basket = (props) => {
         props.relanding(false);
         setCurrentPage('first');
     }, [props.state]);
-
-    const handleDeleteList = async (url) => {
+    
+    const handleDeleteList = async (goods_url) => {
         // 찜 목록 삭제
         try{
             const url = "http://127.0.0.1:8000/v1/basket_change/";
             const data = {
-                "goods_url": url,
+                "goods_url": goods_url,
             }
-            setGoods_url(url);
 
             const response = await axios.put(url, data, {withCredentials:true});
-            console.log('handleDeleteList', response);
-            setCurrentPage('first');
+            // console.log('handleDeleteList', response);
+            goToFirstPage();
         } catch (error) {
             console.log('error', error);
         }
@@ -62,7 +60,7 @@ const Basket = (props) => {
 
             const response = await axios.get(url, {withCredentials: true});
             setResult(response.data);
-            console.log('list', response.data);
+            // console.log('list', response.data);
             setCurrentPage('first');
         } catch (error) {
             console.log('error', error);
@@ -79,24 +77,13 @@ const Basket = (props) => {
 
 const FirstPage =({goToSecondPage, handleDeleteList, result}) => {
     // console.log("찜 목록 리스트")
-    let test = null;
-    if (result)
-    {
-        Object.values(result).map((item) => {
-            Object.values(item).map((content) => {
-                test = content;
-                
-                // console.log('content', content);
-                // console.log('date', content.date);
-                // console.log('goods_url', content.goods_url);
-                // console.log('goods_star', content.goods_star);
-                // console.log('goods_thumb', content.goods_thumb);
-                // console.log('goods_summary', content.goods_summary);
-            });
-        });
-        // console.log('test', test);
+    // console.log(result);
+    const dataArray = result ? Object.values(result) : [];
+
+    if(!dataArray){
+        console.log()
+        return
     }    
-    
     
     const Hotkey_basket = () => {
         // 핫키 설정
@@ -136,42 +123,61 @@ const FirstPage =({goToSecondPage, handleDeleteList, result}) => {
                 <div className={styles.bkboxes1}>찜 목록</div>
             </div>
             <div className={styles.bk_body}>
-                <div className={styles.bklist}>
-                    {result &&
-                        Object.values(result).map((item) => {
-                            Object.values(item).map((content) => {
-                                
-                                {console.log(content.goods_thumb)}
-                                {console.log(content.goods_name)}
-                                {console.log(content.goods_summary)}
-                                {console.log(content.goods_name)}
+                {dataArray &&
+                dataArray.map((item) => {
+                    const DArray = item ? Object.values(item) : [];
+                    return DArray.map((content) => {
+                    return (
+                        <div className={styles.bklist}>
+                        <img
+                            className={styles.bklist_img}
+                            src={content.goods_thumb}
+                        />
+                        <div className={styles.bklist_com}>
+                            <div className={styles.bklist_name}>
+                                {content.goods_name}
+                            </div>
+                            <div className={styles.bklist_txt}>
+                                {content.goods_summary}
+                            </div>
+                            <div className={styles.bklist_price}>
+                                {content.goods_price}
+                            </div>
+                        </div>
 
-                                <div>
-                                    {/* <img className={styles.bklist_img} src="https://shop-phinf.pstatic.net/20230504_180/1683187467116KRcmO_PNG/10308205791871900_1467586958.png?type=m510"/> */}
-                                    <div className={styles.bklist_com}>
-                                        <div className={styles.bklist_name}>델몬트드링크팩 190ml 오렌지＋포도＋사과+망고 과즙음료</div>
-                                        <div className={styles.bklist_txt}></div>
-                                        <div className={styles.bklist_price}>12800원</div>
-                                    </div>
+                        <div className={styles.bklist_btbox}>
+                            <button
+                                className={styles.bklist_bt1}
+                                id="more"
+                                onClick={() => {
+                                    goToSecondPage(content.goods_url)
+                                }}>
+                                <div className={styles.bklist_btfont} style={{ color: "#b4e0a0" }}>
+                                    더 보기
                                 </div>
-                            })
-                        })
-                    }
-                    <div className={styles.bklist_btbox}>
-                        <button className={styles.bklist_bt1} id="more" onClick={()=>{ goToSecondPage() }}>
-                            <div className={styles.bklist_btfont} style={{color:"#b4e0a0"}}>더 보기</div>
-                        </button>
-                        <button className={styles.bklist_bt2} id="delete" onClick={handleDeleteList}>
-                            <div className={styles.bklist_btfont} style={{color:"#dd7878"}}>삭제</div>
-                        </button>
-                    </div>
-                </div>
+                            </button>
+                            <button
+                                className={styles.bklist_bt2}
+                                id="delete"
+                                onClick={() => {
+                                    handleDeleteList(content.goods_url)
+                                }}>
+                                <div className={styles.bklist_btfont} style={{ color: "#dd7878" }}>
+                                    삭제
+                                </div>
+                            </button>
+                        </div>
+                        </div>
+                    );
+                    });
+                })}
+
             </div>   
         </div>
     )
 }
 
-const SecondPage =({goToFirstPage, result}) =>{
+const SecondPage =({goToFirstPage, res, result, goods_url, popupOn, popupOff, message}) =>{
     const [PopupState, setPopupState] = useState(true);
     // console.log(PopupState)
 
@@ -185,8 +191,9 @@ const SecondPage =({goToFirstPage, result}) =>{
     }
     return (
         <div>
-        {PopupState === true?
-        <Slider setPopupState={setPopupState} result={result}/>: <FirstPage goToFirstPage={goToFirstPage()}></FirstPage>}
+        {/* {PopupState === true? */}
+        <Slider goToPage = {goToFirstPage} setPopupState={setPopupState} goods_url={goods_url} result={result}/>
+        {/* : <FirstPage goToFirstPage={goToFirstPage()}></FirstPage>} */}
         </div>
     )
 }

@@ -45,6 +45,7 @@ const Home = (props) => {
         .then(function (response) {
             setRes(response.data);
             setPopupVisible(false);
+            // console.log('res', response.data);
         })
         .catch(function (error) {
             console.log('error', error);
@@ -64,18 +65,30 @@ const Home = (props) => {
             const response = await axios.post(url, data);
             // console.log('goods_detail', response);
             setResult(response.data);
+            // console.log("detail", response.data.img_pathes);
+            // setResult(response.data.img_pathes);
             setInputUrl(goods_url);
-            console.log("goods_url", goods_url);
+            // console.log("goods_url", goods_url);
 
-            setCurrentPage('forth');
-            setPopupVisible(false);
+
+            if (response.data.img_pathes.length > 1){
+                setCurrentPage('forth');
+                setPopupVisible(false);
+            } else {
+                setPopupMessage("분석이 불가능한 상품입니다.");
+                setPopupVisible(true);
+                setTimeout(()=>{
+                    handlePopupClose();
+                }, 2000);
+            }
+            
         } catch (error) {
             console.log('error', error);
         }
     };
 
     const returnThirdPage = () => {
-        console.log('returnThirdPage');
+        // console.log('returnThirdPage');
         setCurrentPage('third');
     };
 
@@ -122,7 +135,7 @@ const Home = (props) => {
             {currentPage === 'first' && (<FirstPage inputValue={inputValue} handleInputChange={handleInputChange} handleButtonClick={handleButtonClick} popupOn={popupVisible} popupOff={handlePopupClose} message={popupMessage}/>)}
             {currentPage === 'second' && <SecondPage inputValue={inputValue} goToThirdPage={goToThirdPage} result={result} popupOn={popupVisible} popupOff = {handlePopupClose} message={popupMessage}/>}
             {currentPage === 'third' && <ThirdPage goToForthPage={goToForthPage} result={res} popupOn = {popupVisible} popupOff = {handlePopupClose} message={popupMessage}/>}
-            {currentPage === 'forth' && <ForthPage goToThirdPage={goToThirdPage} res={res} result={result} goods_url={inputUrl} popupOn = {popupVisible} popupOff = {handlePopupClose} message={popupMessage}/>}
+            {currentPage === 'forth' && <ForthPage goToThirdPage={returnThirdPage} res={res} result={result} goods_url={inputUrl} popupOn = {popupVisible} popupOff = {handlePopupClose} message={popupMessage}/>}
         </div>
     );
 };
@@ -309,7 +322,7 @@ const ForthPage = ({goToThirdPage, res, result, goods_url, popupOn, popupOff, me
         <div>
             {popupOn && (<Popup onClose={popupOff} message={message} />)}
             {/* {PopupState === true? */}
-            <Slider setPopupState={setPopupState} goods_url={goods_url} result={result}/>
+            <Slider goToPage = {goToThirdPage} setPopupState={setPopupState} goods_url={goods_url} result={result}/>
             
             {/* :<ThirdPage goToForthPage={goToThirdPage} result={res}></ThirdPage>} */}
         </div>

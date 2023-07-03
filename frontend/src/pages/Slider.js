@@ -21,25 +21,29 @@ const select_boxes = {
 };
 
 
-const Slider = forwardRef(({setPopupState, result, goods_url}) =>{
+const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
 
   // console.log('Slider_result', result);
   // console.log('Slider_result2', typeof(result.img_pathes), result.img_pathes);
   // console.log('Slider_result3', typeof(result.summary_lst), result.summary_lst);
   const iData = [];
-  for (let i = 0; i < result.summary_lst.length; i++){
-    const tmp = {};
-    tmp['image'] = result.img_pathes[i];
-    tmp['answer'] = result.summary_lst[i];
-    iData.push(tmp);
-  }
+  
+  if(result.img_pathes){
+    for (let i = 0; i < result.summary_lst.length; i++){
+      const tmp = {};
+      tmp['image'] = result.img_pathes[i];
+      tmp['answer'] = result.summary_lst[i];
+      iData.push(tmp);
+    }
+  } 
+  const iData_len  = result.img_pathes.length;
   // console.log(iData);
 
   // console.log('options', result.detail.necessary_opt);
   // console.log('goods_url', goods_url);
 
 
-  const iData_len = result.img_pathes.length;
+  // const iData_len = result.img_pathes.length;
 
   //슬라이드
   const slideRef = useRef(null);
@@ -51,6 +55,22 @@ const Slider = forwardRef(({setPopupState, result, goods_url}) =>{
   const [isClick, setIsClick] = useState(false); // 드래그를 시작하는지 체크해줍니다.
   const [mouseDownClientX, setMouseDownClientX] = useState(0); // 마우스를 클릭한 지점의 x 좌료를 저장합니다
   const [mouseUpClientX, setMouseUpClientX] = useState(0); // 마우스를 땐 지점의 x 좌표를 저장합니다.
+
+  // 팝업
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+
+  // 카운트 증가 감소
+  const [count, setCount] = useState(0);
+
+  // 가격 업데이트
+  const price = result.detail.goods_price.replace(/,/g, "");
+  const [totalPrice, setTotalPrice] = useState(price);
+  useEffect(() => {
+    // console.log('count', count);
+    // console.log('price', typeof(price), price);
+    updatePrice();
+  }, [count])
 
   //반응형 사이트
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // 사용자의 화면크기 정보를 받아 반응형 사이트에 사용합니다.
@@ -86,7 +106,9 @@ const Slider = forwardRef(({setPopupState, result, goods_url}) =>{
   }, [index, isClick]);
   // console.log(`브라우저 사이즈 : ${windowWidth}`);
 
-
+  const updatePrice = () => {
+    setTotalPrice(parseInt(price, 10) * count);
+  };
   const handleClickOutside=(event)=>{
     if(wrapperRef && !wrapperRef.current.contains(event.target)){
         setPopupState(false);
@@ -152,8 +174,7 @@ const Slider = forwardRef(({setPopupState, result, goods_url}) =>{
     setWindowWidth(window.innerWidth);
   };
 
-  // 카운트 증가 감소
-  const [count, setCount] = useState(0);
+  
 
   const decreaseCount = () => {
     if(count > 0) {
@@ -169,7 +190,9 @@ const Slider = forwardRef(({setPopupState, result, goods_url}) =>{
   const BtnEvent = async () => {
     //alert('모달창 내부 작업을 해도 모달창이 꺼지지 않습니다.');
     // setPopupState(false);
-
+    setPopupMessage("찜하기 목록에 추가했습니다.");
+    setPopupVisible(true);
+    console.log("popup on");
     try{
       const url = "http://127.0.0.1:8000/v1/basket_change/";
       const data = {
@@ -179,10 +202,19 @@ const Slider = forwardRef(({setPopupState, result, goods_url}) =>{
 
       const response = await axios.post(url, data, {withCredentials:true});
       // console.log('handleDeleteList', response);
+      setTimeout(()=>{
+        handlePopupClose();
+      }, 5000);
     } catch (error) {
         console.log('error', error);
     }
   };
+
+  const handlePopupClose = () => {
+    console.log("popup close");
+    setPopupVisible(false);
+  };
+
 
   function OptionSelect({ value, onChange }) {
     return (
@@ -263,14 +295,19 @@ const Slider = forwardRef(({setPopupState, result, goods_url}) =>{
 {/* 옵션과 수량 */}
       <session className={`${styles.box} ${styles.box4}`}>      
       
-      {result.detail.necessary_opt.map((item) => {
+      {result.detail.necessary_opt &&
+      result.detail.necessary_opt.map((item) => {
         // {console.log(item)}
-        <div className={styles.box4_idx0}>
-          <span className={styles.box4_txt}>필수옵션</span>
-          {/* <select className={styles.box4_select}> */}
-            <p>{item}</p>
-          {/* </select> */}
-        </div>
+        <span className={styles.box4_txt}>필수옵션</span>
+        return (
+          <div className={styles.box4_idx0}>
+            
+              <div className={styles.box4_select}>
+                {item}
+              </div>
+            
+          </div>)
+        
         })}
 {/*         
         <div className={styles.box4_idx1}>
@@ -296,19 +333,30 @@ const Slider = forwardRef(({setPopupState, result, goods_url}) =>{
         </div>
         <div className={styles.box4_idx4}>
           <span className={styles.box4_txt}>가격</span>
-          <span className={styles.box4_txt}>{count * result.detail.goods_price}원</span>
+          <span className={styles.box4_txt}>{totalPrice}원</span>
         </div>
       </session>
 
 {/* 버튼들 */}
       <session className={`${styles.box} ${styles.box5}`}>
-        <button className={styles.button} onClick={BtnEvent}> 구매하기 </button>
-        <button className={styles.button} onClick={BtnEvent}> 닫기 </button>
+        <button className={styles.button}> 구매하기 </button>
+        <button className={styles.button} onClick={goToPage}> 닫기 </button>
         <button className={styles.button} onClick={BtnEvent}> 찜하기 </button>
       </session>
+      {popupVisible && (<Popup onClose={handlePopupClose} message={popupMessage} />)}
     </div>
   );
 });
+
+const Popup = ({ onClose, message }) => {
+  console.log('message', message);
+  return (
+      <div className={styles.popup1}>
+          <div className={styles.popup1_txt}>{message}</div>
+          <div className={styles.popup1_lgimg}></div>
+      </div>
+  );
+};
 
 export default Slider;
 
