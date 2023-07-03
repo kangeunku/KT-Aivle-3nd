@@ -189,8 +189,7 @@ const Slider = forwardRef(({setPopupState, result}) =>{
       <span className={styles.popuptxt}>이미지 안내</span>
 {/*메인 슬라이드 */}
       <session className={`${styles.box} ${styles.box1}`}>
-
-        <img className={styles.slide1} src={iData[index].image} />
+        <img  className={styles.slide1} src={iData[index].image} />
         <button className={styles.button_left} onClick={decreaseClick} />
         <button className={styles.button_right} onClick={increaseClick} />
       </session>
@@ -233,6 +232,7 @@ const Slider = forwardRef(({setPopupState, result}) =>{
                 </nav>
               ))}
         </div>
+        <span className={styles.slide1order}>({index+1}/{iData_len})</span>
       </session>
 
       <span className={styles.popuptxt}>Summary</span>
@@ -240,7 +240,7 @@ const Slider = forwardRef(({setPopupState, result}) =>{
 {/*대체텍스트 요약 */}
       <session className={`${styles.box} ${styles.box3}`}>
             <span className={styles.minititle}>{iData[index].answer}</span>
-            <span className={styles.minides}>{iData[index].answer}</span>
+            {/* <span className={styles.minides}>{iData[index].answer}</span> */}
       </session>
 
       <span className={styles.popuptxt}>Option</span>
