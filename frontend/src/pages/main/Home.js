@@ -135,6 +135,9 @@ const FirstPage = ({inputValue, handleInputChange, handleButtonClick, popupOn, p
             </>
         );
     };
+
+    const isInputEmpty = inputValue.trim() === '';
+
     return (
         <div className={styles.home_container}>
             <div className={styles.homebox1}>
@@ -143,7 +146,7 @@ const FirstPage = ({inputValue, handleInputChange, handleButtonClick, popupOn, p
             </div>
             <div className={styles.home_search_box1}>
                 <input className={styles.home_overlay_main} id="search_input" placeholder="입력해주세요" value={inputValue} onChange={handleInputChange}/>
-                <button className={styles.home_button1}  onClick={handleButtonClick} alt="상세검색으로 이동하는 버튼"></button>
+                <button className={styles.home_button1}  onClick={handleButtonClick} disabled={isInputEmpty} alt="상세검색으로 이동하는 버튼"></button>
             </div>
             {popupOn && (<Popup onClose={popupOff} message={message} />)}
         </div>
