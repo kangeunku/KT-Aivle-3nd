@@ -379,7 +379,6 @@ const Joinsteptwo = ({ changeislogn }) => {
     );
 }
 
-
 // export default Input;
 
 export { Join }; 

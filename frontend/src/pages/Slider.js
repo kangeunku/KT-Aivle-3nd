@@ -61,7 +61,7 @@ const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
   const [popupMessage, setPopupMessage] = useState("");
 
   // 카운트 증가 감소
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
 
   // 가격 업데이트
   const price = result.detail.goods_price.replace(/,/g, "");
@@ -177,7 +177,7 @@ const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
   
 
   const decreaseCount = () => {
-    if(count > 0) {
+    if(count > 1) {
       setCount(count-1);
     }
   };

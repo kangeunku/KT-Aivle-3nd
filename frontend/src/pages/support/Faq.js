@@ -42,71 +42,7 @@ const myfaqData = [
     { index: 3, subject: '취업시켜주세요',  question: '제곧내', answer:'' },
 ];
 
-// const ImageUploadPreview = () => {
-//     const [previewImage,setPreviewImage] = useState(null);
 
-//     const handleImageUpload = (e) => {
-//         const file = e.target.files[0];
-//         if (file) {
-//             const reader = new FileReader();
-
-//             reader.onload = () => {
-//                 setPreviewImage(reader.result);
-//             };
-
-//             reader.readAsDataURL(file);
-//         }
-//     };
-
-//     return (
-//         <label htmlFor="fileInput" className={styles.fileimgbut}>
-//             <input type="file" id="fileInput" style = {{display:'none'}} onChange={handleImageUpload} />
-//             {previewImage ? (
-//                 <img src={previewImage} alt="미리보기" style={{width:'100px', height:'100px', border:'1px solid gray'}}  onChange={handleImageUpload} />
-//             ) : (
-//                     <div style = {{width:'100px', height:'100px',border: '1px solid gray', backgroundColor: 'lightgray'}}></div>
-//             )}
-//         </label>
-//     );
-// };
-
-const ImageUploadPreview = () => {
-    const [images, setImages] = useState([]);
-  
-    const handleImageUpload = (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-  
-        reader.onload = () => {
-          const newImage = {
-            id: Date.now(),
-            src: reader.result,
-          };
-  
-          setImages((prevImages) => [...prevImages, newImage]);
-        };
-  
-        reader.readAsDataURL(file);
-      }
-    };
-  
-    const renderImageBoxes = () => {
-      return images.map((image) => (
-        <div key={image.id} style={{ width: '100px', height: '100px', border: '1px solid gray', marginRight: '30px' }}>
-          <img src={image.src} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        </div>
-      ))
-    };
-
-    return (
-        <label htmlFor="fileInput" className={styles.fileimgbut}>
-                <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleImageUpload} />
-                    {renderImageBoxes()}
-                        <div style={{ width: '100px', height: '100px', border: '1px solid gray', backgroundColor: 'lightgray' }}></div>
-        </label>
-    );
-};
 
 const Support = (props) => {
     const [currentPage, setCurrentPage] = useState('first');
@@ -395,6 +331,7 @@ const ThirdPage = ({goToSecondPage}) => {
     const [content, setContent] = useState('');
     const [category, setCategory] = useState('');
     const [jsonData, setJsonData] = useState(null);
+    const [img, setImg] = useState(null);
     
     const handleTitleChange = (event) => {
         setTitle(event.target.value);
@@ -407,6 +344,10 @@ const ThirdPage = ({goToSecondPage}) => {
     const handleCategoryChange = (event) => {
         setCategory(event.target.value);
     };
+
+    const handleImageUpload = (image) => {
+        setImg(image);
+    };
     
     const handleSaveData = async () => {
         if (title.length !== 0 && content.length !== 0 && categories.length !== 0) {
@@ -416,8 +357,9 @@ const ThirdPage = ({goToSecondPage}) => {
                     "type": '"' + category + '"',
                     "subject": '"' + title + '"',
                     "question": '"' + content + '"',
-                    // "img_url": null,
+                    "img_url": img,
                 };
+                console.log('data', data);
                 // setJsonData(JSON.stringify(data));
         
                 const response = await axios.post(url, data, {withCredentials: true});
@@ -479,13 +421,54 @@ const ThirdPage = ({goToSecondPage}) => {
                 </div>
                 <div className={styles.faq3_row5}>
                     <div className={styles.faq_row11}>파일 첨부</div>
-                    <ImageUploadPreview />
+                    <ImageUploadPreview img={handleImageUpload}/>
                 </div>
                 <button className={styles.button_faq} onClick={handleSaveData}>등록하기</button>
                 {jsonData} && <div>저장된 데이터: {jsonData}</div>
             </div>
         </div>
         </>
+    );
+};
+
+
+const ImageUploadPreview = ({img}) => {
+    const [images, setImages] = useState([]);
+
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            const newImage = {
+            id: Date.now(),
+            src: reader.result,
+            };
+
+            setImages((prevImages) => [...prevImages, newImage]);
+            img(((prevImages) => [...prevImages, newImage]));
+        };
+
+        reader.readAsDataURL(file);
+        // console.log(reader);
+        }
+    };
+
+    const renderImageBoxes = () => {
+        return images.map((image) => (
+        <div key={image.id} style={{ width: '100px', height: '100px', border: '1px solid gray', marginRight: '30px' }}>
+            <img src={image.src} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+        ))
+    };
+
+    return (
+        <label htmlFor="fileInput" className={styles.fileimgbut}>
+                <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleImageUpload} />
+                    {renderImageBoxes()}
+                        <div style={{ width: '100px', height: '100px', border: '1px solid gray', backgroundColor: 'lightgray' }}></div>
+        </label>
     );
 };
 

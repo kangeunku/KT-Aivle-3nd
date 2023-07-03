@@ -141,7 +141,7 @@ const FirstPage =({goToSecondPage, handleDeleteList, result}) => {
                                 {content.goods_summary}
                             </div>
                             <div className={styles.bklist_price}>
-                                {content.goods_price}
+                                {content.goods_price}원
                             </div>
                         </div>
 
