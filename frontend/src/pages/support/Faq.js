@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import styles from "../../styles/Faq.module.css";
 // import ImageUploadPreview from './ImageUploadPreview'
 // import { RequestTTS } from "../../components/common/google_tts";
-// import { TextToSpeech } from "../../components/common/google_tts";
+import { TextToSpeech } from "../../components/common/google_tts";
 import axios from "axios";
 import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
 
@@ -69,17 +69,22 @@ const Support = (props) => {
     const goToThirdPage = async () => {
         setCurrentPage('third');
     };
+
+    const handleAudio = () => {
+        const audioElement = document.querySelector("audio");
+        audioElement.pause();
+    };
     
     return(
         <div>
-        {currentPage === 'first' && <FirstPage goToSecondPage={goToSecondPage} />}
-        {currentPage === 'second' && <SecondPage goToThirdPage={goToThirdPage} result={result}/>}
+        {currentPage === 'first' && <FirstPage goToSecondPage={goToSecondPage} tts={handleAudio} />}
+        {currentPage === 'second' && <SecondPage goToThirdPage={goToThirdPage} result={result} tts={handleAudio}/>}
         {currentPage === 'third' && <ThirdPage goToSecondPage={goToSecondPage}/>}
         </div>
     );
 };
 
-const FirstPage = ({goToSecondPage}) => {
+const FirstPage = ({goToSecondPage, tts}) => {
     const [ activeIndex, setActiveIndex ] = useState(null);
     // const [ audioSource, setAudioSource ] = useState();
     const [ text, setText ] = useState('');
@@ -87,6 +92,11 @@ const FirstPage = ({goToSecondPage}) => {
     const handleQuestionClick = (index) => {
         setActiveIndex(activeIndex === index ? null : index);
         //setText(faqData[index].answer);
+        const audioElement = document.querySelector("audio");
+        console.log('audioElement', audioElement);
+        if (audioElement){
+            tts();
+        }
     };
 
     // const handleTextToSpeechonComplete = useCallback((result) => {
@@ -193,7 +203,7 @@ const FirstPage = ({goToSecondPage}) => {
                                             {faq.answer.split('\n').map((line, lineIndex) => (
                                                 <div key={lineIndex}>
                                                     {line}
-                                                    {/* <TextToSpeech value={faq.answer} onComplete={handleTextToSpeechonComplete}/>    */}
+                                                    <TextToSpeech value={faq.answer} />   
                                                 </div>
                                             ))}
                                         </div>
