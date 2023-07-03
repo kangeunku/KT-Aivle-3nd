@@ -9,6 +9,8 @@ const Home = (props) => {
     const [currentPage, setCurrentPage] = useState('first');
     const [inputValue, setInputValue] = useState('');
     const [result, setResult] = useState([]);
+    const [res, setRes] = useState([]);
+    const [inputUrl, setInputUrl] = useState([]);
 
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
@@ -41,7 +43,7 @@ const Home = (props) => {
         };
         await axios.post(url, data)
         .then(function (response) {
-            setResult(response.data);
+            setRes(response.data);
             setPopupVisible(false);
         })
         .catch(function (error) {
@@ -62,6 +64,8 @@ const Home = (props) => {
             const response = await axios.post(url, data);
             // console.log('goods_detail', response);
             setResult(response.data);
+            setInputUrl(goods_url);
+            console.log("goods_url", goods_url);
 
             setCurrentPage('forth');
             setPopupVisible(false);
@@ -75,32 +79,41 @@ const Home = (props) => {
         setCurrentPage('third');
     };
 
-
     const handleInputChange= (event) => {
         setInputValue(event.target.value);
     };
 
     const handleButtonClick = async () => {
-        setPopupMessage("상품을 검색 중입니다.");
-        setPopupVisible(true);
-        const url = "http://127.0.0.1:8000/v1/search1/"
-        let data = {
-            "query": '"'+ inputValue +'"',
-        };
-        await axios.post(url, data)
-        .then(function (response) {
-            setResult(response.data);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
         
-        setPopupVisible(false);
-        goToSecondPage();
+        if(inputValue){
+            setPopupMessage("상품을 검색 중입니다.");
+            setPopupVisible(true);
+            const url = "http://127.0.0.1:8000/v1/search1/"
+            let data = {
+                "query": '"'+ inputValue +'"',
+            };
+            await axios.post(url, data)
+            .then(function (response) {
+                setResult(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+            
+            setPopupVisible(false);
+            goToSecondPage();
+        } else {
+            setPopupMessage("검색할 상품을 입력하세요");
+            setPopupVisible(true);
+            setTimeout(()=>{
+                handlePopupClose();
+            }, 1000);            
+        }
+
     };
 
     const handlePopupClose = () => {
-        console.log('popup close');
+        // console.log('popup close');
         setPopupVisible(false);
     };
 
@@ -108,8 +121,8 @@ const Home = (props) => {
         <div>
             {currentPage === 'first' && (<FirstPage inputValue={inputValue} handleInputChange={handleInputChange} handleButtonClick={handleButtonClick} popupOn={popupVisible} popupOff={handlePopupClose} message={popupMessage}/>)}
             {currentPage === 'second' && <SecondPage inputValue={inputValue} goToThirdPage={goToThirdPage} result={result} popupOn={popupVisible} popupOff = {handlePopupClose} message={popupMessage}/>}
-            {currentPage === 'third' && <ThirdPage goToForthPage={goToForthPage} result={result} popupOn = {popupVisible} popupOff = {handlePopupClose} message={popupMessage}/>}
-            {currentPage === 'forth' && <ForthPage goToThirdPage={returnThirdPage} result={result} popupOn = {popupVisible} popupOff = {handlePopupClose} message={popupMessage}/>}
+            {currentPage === 'third' && <ThirdPage goToForthPage={goToForthPage} result={res} popupOn = {popupVisible} popupOff = {handlePopupClose} message={popupMessage}/>}
+            {currentPage === 'forth' && <ForthPage goToThirdPage={goToThirdPage} res={res} result={result} goods_url={inputUrl} popupOn = {popupVisible} popupOff = {handlePopupClose} message={popupMessage}/>}
         </div>
     );
 };
@@ -213,9 +226,9 @@ const SecondPage = ({ inputValue, goToThirdPage, result, popupOn, popupOff, mess
 
 // 추천 상품 목록 보여주기
 const ThirdPage = ({goToForthPage, result, popupOn, popupOff, message}) => {
-    localStorage.clear(); //localStorage 안 데이터 전부 삭제
-    localStorage.setItem("imgData", JSON.stringify(imgData));
-
+    // localStorage.clear(); //localStorage 안 데이터 전부 삭제
+    // localStorage.setItem("imgData", JSON.stringify(imgData));
+    
     return(
         <div className={styles.home_container}>
             <div className={styles.homebox1}>
@@ -231,7 +244,7 @@ const ThirdPage = ({goToForthPage, result, popupOn, popupOff, message}) => {
                         </div>
                         <div className={styles.goodsbox2}>
                             <label className={styles.goodsname}>
-                                {item.title.slice(0, 10)}
+                                {item.title.replace(/<\/?b>/g, '').slice(0, 30)}
                             </label>
                             <label className={styles.goodsprice}>
                                 {item.lprice}원
@@ -280,7 +293,7 @@ const imgData = [
 
 
 // 모달창으로 띄워주기
-const ForthPage = ({goToThirdPage, result, popupOn, popupOff, message}) => {
+const ForthPage = ({goToThirdPage, res, result, goods_url, popupOn, popupOff, message}) => {
     const [PopupState, setPopupState] = useState(true);
 
     function OnOffPopup(){
@@ -295,9 +308,10 @@ const ForthPage = ({goToThirdPage, result, popupOn, popupOff, message}) => {
     return (
         <div>
             {popupOn && (<Popup onClose={popupOff} message={message} />)}
-            {PopupState === true?
-            <Slider setPopupState={setPopupState} result={result}/>
-            : <ThirdPage goToForthPage={goToThirdPage} result={result}></ThirdPage>}
+            {/* {PopupState === true? */}
+            <Slider setPopupState={setPopupState} goods_url={goods_url} result={result}/>
+            
+            {/* :<ThirdPage goToForthPage={goToThirdPage} result={res}></ThirdPage>} */}
         </div>
     )
 };
@@ -350,7 +364,7 @@ function CategoryBoxes({result, onItemSelect, selectedItems}) {
             {result.map((item, index) => (
                 // {detail_category.map((item, index) => (
                 <div className={styles.catebox_box1} key={item.category}>
-                    <div className={styles.catebox_index1}>사과의 {item.category}를 추천해주세요(0을 누를 시 생략)</div>
+                    <div className={styles.catebox_index1}>사과의 {item.category}를 추천해주세요</div>
                     <div className={styles.catebox_index2}>
                         {/* <a>선택 안 함 </a> */}
                         {item.cate_lst.map((category, categoryIndex) => (
