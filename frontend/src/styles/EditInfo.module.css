@@ -16,11 +16,12 @@
 
 .page2box2{ width: 360px; height: 450px; background-color: white; margin-left:25px; margin-right:25px; box-shadow: 8px 8px 8px rgba(40, 90, 67, 0.05); border-radius: 12px; position:relative; overflow:hidden; }
 
-.page2box2_img1 { position: relative; background-image: url(../assets/img/img_change.png); background-position: center; background-repeat: no-repeat; background-size: contain; width:100%; height:220px; left:0px; right:0px; }
+.page2box2_img1 { position: relative; background-image: url(../assets/img/img_change.png); background-position: center; background-repeat: no-repeat; background-size: cover; width:100%; background-position: center; height:220px; left:0px; right:0px; }
 
-.page2box2_img2 { position: relative; background-image: url(../assets/img/img_chpw.png); background-position: center; background-repeat: no-repeat; background-size: contain; width:310px; height:220px; left:0px; right:0px; }
 
-.page2box2_img3 { position: relative; background-image: url(../assets/img/img_die.png); background-position: center; background-repeat: no-repeat; background-size: contain; width:310px; height:220px; }
+.page2box2_img2 { position: relative; background-image: url(../assets/img/img_chpw.png); background-position: center; background-repeat: no-repeat; background-size: cover; width:100%; background-position: center; height:220px; left:0px; right:0px; }
+
+.page2box2_img3 { position: relative; background-image: url(../assets/img/img_die.png); background-position: center; background-repeat: no-repeat; background-size: cover; width:100%; background-position: center; height:220px; }
 
 .page2box2_txt1 { position:relative; top:20px; left:30px; height: 30px; font-weight: 700; font-size: 24px; }
 

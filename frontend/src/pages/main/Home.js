@@ -43,7 +43,7 @@ const Home = (props) => {
         };
         await axios.post(url, data)
             .then(function (response) {
-                setResult(response.data);
+                setRes(response.data);
                 setPopupVisible(false);
             })
             .catch(function (error) {

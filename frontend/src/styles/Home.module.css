@@ -1,3 +1,12 @@
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
 .home_container {
     position: relative;
     padding:0px 50px;
@@ -20,11 +29,10 @@
     top:90px;
     position: relative;
     bottom : 0px;
-    width: 75%;
-    height: 80%;
+    width: 85%;
     min-width: 700px;
     min-height: 600px;
-    margin : 30px auto 0px;
+    margin : 30px auto;
 }
 
 .goodsbox {
@@ -64,12 +72,16 @@
     position: absolute;
     display: inline-block;
     white-space: nowrap;
-    left : 20%;
+    left : 5%;
     top: 20%;
     color:#285A43;
     font-size: 32px;
     font-weight: 700;
-}
+    overflow: hidden;   
+    text-overflow: ellipsis;
+    width: 75%;
+    
+    }
 
 .goodsprice{
     position: absolute;
@@ -79,8 +91,8 @@
     top: 40%;
     color:#285A43;
     width: fit-content;
-    font-size: 24px;
-    font-weight: 500;
+    font-size: 32px;
+    font-weight: 700;
 }
 
 .goodsurl{
@@ -180,16 +192,17 @@
     background-color: white;
     border-Radius: 12px;
 }
+
 .home_search_box1 {
         place-items: center start;
         font-Size: 24px;
         border: None;
-        position: relative;
+        position: fixed;
         min-width: 500px;
-        width:65%;
+        width:55%;
         height: 70px;
-        left:150px;
-        top: 150px;
+        left:560px;
+        top: 230px;
     }
 
 .home_button1 {
@@ -370,12 +383,14 @@
 
 .selected { 
     color: red; 
-    font-weight: 700; 
+    font-weight: 700;
+    cursor: pointer; 
 }
 
 .unselected { 
     color: black; 
     font-weight: 100; 
+    cursor: pointer;
 }
 
 
@@ -415,4 +430,7 @@
     top:70%;
     left:50%;
     transform: translate(-50%, -50%);
+    animation: spin 2s linear infinite;
+    transform-origin: center center;
 }
+
