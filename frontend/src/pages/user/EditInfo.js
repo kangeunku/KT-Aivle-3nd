@@ -169,23 +169,23 @@ const SecondPage = ({goToThirdPage, goToFourthPage, goToFifthPage}) => {
     const Hotkey_ed_2 = () => {
         // 핫키 설정
         const keyMap_ed_2 = {
-            space_1_key: '1',
-            space_2_key: 'shift + 2',
-            space_3_key: 'space + 3'
+            space_1_key: 'space+1',
+            space_2_key: 'space+2',
+            space_3_key: 'space+3'
         };
 
         const toNickChange = () => {
-            console.log('space + 1(ed_2)');
+            console.log('1(ed_2)');
             goToThirdPage();
         };
 
         const topwChange = () => {
-            console.log('space + 2(ed_2)');
+            console.log('2(ed_2)');
             goToFourthPage();
         };
 
         const toOut = () => {
-            console.log('space + 3(ed_2)');
+            console.log('3(ed_2)');
             goToFifthPage();
         };
         // 핫키 적용 함수
@@ -325,7 +325,7 @@ const ThirdPage = ({goToSecondPage}) => {
                             onChange={handleNicknameChange}
                             placeholder="새로운 별명을 입력해 주세요"
                         />
-                        <button className={styles.button_main} tabIndex="1" onClick={() => handleButtonClick(`별명이 ${nicknameval}로 변경되었습니다`)}
+                        <button className={styles.button_main} onClick={() => handleButtonClick(`별명이 ${nicknameval}로 변경되었습니다`)}
                             disabled={!isNicknameValid}>
                             변경한다
                         </button>
@@ -401,7 +401,7 @@ const FourthPage = ({goToSecondPage, changeislogin}) => {
         // 핫키 설정
         const keyMap_ed_4 = {
             ctrl_shift_key: 'ctrl+shift',
-            space1_key: 'space+1'
+            space1_key: 'ctrl+alt'
         };
 
         const pwFocus = () => {

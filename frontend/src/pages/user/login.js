@@ -68,7 +68,7 @@ const Login = ({ changeislogn }) => {
     const Hotkey_lg = () => {
         // 핫키 설정
         const keyMap_lg = {
-            space1_key: 'space+1',
+            ctrlshift_key: 'ctrl+shift',
             space2_key: "space+2",
         };
         
@@ -85,7 +85,7 @@ const Login = ({ changeislogn }) => {
 
         // 핫키 적용 함수
         const handlers_lg = {
-            space1_key: idinputClick,
+            ctrlshift_key: idinputClick,
             space2_key: pwinputClick,
         };
         

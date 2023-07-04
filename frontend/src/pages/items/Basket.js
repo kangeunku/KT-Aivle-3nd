@@ -83,40 +83,53 @@ const FirstPage =({goToSecondPage, handleDeleteList, result}) => {
     if(!dataArray){
         console.log()
         return
-    }    
+    }   
     
-    const Hotkey_basket = () => {
+    {dataArray &&
+    console.log(dataArray)}
+    
+    const Hotkey_bs = () => {
         // 핫키 설정
-        const keyMap_b1 = {
+        const keyMap_bs = {
             space1_key: 'space+1',
-            space2_key: "space+2"
+            space2_key: 'space+2',
+            space3_key: 'space+3',
+        };
+        const FirstClick = () => {
+            console.log('space + 1');
+            goToSecondPage(dataArray[0].goods_url);
         };
 
-        const moreClick = () => {
-            console.log('space+1');
-            document.getElementById('more').focus();
-        };
-        const deleteClick = () => {
+        const SecondClick = async () => {
             console.log('space + 2');
-            document.getElementById('delete').focus(); 
-            //모두 동의로 포커스 이동 후 space로 check -> tab 눌러 다음 버튼으로 이동 -> enter
+
+            // await new Promise(resolve => setTimeout(resolve, 30));
+            const secondGoodsUrl = dataArray && dataArray.length > 1 ? dataArray[1].goods_url : 0;
+            console.log(secondGoodsUrl);
+            goToSecondPage(secondGoodsUrl);
+        };
+        const ThirdClick = () => {
+            console.log('space + 3');
+            goToSecondPage(dataArray[2].goods_url);
         };
 
         // 핫키 적용 함수
-        const handlers_b1 = {
-            space1_key: moreClick,
-            space2_key: deleteClick,
+        const handlers_bs = {
+            space1_key: FirstClick,
+            space2_key: SecondClick,
+            space3_key: ThirdClick,
         };
-        
         return (
             <>
-                <GlobalHotKeys keyMap={keyMap_b1} handlers={handlers_b1}>
+                <GlobalHotKeys keyMap={keyMap_bs} handlers={handlers_bs}>
                 </GlobalHotKeys>
             </>
         );
     };
 
     return (
+        <>
+        <Hotkey_bs/>
         <div>
             <div className={styles.bkboxes}>
                 <div className={styles.page2logo2} ></div>
@@ -174,6 +187,7 @@ const FirstPage =({goToSecondPage, handleDeleteList, result}) => {
 
             </div>   
         </div>
+        </>
     )
 }
 

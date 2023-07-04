@@ -99,9 +99,9 @@ const Joinstepone = () => {
     const Hotkey_local_2 = () => {
         // 핫키 설정
         const keyMap_2 = {
-            space1_key: '1',
-            space2_key: "2",
-            space3_key: "3"
+            space1_key: 'space+1',
+            space2_key: "space+2",
+            space3_key: "space+3"
         };
 
         const termClick = () => {
@@ -326,8 +326,8 @@ const Joinsteptwo = ({ changeislogn }) => {
         const Hotkey_local_3 = () => {
             // 핫키 설정
             const keyMap_3 = {
-                space1_key: 'space+1',
-                space2_key: "ctrl+q",
+                ctrlshift_key: 'ctrl+shift',
+                space2_key: "space+2",
                 space3_key: 'space+3',
                 space4_key: "space+4",
                 // enter_key: "alt+ctrl"
@@ -361,7 +361,7 @@ const Joinsteptwo = ({ changeislogn }) => {
     
             // 핫키 적용 함수
             const handlers_3 = {
-                space1_key: idinputClick,
+                ctrlshift_key: idinputClick,
                 space2_key: pwinputClick,
                 space3_key: pwinputClick_,
                 space4_key: nickClick,
@@ -386,22 +386,22 @@ const Joinsteptwo = ({ changeislogn }) => {
                 <div className="step_two_form">
                     <label>
                         <h5> <strong style={{ color: "red" }}>1</strong> 아이디 입력</h5>
-                        <input type="input" className="input_form" value={form.username} onChange={e => { setFrom({ ...form, username: e.target.value }); handleUsernameChange(e); }} placeholder="아이디를 입력해주세요" />
+                        <input type="input" className="input_form" value={form.username} id="id" onChange={e => { setFrom({ ...form, username: e.target.value }); handleUsernameChange(e); }} placeholder="아이디를 입력해주세요" />
                         <p className="input_form_txt" style={{ color: form.username_val ? 'green' : 'red' }}>특수문자 사용 불가, 두 글자 이상 </p>
                     </label>
                     <label>
                         <h5> <strong style={{ color: "red" }}>2</strong> 비밀번호 입력 </h5>
-                        <input type="password" className="input_form" value={form.password} onChange={e => { setFrom({ ...form, password: e.target.value }); handleUserpwChange(e); }} placeholder="비밀번호를 입력해주세요" />
+                        <input type="password" className="input_form" id="pw1" value={form.password} onChange={e => { setFrom({ ...form, password: e.target.value }); handleUserpwChange(e); }} placeholder="비밀번호를 입력해주세요" />
                         <p className="input_form_txt" style={{ color: form.password_val ? 'green' : 'red' }}>4글자 이상으로 </p>
                     </label>
                     <label>
                         <h5> <strong style={{ color: "red" }}>3</strong> 비밀번호 확인 </h5>
-                        <input type="password" className="input_form" value={form.password2} onChange={e => { setFrom({ ...form, password2: e.target.value }); handleUserpw2Change(e); }} placeholder="비밀번호를 다시한번 입력해주세요" />
+                        <input type="password" className="input_form" id="pw2" value={form.password2} onChange={e => { setFrom({ ...form, password2: e.target.value }); handleUserpw2Change(e); }} placeholder="비밀번호를 다시한번 입력해주세요" />
                         <p className="input_form_txt" style={{ color: form.password2_val ? 'green' : 'red' }}>앞과 일치하게 입력해주세요 </p>
                     </label>
                     <label>
                         <h5> <strong style={{ color: "red" }}>4</strong> 별명 입력 </h5>
-                        <input type="input" className="input_form" value={form.nickname} onChange={e => { setFrom({ ...form, nickname: e.target.value }); handleNicknameChange(e); }} placeholder="별명을 입력해주세요" />
+                        <input type="input" className="input_form" id="nick" value={form.nickname} onChange={e => { setFrom({ ...form, nickname: e.target.value }); handleNicknameChange(e); }} placeholder="별명을 입력해주세요" />
                         <p className="input_form_txt" style={{ color: form.nickname_val ? 'green' : 'red' }}>한국어로만 입력해주세요 </p>
                     </label>
                 </div>

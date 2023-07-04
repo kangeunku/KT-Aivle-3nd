@@ -198,15 +198,15 @@ const SecondPage = ({ inputValue, goToThirdPage, result, popupOn, popupOff, mess
     const Hotkey_h2 = () => {
         // 핫키 설정
         const keyMap_h2 = {
-            enter_key: 'space+1',
+            space_key: 'space',
         };
         const nextClick = () => {
-            console.log('space + 1');
-            document.getElementById('next').focus();
+            console.log('space');
+            document.getElementById("goNext").focus();
         };
         // 핫키 적용 함수
         const handlers_h2 = {
-            enter_key: nextClick,
+            space_key: nextClick,
         };
         return (
             <>
@@ -232,7 +232,7 @@ const SecondPage = ({ inputValue, goToThirdPage, result, popupOn, popupOff, mess
                     </div>
                 </div>
                 <div>
-                    <button className={styles.home_button2} id="next" onClick={() => goToThirdPage(selectedItems)} alt="상품추천으로 이동하는 버튼">
+                    <button className={styles.home_button2} id="goNext" onClick={() => goToThirdPage(selectedItems)} alt="상품추천으로 이동하는 버튼">
                         <div>다음</div>
                     </button>
                 </div>
