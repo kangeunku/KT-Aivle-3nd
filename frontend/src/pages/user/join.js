@@ -434,7 +434,7 @@ const Joinsteptwo = ({ changeislogn }) => {
             );
         };
 
-        const ttsjoinform = `조인폼이다 이좌식아
+        const ttsjoinform = `회원가입페이지 입니다. 탭키를 눌러 진입하여 입력하여주세요.
         아이디는 ${form.username ==''? "빈칸" : form.username}으로 입력하셨습니다.
         비밀번호는 ${form.password ==''? "빈칸" : form.password}으로 입력하셨습니다.
         비밀번호 확인은  ${form.password2 ==''? "빈칸" : form.password2}으로 입력하셨습니다.
