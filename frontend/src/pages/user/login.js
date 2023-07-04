@@ -11,6 +11,10 @@ import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
 
 const Login = ({ changeislogn }) => {
     const [cookies, setCookie, removeCookie] = useCookies(['usercookie']);
+    
+    const [popupVisible, setPopupVisible] = useState(false);
+    const [popupMessage, setPopupMessage] = useState("");
+
     const[form, setFrom] = useState({
         "username": "",
         "password": "",
@@ -19,17 +23,12 @@ const Login = ({ changeislogn }) => {
     });
 
     const navigate = useNavigate();
-
-
+    
     const join_btn = async () => {
-        const url = "http://127.0.0.1:8000/v1/login/"
+        try {
+            const url = "http://127.0.0.1:8000/v1/login/"
 
-        await axios.post(url, form, {withCredentials: true})
-        .then(function (response) {
-            // setResult(JSON.stringify(response.data))
-            // setResult(response.data);
-            // console.log(response);
-            // console.log(JSON.stringify(response.statusText));
+            const response = await axios.post(url, form, {withCredentials: true});
             const res = JSON.stringify(response.statusText);
             
             // 나중에 닉네임 전달받으면 넣어줄것
@@ -39,16 +38,23 @@ const Login = ({ changeislogn }) => {
             setCookie('usercookieid', form.username, { path: '/' });
             
             // 로그인 처리및 홈이동
+            setPopupMessage("로그인이 성공했습니다.");
+            console.log(res);
+            setPopupVisible(true);
+            setTimeout(()=>{
+                handlePopupClose();
+            }, 2000);
+            changeislogn(true);
+            navigate('/home');
             
-            if(res === '"OK"'){
-                changeislogn(true);
-                navigate('/home');
-            }
-            
-        })
-        .catch(function (error) {
+        } catch (error) {
+            setPopupMessage("로그인에 실패했습니다. 아이디와 비밀번호를 확인해 주세요.");
+            setPopupVisible(true);
+            setTimeout(()=>{
+                handlePopupClose();
+            }, 2000);
             console.log(error);
-        })   
+        }
     };
 
     const handleUsernameChange = (e) => {
@@ -71,7 +77,6 @@ const Login = ({ changeislogn }) => {
             space1_key: 'space+1',
             space2_key: "space+2",
         };
-        
 
         const idinputClick = () => {
             console.log('space + 1');            
@@ -96,6 +101,12 @@ const Login = ({ changeislogn }) => {
             </>
         );
     };
+
+    
+    const handlePopupClose = () => {
+        setPopupVisible(false);
+    };
+
     return (
         <>
             {/* <h2 className="subtitle_join">
@@ -126,14 +137,23 @@ const Login = ({ changeislogn }) => {
                 {/* <link to="/home" className="next_step_btn">로그인</link> */}
             </div>
             <button className="next_step_btn" onClick={()=> {join_btn()}} disabled={!isAllFieldsValid}> 
-                <strong style={{color:"red"}}>0</strong> 로그인
+                <div>로그인</div>
             </button>
             {/* setId() */}
-            
+            {popupVisible && (<Popup onClose={handlePopupClose} message={popupMessage} />)}
         </>
     );
     
 }
+
+const Popup = ({ onClose, message }) => {
+    return (
+        <div className="popup1">
+            <div className="popup1_txt">{message}</div>
+            <div className="popup1_lgimg"></div>
+        </div>
+    );
+};
 
 // export default Input;
 

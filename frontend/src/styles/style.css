@@ -73,6 +73,44 @@ li.active_list > a {color: var(--background-green); font-weight: 700;}
 .logosl_3 { background-image: url(../assets/img/logosl_3.png);  width:100%; height:80%; min-width: 60%; min-height: 48%; object-fit: cover; box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);}
 .logosl_4 { background-image: url(../assets/img/logosl_4.png);  width:100%; height:80%; min-width: 60%; min-height: 48%; object-fit: cover; box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);}
 
+.popup1 {
+    position: fixed;
+    background-color: rgba(255, 255, 255, 0.90);
+    border-radius: 5px;
+    width:500px;
+    height:200px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+}
+
+.popup1_txt {
+    position: fixed;
+    color: #191919;
+    top: 35%;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 160%;
+    text-align: center;
+}
+
+.popup1_lgimg {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    background-image: url(../assets/img/foot.png);
+    background-repeat: no-repeat;
+    top:70%;
+    left:50%;
+    transform: translate(-50%, -50%);
+}
+
 @keyframes close {
     from {
         opacity: 1;

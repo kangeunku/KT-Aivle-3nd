@@ -302,19 +302,7 @@ const ThirdPage = ({goToForthPage, result, popupOn, popupOff, message}) => {
                             <label className={styles.goodsprice}>
                                 {item.lprice}원
                             </label>
-                            {/* <label className={styles.goodsscore}>
-                                <strong>5점</strong> <StarRating score={3.5} />
-                            </label> */}
-                            <button className={styles.goodsurl} onClick={() => { goToForthPage(item.link) }}>
-                                구매하기
-                            </button>
                             {popupOn && (<Popup onClose={popupOff} message={message} />)}
-                            {/* <button onClick={() => handleButtonClick("선택")}>
-                                    <div>구매하기</div>
-                                </button>
-                                {popupVisible && (
-                                <Popup onClose={handlePopupClose} message={popupMessage} />
-                                )} */}
                         </div>
                     </div>
                 ))}
