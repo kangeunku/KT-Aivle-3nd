@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from ..models import CustomToken, Users
+from ..models import Users
 from ..serializers import UsersSerialize
 
 from django.utils.decorators import method_decorator
@@ -99,5 +99,4 @@ class DeleteUserAPI(APIView):
         user.save()
         # 로그아웃 처리 및 토큰 삭제(탈퇴한 회원의 토큰은 custom token 테이블에 저장될 필요가 없다고 판단)
         logout(request)
-        CustomToken.objects.filter(user=user).delete()
         return Response({'status': 'success'})

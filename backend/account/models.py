@@ -13,7 +13,3 @@ class Users(AbstractUser):
     nickname = models.TextField(max_length = 50, help_text = "사용자 닉네임", validators=[nickname_valid])
     use_yn = models.CharField(max_length=2, default = 'y', help_text="사용여부") # y, n,
     pass
-
-class CustomToken(models.Model):
-    user = models.OneToOneField(Users, on_delete=models.CASCADE)
-    token = models.CharField(max_length=500)

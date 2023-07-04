@@ -19,7 +19,7 @@ const Resultpopup = styled.div`
     justify-content:center;
 `;
 
-const modal = forwardRef((props, ref) =>{
+const modal_ = forwardRef((props, ref) =>{
   let wrapperRef = useRef(); //모달창 가장 바깥쪽 태그를 감싸주는 역할
 
     useEffect(()=>{
@@ -30,13 +30,13 @@ const modal = forwardRef((props, ref) =>{
     })
     const handleClickOutside=(event)=>{
       if (wrapperRef && !wrapperRef.current.contains(event.target)) {
-        props.setModalState(false);
+        props.setModal_State(false);
       }
     }
 
     function BtnEvent(){
       //alert('모달창 내부 작업을 해도 모달창이 꺼지지 않습니다.');
-      props.setModalState(false);
+      props.setModal_State(false);
     }
 
       return (
@@ -45,9 +45,7 @@ const modal = forwardRef((props, ref) =>{
             <br></br>
             <p 
             style={{textAlign:"center", color:"#008080",
-            fontSize:30, fontWeight:600,  }}> 서비스 이용약관</p>
-
-        
+            fontSize:30, fontWeight:600,  }}> 서비스 이용약관22</p>
 
 
             <button 
@@ -76,4 +74,4 @@ const modal = forwardRef((props, ref) =>{
   
 });
 
-export default modal;
+export default modal_;
