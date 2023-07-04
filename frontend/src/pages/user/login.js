@@ -117,10 +117,10 @@ const Login = ({ changeislogn }) => {
             </>
         );
     };
-    const ttslogin =`로그인이다 이좌식아.
+    const ttslogin =`로그인페이지입니다. 탭을 이용하여 아이디와 비밀번호 창에 접근하여주세요.
     아이디는 ${form.username ==''? "빈칸" : form.username}으로 입력하셨습니다.
     비밀번호는 ${form.password ==''? "빈칸" : form.password}으로 입력하셨습니다.
-    
+    재 확인이 필요하시면 쉬프트와 디버튼을 입력한후 쉬프트와 큐버튼을 동시에 입력하여주세요.
     `;
     return (
         <>
