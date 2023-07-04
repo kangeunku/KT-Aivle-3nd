@@ -47,6 +47,8 @@ const modal = forwardRef((props, ref) =>{
             style={{textAlign:"center", color:"#008080",
             fontSize:30, fontWeight:600,  }}> 서비스 이용약관</p>
 
+        
+
 
             <button 
               style ={{

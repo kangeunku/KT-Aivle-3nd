@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import Modal from "./modal.js"
-// import {Hotkey_start} from "../../components/common/common.js"
+import Modal_ from "./modal_.js"
+
 import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
-// import {local_Hotkey} from './join';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -78,7 +78,8 @@ const Join = ({ changeislogn }) => {
 
 const Joinstepone = () => {
     const [ModalState, setModalState] = useState('false'); //모달창의 상태를 보관해 둘 useState입니다.
-
+    const [Modal_State, setModal_State] = useState('false');
+    
     function OnOffModal() { //모달창 상태를 변경하는 함수입니다.
         if (ModalState === true) {
             setModalState(false);
@@ -86,28 +87,44 @@ const Joinstepone = () => {
             setModalState(true);
         }
     }
-    // 핫키 생성
+
+    function OnOffModal_() {
+        if (Modal_State === true) {
+            setModal_State(false);
+        } else {
+            setModal_State(true);
+        }
+    }
+        // 핫키 생성
     const Hotkey_local_2 = () => {
         // 핫키 설정
         const keyMap_2 = {
-            space1_key: 'space+1',
-            space2_key: "space+2"
+            space1_key: '1',
+            space2_key: "2",
+            space3_key: "3"
         };
 
         const termClick = () => {
             console.log('space+1');
             OnOffModal();
         };
+
+        const term2Click = () => {
+            console.log('space+2');
+            OnOffModal_();
+        };
+
         const checkboxClick = () => {
-            console.log('space + w');
-            document.getElementById('Allcheckbox').focus(); 
+            console.log('space + 3');
+            document.getElementById('AllCheckBox').focus(); 
             //모두 동의로 포커스 이동 후 space로 check -> tab 눌러 다음 버튼으로 이동 -> enter
         };
 
         // 핫키 적용 함수
         const handlers_2 = {
             space1_key: termClick,
-            space2_key: checkboxClick,
+            space2_key: term2Click,
+            space3_key: checkboxClick,
         };
 
         return (
@@ -173,26 +190,32 @@ const Joinstepone = () => {
             </div>
             <ul className="terms_list">
                 <li>
-                    {dataLists.map((list) => (
-                        <div style={{ margin: 20 }}>
-                            <label for={list.id}>{list.data}</label>
-                            <input
-                                id={list.id}
-                                key={list.id}
-                                type="checkbox"
-                                className="check_terms"
-                                onChange={(e) => onCheckedElement(e.target.checked, list)}
-                                checked={checkedList.includes(list.id) ? true : false}
-                            />
-                            <button className="terms_show_btn" onClick={OnOffModal}>전문 보기</button>
-                            {ModalState === true && (
-                                <Modal
-                                    title={list.id === 1 ? "서비스 이용약관" : "개인정보 수집 및 이용에 대한 동의 안내"}
-                                    termsData={list.id === 1 ? termsData1 : termsData2}
-                                    setModalState={setModalState}
-                                />
-                            )}
-                        </div>
+                {dataLists.map((list) => (
+                    
+                    <div style={{
+                        margin:20
+                    }}>
+                        <label for={list.id}>{list.data}</label>
+                        <input
+                            id={list.id}
+                            key={list.id}
+                            type="checkbox"
+                            className="check_terms"
+                            onChange={(e) => onCheckedElement(e.target.checked, list)}
+                            checked={checkedList.includes(list.id) ? true : false}
+                        />
+                         {list.id === 1?
+                            (<>
+                                <button className="terms_show_btn" onClick={OnOffModal}>전문 보기</button>
+                                    {ModalState === true ? //모달 상태가 true면 1번, false면 2번이 작동합니다.
+                                    <Modal setModalState={setModalState}/> : ""}
+                                </>)
+                            :(<>
+                                <button className="terms_show_btn" onClick={OnOffModal_}>전문 보기</button>
+                                    {Modal_State === true ? //모달 상태가 true면 1번, false면 2번이 작동합니다.
+                                    <Modal_ setModal_State={setModal_State}/> : ""}
+                            </>)}
+                    </div>
 
                     ))
                     }
@@ -214,7 +237,7 @@ const Joinstepone = () => {
                     <Modal setModalState={setModalState}/> : ""}
                 </li> */}
                 <li>
-                    <input type="checkbox" className="check_terms"
+                    <input type="checkbox" className="check_terms" id="AllCheckBox"
                         onChange={(e) => onCheckedAll(e.target.checked)}
                         checked={
                             checkedList.length === 0
@@ -354,6 +377,7 @@ const Joinsteptwo = ({ changeislogn }) => {
         };
     return (
         <>
+            <Hotkey_local_3/>
             <div className="choice_tab">
                 <h3 className="welcome">
                     개인정보 입력

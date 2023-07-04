@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, forwardRef } from "react";
 import styles from "../styles/Slider.module.css";
 import axios from "axios";
+import { GlobalHotKeys } from "react-hotkeys";
 
 const select_boxes = {
   0: {
@@ -230,9 +231,44 @@ const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
   //팝업 열고 닫기
   let wrapperRef = useRef();
 
-  return (
-    <div className={styles.resultpopup} ref={wrapperRef}>
+  const Hotkey_s = () => {
+    // 핫키 설정
+    const keyMap_s = {
+        space1_key: 'space+1',
+        space2_key: 'space+2',
+        space3_key: 'space+3',
+    };
+    const buyClick = () => {
+        console.log('space + 1');
+        document.getElementById("buy").focus();
+      };
 
+    const closeClick = () => {
+        console.log('space + 2');
+        document.getElementById("close").focus();
+    };
+    const cartClick = () => {
+        console.log('space + 3');
+        document.getElementById("cart").focus();
+    };
+
+    // 핫키 적용 함수
+    const handlers_s = {
+        space1_key: buyClick,
+        space2_key: closeClick,
+        space3_key: cartClick,
+    };
+    return (
+        <>
+            <GlobalHotKeys keyMap={keyMap_s} handlers={handlers_s}>
+            </GlobalHotKeys>
+        </>
+    );
+  };  
+  return (
+
+    <div className={styles.resultpopup} ref={wrapperRef}>
+      <Hotkey_s/>
       <span className={styles.popuptxt}>이미지 안내</span>
 {/*메인 슬라이드 */}
       <session className={`${styles.box} ${styles.box1}`}>
@@ -339,9 +375,9 @@ const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
 
 {/* 버튼들 */}
       <session className={`${styles.box} ${styles.box5}`}>
-        <button className={styles.button}> 구매하기 </button>
-        <button className={styles.button} onClick={goToPage}> 닫기 </button>
-        <button className={styles.button} onClick={BtnEvent}> 찜하기 </button>
+        <button className={styles.button} id="buy">  구매하기 </button>
+        <button className={styles.button} id="close" onClick={goToPage}> 닫기 </button>
+        <button className={styles.button} id="cart" onClick={BtnEvent}> 찜하기 </button>
       </session>
       {popupVisible && (<Popup onClose={handlePopupClose} message={popupMessage} />)}
     </div>
