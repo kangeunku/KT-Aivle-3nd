@@ -263,14 +263,18 @@ const Joinstepone = () => {
                                 onChange={(e) => onCheckedElement(e.target.checked, list)}
                                 checked={checkedList.includes(list.id) ? true : false}
                             />
-                            <button className="terms_show_btn" onClick={OnOffModal}>전문 보기</button>
-                            {ModalState === true && (
-                                <Modal
-                                    title={list.id === 1 ? "서비스 이용약관" : "개인정보 수집 및 이용에 대한 동의 안내"}
-                                    termsData={list.id === 1 ? termsData1 : termsData2}
-                                    setModalState={setModalState}
-                                />
-                            )}
+                            {list.id === 1?
+                            (<>
+                                <button className="terms_show_btn" onClick={OnOffModal}>전문 보기</button>
+                                    {ModalState === true ? //모달 상태가 true면 1번, false면 2번이 작동합니다.
+                                    <Modal setModalState={setModalState}/> : ""}
+                                </>)
+                            :(<>
+                                <button className="terms_show_btn" onClick={OnOffModal_}>전문 보기</button>
+                                    {Modal_State === true ? //모달 상태가 true면 1번, false면 2번이 작동합니다.
+                                    <Modal_ setModal_State={setModal_State}/> : ""}
+                            </>)}
+                            
                         </div>
 
                     ))
