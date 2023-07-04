@@ -4,6 +4,7 @@ import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import {  Home } from "../../pages";
 import {  Header } from "../../components";
 import { useCookies } from 'react-cookie';
+import { TextToSpeech } from "../../components";
 
 import axios from "axios";
 
@@ -14,6 +15,8 @@ const Login = ({ changeislogn }) => {
     
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
+
+    const [starttts, setstarttts] = useState(false);
 
     const[form, setFrom] = useState({
         "username": "",
@@ -30,11 +33,11 @@ const Login = ({ changeislogn }) => {
 
             const response = await axios.post(url, form, {withCredentials: true});
             const res = JSON.stringify(response.statusText);
-            
-            // 나중에 닉네임 전달받으면 넣어줄것
-            let cookie_name = "사과"
 
-            setCookie('usercookienickname', cookie_name, { path: '/' });
+            // 나중에 닉네임 전달받으면 넣어줄것
+            // let cookie_name = "사과"
+
+            setCookie('usercookienickname',response.data.nickname, { path: '/' });
             setCookie('usercookieid', form.username, { path: '/' });
             
             // 로그인 처리및 홈이동
@@ -69,6 +72,12 @@ const Login = ({ changeislogn }) => {
         setFrom({ ...form, password, password_val: isValidUserpw });
     };
 
+       // 오디오중지
+    const handleAudio = () => {
+        const audioElement = document.querySelector("audio");
+        audioElement.pause();
+    };
+
     const isAllFieldsValid = form.username_val && form.password_val;
     // 핫키 생성
     const Hotkey_lg = () => {
@@ -76,6 +85,8 @@ const Login = ({ changeislogn }) => {
         const keyMap_lg = {
             space1_key: 'space+1',
             space2_key: "space+2",
+            jointts: 'shift+q',
+            stoptts: 'shift+d',
         };
 
         const idinputClick = () => {
@@ -88,10 +99,20 @@ const Login = ({ changeislogn }) => {
             document.getElementById('pw').focus();
         };
 
+        const jointtsClick = () => {
+            setstarttts(true)
+        }
+        const stop_tts = () => {
+            setstarttts(false)
+            handleAudio();
+        }
+
         // 핫키 적용 함수
         const handlers_lg = {
             space1_key: idinputClick,
             space2_key: pwinputClick,
+            jointts: jointtsClick,
+            stoptts: stop_tts,
         };
         
         return (
@@ -107,6 +128,11 @@ const Login = ({ changeislogn }) => {
         setPopupVisible(false);
     };
 
+    const ttslogin =`로그인페이지입니다. 탭을 이용하여 아이디와 비밀번호 창에 접근하여주세요.
+    아이디는 ${form.username ==''? "빈칸" : form.username}으로 입력하셨습니다.
+    비밀번호는 ${form.password ==''? "빈칸" : form.password}으로 입력하셨습니다.
+    재 확인이 필요하시면 쉬프트와 디버튼을 입력한후 쉬프트와 큐버튼을 동시에 입력하여주세요.
+    `;
     return (
         <>
             {/* <h2 className="subtitle_join">
@@ -140,7 +166,7 @@ const Login = ({ changeislogn }) => {
                 <div>로그인</div>
             </button>
             {/* setId() */}
-            {popupVisible && (<Popup onClose={handlePopupClose} message={popupMessage} />)}
+            {popupVisible && (<Popup onClose={handlePopupClose} message={popupMessage} />)}{starttts && <TextToSpeech value={ttslogin} />} 
         </>
     );
     

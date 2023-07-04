@@ -4,6 +4,8 @@ import styles from "../../styles/Home.module.css";
 import Slider from "../Slider";
 import axios from "axios";
 import { GlobalHotKeys } from "react-hotkeys";
+import { TextToSpeech } from "../../components";
+import { getCookie } from '../../components/common/csrftoken';
 
 const Home = (props) => {
     const [currentPage, setCurrentPage] = useState('first');
@@ -14,6 +16,12 @@ const Home = (props) => {
 
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
+
+    const [starttts, setstarttts] = useState(false);
+
+    useEffect(() => {
+        setstarttts(true)
+    });
 
 
     // 동일한 링크를 클릭시 처음화면으로 초기화
@@ -54,6 +62,7 @@ const Home = (props) => {
     }
 
     const goToForthPage = async (goods_url) => {
+        // goods_url.replace('"','')
         setPopupMessage("상품을 분석 중입니다.");
         setPopupVisible(true);
         try {
@@ -131,8 +140,17 @@ const Home = (props) => {
         setPopupVisible(false);
     };
 
+    const homettsstart =`
+        환영합니다. ${getCookie("usercookienickname")} 님!
+        현재페이지는 메인페이지입니다.
+        메인페이지 이동은 스페이스바와 큐키를 입력하세요.
+        찜목록페이지는 스페이스바와 더블유키를 입력하세요.
+        회원정보수정은 스페이스바와 영문이를 입력하세요.
+        고객센터는 스페이스바와 알을 입력하세요.
+    `;
     return (
         <div>
+            {starttts && <TextToSpeech value={homettsstart} />} 
             {currentPage === 'first' && (<FirstPage inputValue={inputValue} handleInputChange={handleInputChange} handleButtonClick={handleButtonClick} popupOn={popupVisible} popupOff={handlePopupClose} message={popupMessage}/>)}
             {currentPage === 'second' && <SecondPage inputValue={inputValue} goToThirdPage={goToThirdPage} result={result} popupOn={popupVisible} popupOff = {handlePopupClose} message={popupMessage}/>}
             {currentPage === 'third' && <ThirdPage goToForthPage={goToForthPage} result={res} popupOn = {popupVisible} popupOff = {handlePopupClose} message={popupMessage}/>}
@@ -142,19 +160,42 @@ const Home = (props) => {
 };
 
 const FirstPage = ({ inputValue, handleInputChange, handleButtonClick, popupOn, popupOff, message }) => {
+    const [serchtts, setserchtts] = useState(false);
+       // 오디오중지
+    const handleAudio = () => {
+        const audioElement = document.querySelector("audio");
+        audioElement.pause();
+    };
+
     // 핫키 생성
     const Hotkey_h1 = () => {
         // 핫키 설정
         const keyMap_h1 = {
-            ctrlshift_key: 'ctrl+shift'
+            ctrlshift_key: 'ctrl+shift',
+            searchtts: 'shift+q',
+            stoptts: 'shift+d',
         };
+
         const inputClick = () => {
             console.log('ctrl + shift');
             document.getElementById('search_input').focus();
         };
+
+        const searchttsClick = () => {
+            console.log("searchfirst")
+            setserchtts(true)
+        }
+
+        const stopttsClick = () => {
+            console.log("stopfirst")
+            setserchtts(false)
+            handleAudio()
+        }
         // 핫키 적용 함수
         const handlers_h1 = {
             ctrlshift_key: inputClick,
+            searchtts: searchttsClick,
+            stoptts: stopttsClick
         };
         return (
             <>
@@ -165,10 +206,17 @@ const FirstPage = ({ inputValue, handleInputChange, handleButtonClick, popupOn, 
 
     const isInputEmpty = inputValue.trim() === '';
 
+    const searchtts = `
+        검색기능입니다. 원하시는 상품명을 검색하여주세요.
+        현재 작성하는 내용은 ${inputValue ==''? "빈칸" : inputValue} 로 입력하였습니다.
+    `
+
     return (
         <>
         <Hotkey_h1/>
         <div className={styles.home_container}>
+            <Hotkey_h1 />
+            {serchtts && <TextToSpeech value={searchtts} />} 
             <div className={styles.homebox1}>
                 <div className={styles.page2logo2} ></div>
                 <div className={styles.homebox11}>상품 검색</div>
@@ -186,6 +234,8 @@ const FirstPage = ({ inputValue, handleInputChange, handleButtonClick, popupOn, 
 const SecondPage = ({ inputValue, goToThirdPage, result, popupOn, popupOff, message }) => {
     const [selectedItems, setSelectedItems] = useState([]);
 
+    const [secondtts, setsecondtts] = useState(false);
+
     const handleItemClick = (category) => {
         // console.log('handleItemClick', category);
         if (selectedItems.includes(category)) {
@@ -195,19 +245,36 @@ const SecondPage = ({ inputValue, goToThirdPage, result, popupOn, popupOff, mess
         }
     };
 
+    const handleAudio = () => {
+        const audioElement = document.querySelector("audio");
+        audioElement.pause();
+    };
+
     // 핫키 생성
     const Hotkey_h2 = () => {
         // 핫키 설정
         const keyMap_h2 = {
             enter_key: 'space+1',
+            secondtts: 'shift+q',
+            stoptts: 'shift+d',
         };
         const nextClick = () => {
-            console.log('space + 1');
             document.getElementById('next').focus();
         };
+
+        const stop_tts = () => {
+            setsecondtts(false)
+            handleAudio();
+        }
+
+        const secondttsClick = () => {
+            setsecondtts(true)
+        }
         // 핫키 적용 함수
         const handlers_h2 = {
             enter_key: nextClick,
+            secondtts: secondttsClick,
+            stoptts: stop_tts,
         };
         return (
             <>
@@ -216,9 +283,15 @@ const SecondPage = ({ inputValue, goToThirdPage, result, popupOn, popupOff, mess
             </>
         );
     };
+    const ttssecondsearch = `
+        아래의 카테고리가 있습니다. 탭을눌러 선택하여주세요.
+        현재 선택한 카테고리들은 ${selectedItems ==''? "빈칸" : selectedItems} 입니다.
+        검색을 원하시면 다음 버튼을 클릭하여주세요.
+    `
     return (
         <>
             <Hotkey_h2 />
+		    {secondtts && <TextToSpeech value={ttssecondsearch} />}
             <div className={styles.home_container2}>
                 <div className={styles.home_search_contained}>
                     <div className={styles.home_search_box2} >
@@ -247,44 +320,77 @@ const SecondPage = ({ inputValue, goToThirdPage, result, popupOn, popupOff, mess
 const ThirdPage = ({goToForthPage, result, popupOn, popupOff, message}) => {
     // localStorage.clear(); //localStorage 안 데이터 전부 삭제
     // localStorage.setItem("imgData", JSON.stringify(imgData));
+    console.log(result)
+    const [thrdtts, setthrdtts] = useState(false);
+
+    const handleAudio = () => {
+        const audioElement = document.querySelector("audio");
+        audioElement.pause();
+    };
+
     const Hotkey_h3 = () => {
         // 핫키 설정
         const keyMap_h3 = {
-            space1_key: 'space+1',
-            space2_key: 'space+2',
-            space3_key: 'space+3',
+            secondtts: 'shift+q',
+            stoptts: 'shift+d',
+            itemfirst: 'space+1',
+            itemsecond: 'space+2',
+            itemthrd: 'space+3',
         };
-        const FirstClick = () => {
-            console.log('space + 1');
-            goToForthPage(result[0].link);
-        };
+        
+        const stop_tts = () => {
+            setthrdtts(false)
+            handleAudio();
+        }
 
-        const SecondClick = () => {
-            console.log('space + 2');
-            goToForthPage(result[1].link);
-        };
-        const ThirdClick = () => {
-            console.log('space + 3');
-            goToForthPage(result[2].link);
-        };
+        const thrdClick = () => {
+            setthrdtts(true)
+        }
+
+        const firstitemClick = () => {
+            console.log(result[0].link)
+            goToForthPage(result[0].link)
+        }
+        
+        const seconditemClick = () => {
+            console.log(result[1].link)
+            goToForthPage(result[1].link)
+        }
+        
+        const thrditemClick = () => {
+            console.log(result[2].link)
+            goToForthPage(result[2].link)
+        }
 
         // 핫키 적용 함수
         const handlers_h3 = {
-            space1_key: FirstClick,
-            space2_key: SecondClick,
-            space3_key: ThirdClick,
+            secondtts: thrdClick,
+            stoptts: stop_tts,
+            itemfirst: firstitemClick,
+            itemsecond: seconditemClick,
+            itemthrd: thrditemClick,
         };
         return (
             <>
-                <GlobalHotKeys keyMap={keyMap_h3} handlers={handlers_h3}>
-                </GlobalHotKeys>
+                <GlobalHotKeys keyMap={keyMap_h3} handlers={handlers_h3}></GlobalHotKeys>
             </>
         );
-    };
+    }
+
+
+    let ttsthrdsearch = "3가지 상품을 추천드립니다."
+
+    for( let i in result){
+        ttsthrdsearch += `${i+1}번째 상품은 ${result[i].title} 입니다. 가격은 ${result[i].lprice} 입니다.`
+    }
+    ttsthrdsearch += `상품 선택을 원하시면 스페이스바와 원하시는 상품의 번째를 동시에 눌러주십시오.`
+
     return(
         <>
         <Hotkey_h3/>
         <div className={styles.home_container}>
+            <Hotkey_h3 />
+            {thrdtts && <TextToSpeech value={ttsthrdsearch} />}
             <div className={styles.homebox1}>
                 <div className={styles.page2logo2} ></div>
                 <div className={styles.homebox11}>추천 상품</div>

@@ -40,7 +40,7 @@ const Header = ({ changeislogn }) => {
     );
   };
   useEffect(() => {
-    setnameState(getCookie("usercookieid"))
+    setnameState(getCookie("usercookienickname"))
   }, []);
 
     return (
