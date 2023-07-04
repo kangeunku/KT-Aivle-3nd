@@ -2,8 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 
 import { Home, Basket, EditInfo, Support, Choicelogin, Test } from "./pages";
-import { Header } from "./components";
-
+import { Header,TextToSpeech } from "./components";
 
 import { GlobalHotKeys } from 'react-hotkeys';
 // import getCookie from "./components/common/csrftoken"
@@ -204,8 +203,23 @@ const App = () => {
 // 레이어팝업 영역
 const Popup = ({ handleClose }) => {
   const modalRef = useRef(null);
+  const [starttts, setstarttts] = useState(false);
+  const ref_tts = useRef(starttts);
+
+  const ttsStart = () => {
+    ref_tts.current = true;
+  };
+
+  useEffect(() => {
+    ttsStart();
+    setstarttts(ref_tts.current);
+  }, []);
 
   const closeWithAnimation = () => {
+    handleAudio();
+    ref_tts.current = false;
+    setstarttts(ref_tts.current);
+  
     if (modalRef.current) {
       modalRef.current.classList.add("closing");
       setTimeout(() => {
@@ -219,14 +233,22 @@ const Popup = ({ handleClose }) => {
     // 핫키 설정
     const keyMap_modal = {
       enter_key: 'enter',
+      tts_stop: 'space+s',
     };
+
     const closeClick = () => {
       console.log('enter');
       closeWithAnimation();
     };
+
+    const stoptts = () => {
+      handleAudio();
+    }
+
     // 핫키 적용 함수
     const handlers_modal = {
       enter_key: closeClick,
+      tts_stop: stoptts,
     };
     return (
       <>
@@ -234,6 +256,11 @@ const Popup = ({ handleClose }) => {
         </GlobalHotKeys>
       </>
     );
+  };
+
+  const handleAudio = () => {
+    const audioElement = document.querySelector("audio");
+    audioElement.pause();
   };
 
   //로고슬라이드
@@ -255,6 +282,14 @@ const Popup = ({ handleClose }) => {
     };
   }, []);
 
+  const tts_content =`
+  음성 기반 온라인 쇼핑 안내 도우미 오~소리입니다!
+  복잡한 온라인 쇼핑 과정을 간단하게 바꾸고 싶다면?  ARS를 통한 음성인식 쇼핑 도우미인 오소리를 이용해보세요
+  상품 이미지 정보에 대한 대체 텍스트 제공과 요약으로 쇼핑에 꼭 필요한 정보를 전달드립니다! 상품 검색부터 
+  상품 상세 옵션 선택까지 모든 서비스를 음성으로 이용해보세요! 음성 ARS는 안내 음성 마지막에 제공됩니다. 
+  a 키를 누르면 현재 페이지를 알 수 있습니다. 다시 듣고 싶으면 1번을, 오소리를 이용하시려면 2번을 눌러주세요.
+  `
+
   return (
     <>
       <Hotkey_modal />
@@ -274,7 +309,10 @@ const Popup = ({ handleClose }) => {
               alt={`Slide ${activeSlide + 1}`}
             />
           </div>
-          <button onClick={closeWithAnimation} className="start_closing">시작하기</button>
+          <button onClick={() => {closeWithAnimation()}} className="start_closing">시작하기</button>
+          {/* <button onClick={()=>{ttsStart()}} className="start_closing">음성안내시작</button>
+          <button onClick={()=>{handleAudio()}} className="start_closing">멈추기</button> */}
+          {starttts && <TextToSpeech value={tts_content} />}
         </div>
       </div>
     </>
