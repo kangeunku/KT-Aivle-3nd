@@ -311,7 +311,7 @@ const SecondPage = ({goToThirdPage, result}) => {
                                                         ))}
                                                         {index.img_file && (
                                                             <div>
-                                                                <a href={index.img_file}>{index.img_file}</a>
+                                                                <img src={`http://127.0.0.1:8000/${index.img_file}`} style={{maxWidth: "300px", maxHeight: "300px"}}/>
                                                             </div>
                                                         )}
                                                         <strong>A.</strong> {index.answer.replace(/"/g, '').split('\n').map((line, lineIndex) => (
