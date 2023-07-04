@@ -165,6 +165,8 @@ const FirstPage = ({ inputValue, handleInputChange, handleButtonClick, popupOn, 
     const isInputEmpty = inputValue.trim() === '';
 
     return (
+        <>
+        <Hotkey_h1/>
         <div className={styles.home_container}>
             <div className={styles.homebox1}>
                 <div className={styles.page2logo2} ></div>
@@ -176,6 +178,7 @@ const FirstPage = ({ inputValue, handleInputChange, handleButtonClick, popupOn, 
             </div>
             {popupOn && (<Popup onClose={popupOff} message={message} />)}
         </div>
+        </>
     );
 };
 
@@ -243,8 +246,43 @@ const SecondPage = ({ inputValue, goToThirdPage, result, popupOn, popupOff, mess
 const ThirdPage = ({goToForthPage, result, popupOn, popupOff, message}) => {
     // localStorage.clear(); //localStorage 안 데이터 전부 삭제
     // localStorage.setItem("imgData", JSON.stringify(imgData));
-    
+    const Hotkey_h3 = () => {
+        // 핫키 설정
+        const keyMap_h3 = {
+            space1_key: 'space+1',
+            space2_key: 'space+2',
+            space3_key: 'space+3',
+        };
+        const FirstClick = () => {
+            console.log('space + 1');
+            goToForthPage(result[0].link);
+        };
+
+        const SecondClick = () => {
+            console.log('space + 2');
+            goToForthPage(result[1].link);
+        };
+        const ThirdClick = () => {
+            console.log('space + 3');
+            goToForthPage(result[2].link);
+        };
+
+        // 핫키 적용 함수
+        const handlers_h3 = {
+            space1_key: FirstClick,
+            space2_key: SecondClick,
+            space3_key: ThirdClick,
+        };
+        return (
+            <>
+                <GlobalHotKeys keyMap={keyMap_h3} handlers={handlers_h3}>
+                </GlobalHotKeys>
+            </>
+        );
+    };
     return(
+        <>
+        <Hotkey_h3/>
         <div className={styles.home_container}>
             <div className={styles.homebox1}>
                 <div className={styles.page2logo2} ></div>
@@ -282,6 +320,7 @@ const ThirdPage = ({goToForthPage, result, popupOn, popupOff, message}) => {
                 ))}
             </div>
         </div>
+        </>
     )
 }
 

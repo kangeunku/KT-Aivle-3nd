@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "../../styles/EditInfo.module.css";
 import { useNavigate  } from "react-router-dom";
 import axios from "axios";
+import { GlobalHotKeys } from "react-hotkeys";
 
 const EditInfo = (props) => {
     const [currentPage, setCurrentPage] = useState('first');
@@ -115,7 +116,33 @@ const FirstPage = ({goToSecondPage}) => {
         setPopupVisible(false);
     };
 
+    const Hotkey_ed_1 = () => {
+        // 핫키 설정
+        const keyMap_ed_1 = {
+            ctrl_shift_key: 'ctrl+shift'
+        };
+
+        const pwFocus = () => {
+            console.log('ctrl + shift(ed_1)');
+            document.getElementById("pw").focus();
+        };
+
+        // 핫키 적용 함수
+        const handlers_ed_1 = {
+            ctrl_shift_key: pwFocus,
+        };
+
+        return (
+            <>
+                <GlobalHotKeys keyMap={keyMap_ed_1} handlers={handlers_ed_1}>
+                </GlobalHotKeys>
+            </>
+        );
+    };
+
     return(
+        <>
+        <Hotkey_ed_1/>
         <div className={styles.editbody}>
             <div className={styles.editbox1}>
                 <div className={styles.page2logo2} ></div>
@@ -127,17 +154,58 @@ const FirstPage = ({goToSecondPage}) => {
             <div className={styles.edit_form1}>
                 <div className={styles.edit_form1_txt}>비밀번호 입력</div>
                 <div className={styles.edit_form1_box2}>
-                    <input className={styles.edit_form1_input} type="password" placeholder="비밀번호를 입력해주세요" value={password} onChange={(e) => setPassword(e.target.value)}></input>
+                    <input className={styles.edit_form1_input} id="pw" type="password" placeholder="비밀번호를 입력해주세요" value={password} onChange={(e) => setPassword(e.target.value)}></input>
                 </div>
                 <button className={styles.button_main} onClick={handlePasswordSubmit}>
                     <div>입력</div>
                 </button>
             </div>
         </div>
+        </>
     );};
 
 const SecondPage = ({goToThirdPage, goToFourthPage, goToFifthPage}) => {
+
+    const Hotkey_ed_2 = () => {
+        // 핫키 설정
+        const keyMap_ed_2 = {
+            space_1_key: '1',
+            space_2_key: 'shift + 2',
+            space_3_key: 'space + 3'
+        };
+
+        const toNickChange = () => {
+            console.log('space + 1(ed_2)');
+            goToThirdPage();
+        };
+
+        const topwChange = () => {
+            console.log('space + 2(ed_2)');
+            goToFourthPage();
+        };
+
+        const toOut = () => {
+            console.log('space + 3(ed_2)');
+            goToFifthPage();
+        };
+        // 핫키 적용 함수
+        const handlers_ed_2 = {
+            space_1_key: toNickChange,
+            space_2_key: topwChange,
+            space_3_key: toOut
+        };
+
+        return (
+            <>
+                <GlobalHotKeys keyMap={keyMap_ed_2} handlers={handlers_ed_2}>
+                </GlobalHotKeys>
+            </>
+        );
+    };
+
     return(
+        <>
+        <Hotkey_ed_2/>
         <div>
             <div className={styles.editbody}>
                 <div className={styles.editbox1}>
@@ -146,7 +214,7 @@ const SecondPage = ({goToThirdPage, goToFourthPage, goToFifthPage}) => {
                 </div>
                 <div className={styles.editbox2}>원하는 메뉴를 선택해주세요</div>
                 <div className={styles.page2box}>
-                    <div className={styles.page2box2} onClick={goToThirdPage}>
+                    <div className={styles.page2box2} id="nickchange" onClick={goToThirdPage}>
                         <img className={styles.page2box2_img1} alt=""  />
                         <div className={styles.page2box2_txt1}>별명 변경</div>
                         <div className={styles.page2box2_txt2}>별명을 변경할 수 있습니다</div>
@@ -164,6 +232,7 @@ const SecondPage = ({goToThirdPage, goToFourthPage, goToFifthPage}) => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 
@@ -207,7 +276,33 @@ const ThirdPage = ({goToSecondPage}) => {
     // 닉네임 유효성 검사. 지금은 4글자 이상으로 해뒀고 회의후 바꾸기
     const isNicknameValid = nicknameval.match(/^[가-힣]*$/) && nicknameval.length >= 2;
 
+    const Hotkey_ed_3 = () => {
+        // 핫키 설정
+        const keyMap_ed_3 = {
+            ctrl_shift_key: 'ctrl+shift'
+        };
+
+        const pwFocus = () => {
+            console.log('ctrl + shift(ed_3)');
+            document.getElementById("newNick").focus();
+        };
+
+        // 핫키 적용 함수
+        const handlers_ed_3 = {
+            ctrl_shift_key: pwFocus,
+        };
+
+        return (
+            <>
+                <GlobalHotKeys keyMap={keyMap_ed_3} handlers={handlers_ed_3}>
+                </GlobalHotKeys>
+            </>
+        );
+    };
+
     return(
+        <>
+        <Hotkey_ed_3/>
         <div>
             <div className={styles.editbody}>
                 <div className={styles.editbox1}>
@@ -224,14 +319,15 @@ const ThirdPage = ({goToSecondPage}) => {
                     <div className={styles.edit_form1_box2} style={{ display: 'flex' }}>
                         <input
                             className={styles.edit_form1_input}
+                            id="newNick"
                             type="text"
                             value={nicknameval}
                             onChange={handleNicknameChange}
                             placeholder="새로운 별명을 입력해 주세요"
                         />
-                        <button className={styles.button_main} onClick={() => handleButtonClick(`별명이 ${nicknameval}로 변경되었습니다`)}
+                        <button className={styles.button_main} tabIndex="1" onClick={() => handleButtonClick(`별명이 ${nicknameval}로 변경되었습니다`)}
                             disabled={!isNicknameValid}>
-                            <div>변경한다</div>
+                            변경한다
                         </button>
                         {/* isNicknameValid가 true일때 밑의 체크박스가 표시됩니다 */}
                         {isNicknameValid && (
@@ -250,6 +346,7 @@ const ThirdPage = ({goToSecondPage}) => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 
@@ -300,7 +397,40 @@ const FourthPage = ({goToSecondPage, changeislogin}) => {
 
     const isPasswordValid2 = password1===password2;
 
+    const Hotkey_ed_4 = () => {
+        // 핫키 설정
+        const keyMap_ed_4 = {
+            ctrl_shift_key: 'ctrl+shift',
+            space1_key: 'space+1'
+        };
+
+        const pwFocus = () => {
+            console.log('ctrl + shift(ed_4)');
+            document.getElementById("newPw").focus();
+        };
+
+        const pwFocus_2 = () => {
+            console.log('space+1');
+            document.getElementById("newPwCheck").focus();
+        }
+
+        // 핫키 적용 함수
+        const handlers_ed_4 = {
+            ctrl_shift_key: pwFocus,
+            space1_key:pwFocus_2
+        };
+
+        return (
+            <>
+                <GlobalHotKeys keyMap={keyMap_ed_4} handlers={handlers_ed_4}>
+                </GlobalHotKeys>
+            </>
+        );
+    };
+
     return(
+        <>
+        <Hotkey_ed_4/>
         <div>
             <div className={styles.editbody}>
                 <div className={styles.editbox1}>
@@ -316,6 +446,7 @@ const FourthPage = ({goToSecondPage, changeislogin}) => {
                     <div className={styles.edit_form1_box2} style={{display:"flex"}}>
                         <input
                             className={styles.edit_form1_input}
+                            id="newPw"
                             type="password"
                             value={password1}
                             onChange={(e) => setPassword1(e.target.value)}
@@ -333,6 +464,7 @@ const FourthPage = ({goToSecondPage, changeislogin}) => {
                         <div className={styles.edit_form1_box2} style={{display:"flex"}}>
                         <input
                             className={styles.edit_form1_input}
+                            id="newPwCheck"
                             type="password"
                             value={password2}
                             onChange={(e) => setPassword2(e.target.value)}
@@ -352,6 +484,7 @@ const FourthPage = ({goToSecondPage, changeislogin}) => {
                 )}
                 </div>
         </div>
+        </>
     );
 };
 
@@ -391,7 +524,32 @@ const FifthPage = ({changeislogin}) => {
         changeislogin(false);
     };
 
+    const Hotkey_ed_5 = () => {
+        // 핫키 설정
+        const keyMap_ed_5 = {
+            ctrl_shift_key: 'ctrl+shift',
+        };
+
+        const pwFocus = () => {
+            console.log('ctrl + shift(ed_5)');
+            document.getElementById("toOut").focus();
+        };
+
+        // 핫키 적용 함수
+        const handlers_ed_5 = {
+            ctrl_shift_key: pwFocus,
+        };
+
+        return (
+            <>
+                <GlobalHotKeys keyMap={keyMap_ed_5} handlers={handlers_ed_5}>
+                </GlobalHotKeys>
+            </>
+        );
+    };
     return(
+        <>
+        <Hotkey_ed_5/>
         <div>
             <div className={styles.editbody}>
                 <div className={styles.editbox1}>
@@ -408,6 +566,7 @@ const FifthPage = ({changeislogin}) => {
                     <div className={styles.edit_form1_box2} style={{ display: 'flex' }}>
                         <input
                             className={styles.edit_form1_input}
+                            id="toOut"
                             type="password"
                             placeholder="비밀번호를 입력해주세요"
                             value={password} 
@@ -426,6 +585,7 @@ const FifthPage = ({changeislogin}) => {
             </div>
 
         </div>
+        </>
     );
 };
 

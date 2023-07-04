@@ -383,8 +383,38 @@ const ThirdPage = ({goToSecondPage}) => {
         }
     };    
 
+    const Hotkey_faq_3 = () => {
+        // 핫키 설정
+        const keyMap_faq3 = {
+            space1_key: 'space + 1',
+            space2_key: 'space + 2'
+        };
+
+        const selectboxFocus = () => {
+            console.log('space + 1');
+            document.getElementById("sbox").focus();
+        };
+
+        const uploadFocus = () => {
+            console.log('space + 2');
+            document.getElementById("upload").focus();
+        }
+
+        // 핫키 적용 함수
+        const handlers_faq3 = {
+            space1_key: selectboxFocus,
+        };
+        return (
+            <>
+                <GlobalHotKeys keyMap={keyMap_faq3} handlers={handlers_faq3}>
+                </GlobalHotKeys>
+            </>
+        );
+    };
+
     return (
         <>
+        <Hotkey_faq_3/>
         <div className={styles.faq_container3}>
             <div className={styles.faq_main1}>
                 <div className={styles.page2logo2} ></div>
@@ -397,6 +427,7 @@ const ThirdPage = ({goToSecondPage}) => {
                 <div className={styles.faq3_row2}>
                     <div className={styles.faq_row11}>문의 유형</div>
                     <select className={styles.faq_selectbox}
+                        id="sbox"
                         value={category}
                         onChange={handleCategoryChange}
                     >
@@ -431,7 +462,7 @@ const ThirdPage = ({goToSecondPage}) => {
                 </div>
                 <div className={styles.faq3_row5}>
                     <div className={styles.faq_row11}>파일 첨부</div>
-                    <ImageUploadPreview img={handleImageUpload}/>
+                    <ImageUploadPreview id="upload" img={handleImageUpload}/>
                 </div>
                 <button className={styles.button_faq} onClick={handleSaveData}>등록하기</button>
                 {jsonData} && <div>저장된 데이터: {jsonData}</div>
