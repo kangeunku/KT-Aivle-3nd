@@ -12,32 +12,38 @@ const select_boxes = {
   1: {
     index: 1,
     placeholder: '컬러 선택하세요',
-    options: [ '아보카도 그린(손잡이 + 빨대+개별박스포장) (+5000원)', '파스텔실버(손잡이 + 빨대+개별박스포장) (+5000원)', '파스텔블랙(손잡이 + 빨대+개별박스포장) (+5000원)' ]
+    options: ['아보카도 그린(손잡이 + 빨대+개별박스포장) (+5000원)', '파스텔실버(손잡이 + 빨대+개별박스포장) (+5000원)', '파스텔블랙(손잡이 + 빨대+개별박스포장) (+5000원)']
   },
   2: {
-    index: 2, placeholder: '각인서비스를원하신다면 20자이내로 입력해주세요', options: [ '' ]
+    index: 2, placeholder: '각인서비스를원하신다면 20자이내로 입력해주세요', options: ['']
   },
-  3: { index: 3, placeholder: '옵션 수량 선택', options: ['' ]
+  3: {
+    index: 3, placeholder: '옵션 수량 선택', options: ['']
   }
 };
 
-
-const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
+const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
 
   // console.log('Slider_result', result);
   // console.log('Slider_result2', typeof(result.img_pathes), result.img_pathes);
   // console.log('Slider_result3', typeof(result.summary_lst), result.summary_lst);
   const iData = [];
-  
-  if(result.img_pathes){
-    for (let i = 0; i < result.summary_lst.length; i++){
+
+  const [selected_opt, setSelected_opt] = useState("");
+
+  const onItemSelect = (item) => {
+    setSelected_opt((prevSelectedOpt) => (prevSelectedOpt === item ? "" : item));
+  }
+
+  if (result.img_pathes) {
+    for (let i = 0; i < result.summary_lst.length; i++) {
       const tmp = {};
       tmp['image'] = result.img_pathes[i];
       tmp['answer'] = result.summary_lst[i];
       iData.push(tmp);
     }
-  } 
-  const iData_len  = result.img_pathes.length;
+  }
+  const iData_len = result.img_pathes.length;
   // console.log(iData);
 
   // console.log('options', result.detail.necessary_opt);
@@ -75,10 +81,10 @@ const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
 
   //반응형 사이트
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // 사용자의 화면크기 정보를 받아 반응형 사이트에 사용합니다.
-  useEffect(()=>{
+  useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
-    return()=>{
-        document.removeEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
     }
   })
 
@@ -96,7 +102,7 @@ const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
       setX(-5);
       setIsSlide(true);
       setTimeout(() => {
-        setIndex((prev) => (prev === iData_len-1 ? 0 : prev + 1));
+        setIndex((prev) => (prev === iData_len - 1 ? 0 : prev + 1));
         setX(0);
         setIsSlide(false);
       }, 300);
@@ -110,9 +116,9 @@ const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
   const updatePrice = () => {
     setTotalPrice(parseInt(price, 10) * count);
   };
-  const handleClickOutside=(event)=>{
-    if(wrapperRef && !wrapperRef.current.contains(event.target)){
-        setPopupState(false);
+  const handleClickOutside = (event) => {
+    if (wrapperRef && !wrapperRef.current.contains(event.target)) {
+      setPopupState(false);
     }
   }
 
@@ -123,7 +129,7 @@ const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
     setX(-5);
     setIsSlide(true);
     await setTimeout(() => {
-      setIndex((prev) => (prev === iData_len-1 ? 0 : prev + 1));
+      setIndex((prev) => (prev === iData_len - 1 ? 0 : prev + 1));
       setX(0);
       setIsSlide(false);
     }, 300);
@@ -136,7 +142,7 @@ const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
     setX(+5);
     setIsSlide(true);
     await setTimeout(() => {
-      setIndex((prev) => (prev === 0 ? iData_len-1 : prev - 1));
+      setIndex((prev) => (prev === 0 ? iData_len - 1 : prev - 1));
       setX(0);
       setIsSlide(false);
     }, 300);
@@ -175,16 +181,16 @@ const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
     setWindowWidth(window.innerWidth);
   };
 
-  
+
 
   const decreaseCount = () => {
-    if(count > 1) {
-      setCount(count-1);
+    if (count > 1) {
+      setCount(count - 1);
     }
   };
 
   const increaseCount = () => {
-    setCount(count+1)
+    setCount(count + 1)
   };
 
 
@@ -194,20 +200,20 @@ const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
     setPopupMessage("찜하기 목록에 추가했습니다.");
     setPopupVisible(true);
     console.log("popup on");
-    try{
+    try {
       const url = "http://127.0.0.1:8000/v1/basket_change/";
       const data = {
-          "goods_url": goods_url,
+        "goods_url": goods_url,
       }
       // setGoods_url(url);
 
-      const response = await axios.post(url, data, {withCredentials:true});
+      const response = await axios.post(url, data, { withCredentials: true });
       // console.log('handleDeleteList', response);
-      setTimeout(()=>{
+      setTimeout(() => {
         handlePopupClose();
       }, 5000);
     } catch (error) {
-        console.log('error', error);
+      console.log('error', error);
     }
   };
 
@@ -270,14 +276,14 @@ const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
     <div className={styles.resultpopup} ref={wrapperRef}>
       <Hotkey_s/>
       <span className={styles.popuptxt}>이미지 안내</span>
-{/*메인 슬라이드 */}
+      {/*메인 슬라이드 */}
       <session className={`${styles.box} ${styles.box1}`}>
-        <img  className={styles.slide1} src={iData[index].image} />
+        <img className={styles.slide1} src={iData[index].image} />
         <button className={styles.button_left} onClick={decreaseClick} />
         <button className={styles.button_right} onClick={increaseClick} />
       </session>
 
- {/* 서브 슬라이드 */}
+      {/* 서브 슬라이드 */}
       <session className={`${styles.box} ${styles.box2}`}>
         {/* 서브 슬라이드 */}
         <div className={styles.row}
@@ -287,78 +293,63 @@ const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
           onMouseLeave={onMouseLeave}
           onMouseMove={onMouseMove}
           ref={slideRef}
-          style={{transform: `translateX(${x}vw)`,}}>
+          style={{ transform: `translateX(${x}vw)`, }}>
 
           {/*컨테이너 오른쪽 이미지*/}
           {[3, 2, 1].map((cnt) => (
-                <nav className={styles.box2container} key={cnt}>
-                  <img className={`${styles.img} ${styles.previewimg}`}
-                    style={{ opacity: 0.5, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
-                    src={iData[(index-cnt >= 0)?index-cnt: iData_len-cnt+index].image}
-                  />
-                </nav>
-              ))}
+            <nav className={styles.box2container} key={cnt}>
+              <img className={`${styles.img} ${styles.previewimg}`}
+                style={{ opacity: 0.5, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
+                src={iData[(index - cnt >= 0) ? index - cnt : iData_len - cnt + index].image}
+              />
+            </nav>
+          ))}
           {/* 보여주려는 이미지 */}
           <nav className={styles.imgwrapper}>
-              <img className={styles.img}
-                style={{ opacity: 1, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
-                src={iData[index].image}
-              />
+            <img className={styles.img}
+              style={{ opacity: 1, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
+              src={iData[index].image}
+            />
           </nav>
           {/*컨테이너 왼쪽 이미지*/}
           {[1, 2, 3].map((cnt) => (
-                <nav className={styles.box2container} key={cnt}>
-                  <img className={`${styles.img} ${styles.previewimg}`}
-                    style={{ opacity: 0.5, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
-                    src={iData[(index+cnt <= iData_len-1)?index+cnt:cnt+index-iData_len].image}
-                  />
-                </nav>
-              ))}
+            <nav className={styles.box2container} key={cnt}>
+              <img className={`${styles.img} ${styles.previewimg}`}
+                style={{ opacity: 0.5, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
+                src={iData[(index + cnt <= iData_len - 1) ? index + cnt : cnt + index - iData_len].image}
+              />
+            </nav>
+          ))}
         </div>
-        <span className={styles.slide1order}>({index+1}/{iData_len})</span>
+        <span className={styles.slide1order}>({index + 1}/{iData_len})</span>
       </session>
 
       <span className={styles.popuptxt}>Summary</span>
-      
-{/*대체텍스트 요약 */}
+
+      {/*대체텍스트 요약 */}
       <session className={`${styles.box} ${styles.box3}`}>
-            <span className={styles.minititle}>{iData[index].answer}</span>
-            {/* <span className={styles.minides}>{iData[index].answer}</span> */}
+        <span className={styles.minititle}>{iData[index].answer}</span>
+        {/* <span className={styles.minides}>{iData[index].answer}</span> */}
       </session>
 
       <span className={styles.popuptxt}>Option</span>
 
-{/* 옵션과 수량 */}
-      <session className={`${styles.box} ${styles.box4}`}>      
-      
-      {result.detail.necessary_opt &&
-      result.detail.necessary_opt.map((item) => {
-        // {console.log(item)}
-        <span className={styles.box4_txt}>필수옵션</span>
-        return (
-          <div className={styles.box4_idx0}>
-            
-              <div className={styles.box4_select}>
-                {item}
+      {/* 옵션 */}
+      {result.detail.necessary_opt && (
+        <div className={styles.box4_idx0}>
+          <span className={styles.box4_txt}>필수옵션</span>
+          <div className={styles.box4_select}>
+            {result.detail.necessary_opt.map((item, index) => (
+              <div key={index}>
+                <div className={`${styles.box4_opttxt} ${selected_opt === item ? styles.selected_opt : styles.unselected_opt}`} onClick={() => onItemSelect(item)}>{item}</div>
+                <hr></hr>
               </div>
-            
-          </div>)
-        
-        })}
-{/*         
-        <div className={styles.box4_idx1}>
-          <span className={styles.box4_txt}>선택옵션</span>
-          <select className={styles.box4_select}>
-            <option value = "연유추가">연유추가</option>
-            <option value = "팥고물도 추가">팥고물도 추가</option>
-            <option value = "다 다 추가">다 다 추가</option>
-          </select>
+            ))}
+          </div>
         </div>
-        <div className={styles.box4_idx2}>
-          <span className={styles.box4_txt}>입력옵션</span>
-          <textarea className={styles.box4_txtarea}>
-          </textarea>
-        </div> */}
+      )}
+      {/* 수량 */}
+      <session className={`${styles.box} ${styles.box4}`}>
         <div className={styles.box4_idx3}>
           <span className={styles.box4_txt}>수량</span>
           <div className={styles.box4_count}>
@@ -371,9 +362,10 @@ const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
           <span className={styles.box4_txt}>가격</span>
           <span className={styles.box4_txt}>{totalPrice}원</span>
         </div>
+
       </session>
 
-{/* 버튼들 */}
+      {/* 버튼들 */}
       <session className={`${styles.box} ${styles.box5}`}>
         <button className={styles.button} id="buy">  구매하기 </button>
         <button className={styles.button} id="close" onClick={goToPage}> 닫기 </button>
@@ -387,10 +379,10 @@ const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
 const Popup = ({ onClose, message }) => {
   console.log('message', message);
   return (
-      <div className={styles.popup1}>
-          <div className={styles.popup1_txt}>{message}</div>
-          <div className={styles.popup1_lgimg}></div>
-      </div>
+    <div className={styles.popup1}>
+      <div className={styles.popup1_txt}>{message}</div>
+      <div className={styles.popup1_lgimg}></div>
+    </div>
   );
 };
 

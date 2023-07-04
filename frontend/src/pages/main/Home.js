@@ -44,6 +44,7 @@ const Home = (props) => {
         await axios.post(url, data)
             .then(function (response) {
                 setRes(response.data);
+                setRes(response.data);
                 setPopupVisible(false);
             })
             .catch(function (error) {
@@ -302,6 +303,12 @@ const ThirdPage = ({goToForthPage, result, popupOn, popupOff, message}) => {
                             <label className={styles.goodsprice}>
                                 {item.lprice}원
                             </label>
+                            {/* <label className={styles.goodsscore}>
+                                <strong>5점</strong> <StarRating score={3.5} />
+                            </label> */}
+                            <button className={styles.goodsurl}>
+                                구매하기
+                            </button>
                             {popupOn && (<Popup onClose={popupOff} message={message} />)}
                         </div>
                     </div>
