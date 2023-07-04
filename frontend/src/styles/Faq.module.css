@@ -1,8 +1,19 @@
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
 .foot{
     background-image: url(../assets/img/foot.png);
     background-position: center;
     width:32px;
     height:32px;
+    animation: spin 2s linear infinite;
+    transform-origin: center center;
 }
 
 .faq_container1{

@@ -1,3 +1,5 @@
+@keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% {transform: translate(-50%, -50%) rotate(360deg);}}
+
 .editbody { position: relative; margin: 30px 50px 200px; }
 
 .editbox1{ display: flex; align-items: center; align-items: flex-end; }
@@ -87,6 +89,8 @@
     height: 60px;
     background-image: url(../assets/img/foot.png);
     background-repeat: no-repeat;
+    animation: spin 2s linear infinite;
+    transform-origin: center center;
     top:70%;
     left:50%;
     transform: translate(-50%, -50%);
