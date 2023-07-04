@@ -73,9 +73,6 @@ const Join = ({ changeislogn }) => {
 
 }
 
-
-
-
 const Joinstepone = () => {
     const [ModalState, setModalState] = useState('false'); //모달창의 상태를 보관해 둘 useState입니다.
     const [Modal_State, setModal_State] = useState('false');
@@ -134,6 +131,7 @@ const Joinstepone = () => {
             </>
         );
     };
+
     const dataLists = [ // 체크 박스에 사용할 데이터
         { id: 1, data: "1. 서비스 이용 약관 (필수)" },
         { id: 2, data: "2. 개인정보 수집 및 이용에 대한 동의 안내 (필수)" }
@@ -167,7 +165,6 @@ const Joinstepone = () => {
                 setCheckedLists(checkedList.filter((el) => el !== list.id));
             }
         }, [checkedList]
-
     );
 
     return (
@@ -176,7 +173,6 @@ const Joinstepone = () => {
                 <a>회원가입</a>
             </h2> */}
             <Hotkey_local_2 />
-
 
             <div className="choice_tab">
                 <h3 className="welcome">
@@ -204,7 +200,7 @@ const Joinstepone = () => {
                             onChange={(e) => onCheckedElement(e.target.checked, list)}
                             checked={checkedList.includes(list.id) ? true : false}
                         />
-                         {list.id === 1?
+                        {list.id === 1?
                             (<>
                                 <button className="terms_show_btn" onClick={OnOffModal}>전문 보기</button>
                                     {ModalState === true ? //모달 상태가 true면 1번, false면 2번이 작동합니다.
@@ -267,34 +263,38 @@ const Joinsteptwo = ({ changeislogn }) => {
         password2_val: false,
         nickname_val: false,
     });
+    const [popupVisible, setPopupVisible] = useState(false);
+    const [popupMessage, setPopupMessage] = useState("");
 
     const join_btn = async () => {
-        // let response_data = Send_api(4, form);
-        const url = "http://127.0.0.1:8000/v1/register/"
-        console.log(form)
-        await axios.post(url, form, { withCredentials: true })
-            .then(function (response) {
-                // console.log(JSON.stringify(response));
-                const res = JSON.stringify(response.statusText);
-                console.log(res)
-                setCookie('usercookienickname', form.nickname, { path: '/' });
-                setCookie('usercookieid', form.username, { path: '/' });
-                if(res === '"OK"'){
-                    changeislogn(true);
-                    navigate('/home');
-                }
+        try {
+            const url = "http://127.0.0.1:8000/v1/register/"
+            // console.log(form)
+            const response = await axios.post(url, form, { withCredentials: true })
+            const res = JSON.stringify(response.statusText);
+            
+            setCookie('usercookienickname', form.nickname, { path: '/' });
+            setCookie('usercookieid', form.username, { path: '/' });
 
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+            setPopupMessage("환영합니다.");
+
+            console.log(res);
+            setPopupVisible(true);
+            setTimeout(()=>{
+                handlePopupClose();
+            }, 2000);
+            changeislogn(true);
+            navigate('/home');
+            
+        } catch (error) {
+            setPopupMessage("회원가입에 실패했습니다. 아이디와 비밀번호, 별명을 확인해 주세요.");
+            setPopupVisible(true);
+            setTimeout(()=>{
+                handlePopupClose();
+            }, 2000);
+            console.log(error);
+        };
     };
-
-    // const join_btn = () => {
-
-    //     changeislogn(true)
-    //     navigate('/home')
-    // }
 
     const handleUsernameChange = (e) => {
         const username = e.target.value;
@@ -322,59 +322,64 @@ const Joinsteptwo = ({ changeislogn }) => {
 
     const isAllFieldsValid = form.username_val && form.password_val && form.password2_val && form.nickname_val;
         
-        // 핫키 생성
-        const Hotkey_local_3 = () => {
-            // 핫키 설정
-            const keyMap_3 = {
-                space1_key: 'space+1',
-                space2_key: "ctrl+q",
-                space3_key: 'space+3',
-                space4_key: "space+4",
-                // enter_key: "alt+ctrl"
-            };
-            
-            // const EnterClick = () => {
-            //     const inputRef = useRef(null);
-            //     console.log('enter');
-            //     if (inputRef.current) {
-            //         inputRef.current.blur();
-            //     }
-            // }
-            const idinputClick = () => {
-                console.log('idinputClick');
-                document.getElementById('id').focus();
-            };
-
-            // document.activeElement.
-            const pwinputClick = () => {
-                console.log('space + 2');
-                document.getElementById('pw1').focus();
-            };
-            const pwinputClick_ = () => {
-                console.log('space + 3');
-                document.getElementById('pw2').focus();
-            };
-            const nickClick = () => {
-                console.log('space + 4');
-                document.getElementById('nick').focus();
-            }
-    
-            // 핫키 적용 함수
-            const handlers_3 = {
-                space1_key: idinputClick,
-                space2_key: pwinputClick,
-                space3_key: pwinputClick_,
-                space4_key: nickClick,
-                // enter_key: EnterClick
-            };
-            
-            return (
-                <>
-                    <GlobalHotKeys keyMap={keyMap_3} handlers={handlers_3}>
-                    </GlobalHotKeys>
-                </>
-            );
+    // 핫키 생성
+    const Hotkey_local_3 = () => {
+        // 핫키 설정
+        const keyMap_3 = {
+            space1_key: 'space+1',
+            space2_key: "ctrl+q",
+            space3_key: 'space+3',
+            space4_key: "space+4",
+            // enter_key: "alt+ctrl"
         };
+        
+        // const EnterClick = () => {
+        //     const inputRef = useRef(null);
+        //     console.log('enter');
+        //     if (inputRef.current) {
+        //         inputRef.current.blur();
+        //     }
+        // }
+        const idinputClick = () => {
+            console.log('idinputClick');
+            document.getElementById('id').focus();
+        };
+
+        // document.activeElement.
+        const pwinputClick = () => {
+            console.log('space + 2');
+            document.getElementById('pw1').focus();
+        };
+        const pwinputClick_ = () => {
+            console.log('space + 3');
+            document.getElementById('pw2').focus();
+        };
+        const nickClick = () => {
+            console.log('space + 4');
+            document.getElementById('nick').focus();
+        }
+
+        // 핫키 적용 함수
+        const handlers_3 = {
+            space1_key: idinputClick,
+            space2_key: pwinputClick,
+            space3_key: pwinputClick_,
+            space4_key: nickClick,
+            // enter_key: EnterClick
+        };
+        
+        return (
+            <>
+                <GlobalHotKeys keyMap={keyMap_3} handlers={handlers_3}>
+                </GlobalHotKeys>
+            </>
+        );
+    };
+
+    const handlePopupClose = () => {
+        setPopupVisible(false);
+    };
+
     return (
         <>
             <Hotkey_local_3/>
@@ -406,10 +411,20 @@ const Joinsteptwo = ({ changeislogn }) => {
                     </label>
                 </div>
             </div>
-            <button className="next_step_btn" onClick={() => join_btn()}> <strong style={{ color: "red" }}>0</strong> 회원가입 </button>
+            <button className="next_step_btn" onClick={() => join_btn()}> 회원가입 </button>
+            {popupVisible && (<Popup onClose={handlePopupClose} message={popupMessage} />)}
         </>
     );
 }
+
+const Popup = ({ onClose, message }) => {
+    return (
+        <div className="popup1">
+            <div className="popup1_txt">{message}</div>
+            <div className="popup1_lgimg"></div>
+        </div>
+    );
+};
 
 // export default Input;
 

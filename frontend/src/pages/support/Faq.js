@@ -465,7 +465,6 @@ const ThirdPage = ({goToSecondPage}) => {
                     <ImageUploadPreview id="upload" img={handleImageUpload}/>
                 </div>
                 <button className={styles.button_faq} onClick={handleSaveData}>등록하기</button>
-                {jsonData} && <div>저장된 데이터: {jsonData}</div>
             </div>
         </div>
         </>
@@ -475,6 +474,10 @@ const ThirdPage = ({goToSecondPage}) => {
 
 const ImageUploadPreview = ({img}) => {
     const [images, setImages] = useState([]);
+
+    useEffect(() => {
+        img(images);
+    }, [images])
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
@@ -488,11 +491,10 @@ const ImageUploadPreview = ({img}) => {
             };
 
             setImages((prevImages) => [...prevImages, newImage]);
-            img(((prevImages) => [...prevImages, newImage]));
         };
 
         reader.readAsDataURL(file);
-        // console.log(reader);
+        console.log(reader);
         }
     };
 
@@ -506,9 +508,9 @@ const ImageUploadPreview = ({img}) => {
 
     return (
         <label htmlFor="fileInput" className={styles.fileimgbut}>
-                <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleImageUpload} />
-                    {renderImageBoxes()}
-                        <div style={{ width: '100px', height: '100px', border: '1px solid gray', backgroundColor: 'lightgray' }}></div>
+            <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleImageUpload} />
+            {renderImageBoxes()}
+            <div style={{ width: '100px', height: '100px', border: '1px solid gray', backgroundColor: 'lightgray' }}></div>
         </label>
     );
 };

@@ -22,7 +22,7 @@ const Header = ({ changeislogn }) => {
   const Hotkey_head = () => {
     // 핫키 설정
     const keyMap_head = {
-        spaceEsc_key: 'ctrl+esc'
+        spaceEsc_key: 'ctrl+space'
     };
     const logoutClick = () => {
         console.log('ctrl+esc');
