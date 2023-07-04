@@ -381,7 +381,7 @@ const ThirdPage = ({goToForthPage, result, popupOn, popupOff, message}) => {
     let ttsthrdsearch = "3가지 상품을 추천드립니다."
 
     for( let i in result){
-        ttsthrdsearch += `${i+1}번째 상품은 ${result[i].title} 입니다. 가격은 ${result[i].lprice} 입니다.`
+        ttsthrdsearch += `${parseInt(i)+1}번째 상품은 ${result[i].title} 입니다. 가격은 ${result[i].lprice} 원 입니다.`
     }
     ttsthrdsearch += `상품 선택을 원하시면 스페이스바와 원하시는 상품의 번째를 동시에 눌러주십시오.`
 

@@ -93,7 +93,7 @@ const App = () => {
               <Link to="/support" onClick={() => navState === "support" ? relanding(true) : setnavState("support")}>고객센터</Link>
             </li>
             <li className={navState === "test" ? "active_list" : null}>
-              <Link to="/test" onClick={() => setnavState("test")}>테스트섹션</Link>
+              <Link to="/test" onClick={() => setnavState("test")}>팀 소개</Link>
             </li>
           </ul>
         </nav>
