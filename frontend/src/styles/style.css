@@ -68,10 +68,10 @@ li.active_list > a {color: var(--background-green); font-weight: 700;}
 .test_btn { display: block; margin: 20px; width: 200px; font-size: 32px; line-height: 1.8; background-color: #285a43;}
 
 .slide-container { margin:20px auto 0px; width: 55%; height: 70%;}
-.logosl_1 { background: no-repeat url(../assets/img/logosl_1.png); background-size: 100%;  width:100%; height:80%; object-fit: cover; box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);}
-.logosl_2 { background: no-repeat url(../assets/img/logosl_2.png); background-size: 100%;   width:100%; height:80%; object-fit: cover; box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);}
-.logosl_3 { background: no-repeat url(../assets/img/logosl_3.png); background-size: 100%;   width:100%; height:80%; object-fit: cover; box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);}
-.logosl_4 { background: no-repeat url(../assets/img/logosl_4.png); background-size: 100%;   width:100%; height:80%; object-fit: cover; box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);}
+.logosl_1 { background: no-repeat url(../assets/img/logosl_1.png); background-size: 100%; min-width: 80%; width:100%; height:80%; object-fit: cover; box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);}
+.logosl_2 { background: no-repeat url(../assets/img/logosl_2.png); background-size: 100%; min-width: 80%; width:100%; height:80%; object-fit: cover; box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);}
+.logosl_3 { background: no-repeat url(../assets/img/logosl_3.png); background-size: 100%; min-width: 80%; width:100%; height:80%; object-fit: cover; box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);}
+.logosl_4 { background: no-repeat url(../assets/img/logosl_4.png); background-size: 100%; min-width: 80%; width:100%; height:80%; object-fit: cover; box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);}
 
 @keyframes close {
     from {
