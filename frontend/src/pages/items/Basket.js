@@ -77,7 +77,7 @@ const Basket = (props) => {
 
 const FirstPage =({goToSecondPage, handleDeleteList, result}) => {
     // console.log("찜 목록 리스트")
-    // console.log(result);
+    console.log(result);
     const dataArray = result ? Object.values(result) : [];
 
     if(!dataArray){
@@ -123,54 +123,47 @@ const FirstPage =({goToSecondPage, handleDeleteList, result}) => {
                 <div className={styles.bkboxes1}>찜 목록</div>
             </div>
             <div className={styles.bk_body}>
-                {dataArray &&
-                dataArray.map((item) => {
-                    const DArray = item ? Object.values(item) : [];
-                    return DArray.map((content) => {
+            {dataArray &&
+                dataArray.map((content) => {
                     return (
-                        <div className={styles.bklist}>
-                        <img
-                            className={styles.bklist_img}
-                            src={content.goods_thumb}
-                        />
+                    <div className={styles.bklist}>
+                        <img className={styles.bklist_img} src={content.goods_thumb} />
                         <div className={styles.bklist_com}>
-                            <div className={styles.bklist_name}>
-                                {content.goods_name}
-                            </div>
-                            <div className={styles.bklist_txt}>
-                                {content.goods_summary && (content.goods_summary.slice(0, 70)+'.....')}
-                            </div>
-                            <div className={styles.bklist_price}>
-                                {content.goods_price}원
-                            </div>
+                        <div className={styles.bklist_name}>{content.goods_name}</div>
+                        <div className={styles.bklist_txt}>
+                            {content.goods_summary && content.goods_summary.slice(0, 70) + "....."}
+                        </div>
+                        <div className={styles.bklist_price}>{content.goods_price}원</div>
                         </div>
 
                         <div className={styles.bklist_btbox}>
-                            <button
-                                className={styles.bklist_bt1}
-                                id="more"
-                                onClick={() => {
-                                    goToSecondPage(content.goods_url)
-                                }}>
-                                <div className={styles.bklist_btfont} style={{ color: "#b4e0a0" }}>
-                                    더 보기
-                                </div>
-                            </button>
-                            <button
-                                className={styles.bklist_bt2}
-                                id="delete"
-                                onClick={() => {
-                                    handleDeleteList(content.goods_url)
-                                }}>
-                                <div className={styles.bklist_btfont} style={{ color: "#dd7878" }}>
-                                    삭제
-                                </div>
-                            </button>
+                        <button
+                            className={styles.bklist_bt1}
+                            id="more"
+                            onClick={() => {
+                            goToSecondPage(content.goods_url);
+                            }}
+                        >
+                            <div className={styles.bklist_btfont} style={{ color: "#b4e0a0" }}>
+                            더 보기
+                            </div>
+                        </button>
+                        <button
+                            className={styles.bklist_bt2}
+                            id="delete"
+                            onClick={() => {
+                            handleDeleteList(content.goods_url);
+                            }}
+                        >
+                            <div className={styles.bklist_btfont} style={{ color: "#dd7878" }}>
+                            삭제
+                            </div>
+                        </button>
                         </div>
-                        </div>
+                    </div>
                     );
-                    });
                 })}
+
 
             </div>   
         </div>

@@ -44,7 +44,7 @@ const Home = (props) => {
         await axios.post(url, data)
             .then(function (response) {
                 setRes(response.data);
-                setRes(response.data);
+                setResult(response.data);
                 setPopupVisible(false);
             })
             .catch(function (error) {
