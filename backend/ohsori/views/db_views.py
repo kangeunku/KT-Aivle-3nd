@@ -50,7 +50,8 @@ class BasketsAPI(APIView):
             num += 1
         # print(goods)
         # basket = {'reg_data' :}
-        return Response({"goods" : basket})
+        # basket = json.dumps(basket, default=str)
+        return Response(basket)
         
 # @method_decorator(csrf_exempt, name = "dispatch")
 class Baskets_Add_DelAPI(View):
@@ -72,9 +73,7 @@ class Baskets_Add_DelAPI(View):
         baskets = Baskets()
         goods_no = Goods.objects.only('goods_no').get(goods_url = data['goods_url'])
         try:
-            baskets1 = Baskets.objects.get(goods_no = goods_no, username = request.user.username)
-            baskets1.use_yn = 'y'
-            baskets1.save()
+            Baskets.objects.get(goods_no = goods_no, username = request.user.username, use_yn = 'y')
             return JsonResponse({"status" : "이미 존재하는 상품입니다"})
         except Baskets.DoesNotExist:
             baskets.goods_no = goods_no
