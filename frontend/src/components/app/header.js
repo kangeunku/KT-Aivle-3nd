@@ -48,8 +48,8 @@ const Header = ({ changeislogn }) => {
         <Hotkey_head/>
         <header className="header">
           <div className="head_btn_box">
-            <button className="btn"></button>
-            <button className="btn"></button>
+            {/* <button className="btn"></button>
+            <button className="btn"></button> */}
             <button className="btn"></button>
             <button className="btn" id="logout" onClick={()=>{logout()}}></button>
           </div>
