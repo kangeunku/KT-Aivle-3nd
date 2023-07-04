@@ -33,9 +33,6 @@ class Baskets(models.Model):
     class Meta:
         db_table = 'ohsori_basket'
 
-def user_directory_path(instance, filename):
-    return 'user_{}/{}'.format(instance.name, filename)
-    
 class Qna(models.Model):
     qna_no = models.AutoField(help_text="문의 번호", primary_key=True)
     username = models.ForeignKey(Users, on_delete=models.CASCADE, related_name="qna",db_column="username")
@@ -43,7 +40,7 @@ class Qna(models.Model):
     question = models.CharField(help_text='질문')
     answer = models.TextField (help_text='개인답변', blank = True)
     type = models.CharField(help_text='질문유형', null = True, blank = True)
-    img_file = models.FileField(upload_to=user_directory_path, help_text="이미지 파일", null =True, blank=True)
+    img_file = models.ImageField(help_text="이미지 파일", null =True, blank=True)
     reg_date = models.DateTimeField(auto_now_add = True, help_text="등록일자") 
     use_yn = models.CharField(max_length=2, help_text="사용여부")
     
