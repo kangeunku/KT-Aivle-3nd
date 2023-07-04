@@ -10,10 +10,17 @@ import termsData1 from '../../assets/txt/terms.json'
 import termsData2 from '../../assets/txt/terms2.json'
 import { useCookies } from 'react-cookie';
 
+import { TextToSpeech } from "../../components";
+
 
 const Join = ({ changeislogn }) => {
     const [joinState, setjoinState] = useState(1);
-    
+
+    // tts 상태 지정
+    const [starttts, setstarttts] = useState(false);
+    const [termsone, settermsone] = useState(false);
+    const [termstwo, settermstwo] = useState(false);
+
     const next_stage = (txt) => {
         if (txt === 'end') {
             console.log("end");
@@ -24,37 +31,96 @@ const Join = ({ changeislogn }) => {
         }
     }
 
+    // 오디오중지
+    const handleAudio = () => {
+        const audioElement = document.querySelector("audio");
+        audioElement.pause();
+    };
+
     // 핫키 생성
     const Hotkey_local_1 = () => {
         // 핫키 설정
         const keyMap_1 = {
-            enter_key: 'enter'
+            enter_key: 'enter',
+            jointts: 'shift+q',
+            stoptts: 'shift+d',
+            termsone: 'shift+1',
+            termstwo: 'shift+2',
         };
-
+        
         const nextClick = () => {
             console.log('enter');
             if (joinState == 1) next_stage();
             else if (joinState == 2) next_stage('end');
         };
+        
+        // tts 중단
+        const stopttsClick = () => {
+            if ((starttts == true) || (termsone == true) || (termstwo == true)){
+                handleAudio();
+            }
+            setstarttts(false);
+            settermsone(false);
+            settermstwo(false);
+        }
+        // 약관 일번
+        const termsoneClick = () => {
+            settermsone(true);
+            console.log('termsoneClick');
+        };
+
+        // 약관 이번
+        const termstwoClick = () => {
+            settermstwo(true);
+            console.log('termstwoClick');
+        };
+
+        // 페이지 소계
+        const jointtsClick = () => {
+            setstarttts(true);
+            console.log('jointts');
+        };
 
         // 핫키 적용 함수
         const handlers_1 = {
             enter_key: nextClick,
+            jointts: jointtsClick,
+            termsone:termsoneClick,
+            termstwo:termstwoClick,
+            stoptts:stopttsClick,
         };
+
 
         return (
             <>
-                <GlobalHotKeys keyMap={keyMap_1} handlers={handlers_1}>
-                </GlobalHotKeys>
+                <GlobalHotKeys keyMap={keyMap_1} handlers={handlers_1}></GlobalHotKeys>
             </>
         );
     };
+    let ttstemone = ""
+    let ttstemtwo = ""
+    
+    for (let i in termsData1){
+        ttstemone += termsData1[i].index + termsData1[i].content
+    }
+    for (let i in termsData2){
+        ttstemtwo += termsData2[i].index + termsData2[i].content
+    }
+
+    // 약관안내 문구
+    const ttsjoinstepone =`회원가입 약관체크 페이지 입니다. 
+    서비스 이용 약관을 들으시려면 스페이스버튼과 숫자 일 버튼을 동시에 눌러주세요.
+    개인정보 관련 이용약관을 들으시려면 스페이스버튼과 숫자이 버튼을 동시에 눌러주세요.
+    `;
 
     if (joinState == 1) {
         return (
             <>
                 <Hotkey_local_1 />
                 <Joinstepone />
+                {starttts && <TextToSpeech value={ttsjoinstepone} />}
+                {termsone && <TextToSpeech value={ttstemone} />}
+                {termstwo && <TextToSpeech value={ttstemtwo} />}
                 <button className="next_step_btn" onClick={() => next_stage()}>다음</button>
             </>
         );
@@ -72,9 +138,6 @@ const Join = ({ changeislogn }) => {
     }
 
 }
-
-
-
 
 const Joinstepone = () => {
     const [ModalState, setModalState] = useState('false'); //모달창의 상태를 보관해 둘 useState입니다.
@@ -175,7 +238,7 @@ const Joinstepone = () => {
                 <li>
                     {dataLists.map((list) => (
                         <div style={{ margin: 20 }}>
-                            <label for={list.id}>{list.data}</label>
+                            <label htmlFor={list.id}>{list.data}</label>
                             <input
                                 id={list.id}
                                 key={list.id}
@@ -234,6 +297,8 @@ const Joinstepone = () => {
 const Joinsteptwo = ({ changeislogn }) => {
     const [cookies, setCookie] = useCookies(['usercookie']);
     const navigate = useNavigate();
+    const [starttts, setstarttts] = useState(false);
+
     const [form, setFrom] = useState({
         "username": "",
         "password": "",
@@ -260,7 +325,6 @@ const Joinsteptwo = ({ changeislogn }) => {
                     changeislogn(true);
                     navigate('/home');
                 }
-
             })
             .catch(function (error) {
                 console.log(error);
@@ -297,6 +361,12 @@ const Joinsteptwo = ({ changeislogn }) => {
         setFrom({ ...form, nickname, nickname_val: isValidNickname });
     };
 
+    // 오디오중지
+    const handleAudio = () => {
+        const audioElement = document.querySelector("audio");
+        audioElement.pause();
+    };
+
     const isAllFieldsValid = form.username_val && form.password_val && form.password2_val && form.nickname_val;
         
         // 핫키 생성
@@ -307,6 +377,8 @@ const Joinsteptwo = ({ changeislogn }) => {
                 space2_key: "ctrl+q",
                 space3_key: 'space+3',
                 space4_key: "space+4",
+                jointts: 'shift+q',
+	            stoptts: 'shift+d',
                 // enter_key: "alt+ctrl"
             };
             
@@ -335,6 +407,13 @@ const Joinsteptwo = ({ changeislogn }) => {
                 console.log('space + 4');
                 document.getElementById('nick').focus();
             }
+            const jointtsClick = () => {
+                setstarttts(true)
+            }
+            const stop_tts = () => {
+                setstarttts(false)
+                handleAudio();
+            }
     
             // 핫키 적용 함수
             const handlers_3 = {
@@ -342,6 +421,8 @@ const Joinsteptwo = ({ changeislogn }) => {
                 space2_key: pwinputClick,
                 space3_key: pwinputClick_,
                 space4_key: nickClick,
+	            jointts: jointtsClick,
+	            stoptts: stop_tts,
                 // enter_key: EnterClick
             };
             
@@ -352,8 +433,19 @@ const Joinsteptwo = ({ changeislogn }) => {
                 </>
             );
         };
+
+        const ttsjoinform = `조인폼이다 이좌식아
+        아이디는 ${form.username ==''? "빈칸" : form.username}으로 입력하셨습니다.
+        비밀번호는 ${form.password ==''? "빈칸" : form.password}으로 입력하셨습니다.
+        비밀번호 확인은  ${form.password2 ==''? "빈칸" : form.password2}으로 입력하셨습니다.
+        별명은  ${form.nickname ==''? "빈칸" : form.nickname}으로 입력하셨습니다.
+        다시듣고 싶으시다면 쉬프트 버튼과 디버튼을 동시에 누른후
+        쉬프트 버튼과 큐버튼을 동시에 눌러주세요.
+        `;
+
     return (
         <>
+        <Hotkey_local_3/>
             <div className="choice_tab">
                 <h3 className="welcome">
                     개인정보 입력
@@ -383,6 +475,7 @@ const Joinsteptwo = ({ changeislogn }) => {
                 </div>
             </div>
             <button className="next_step_btn" onClick={() => join_btn()}> <strong style={{ color: "red" }}>0</strong> 회원가입 </button>
+            {starttts && <TextToSpeech value={ttsjoinform} />}
         </>
     );
 }
