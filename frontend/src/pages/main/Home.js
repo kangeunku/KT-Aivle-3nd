@@ -306,7 +306,7 @@ const SecondPage = ({ inputValue, goToThirdPage, result, popupOn, popupOff, mess
                     </div>
                 </div>
                 <div>
-                    <button className={styles.home_button2} id="next" onClick={() => goToThirdPage(selectedItems)} alt="상품추천으로 이동하는 버튼">
+                    <button className={styles.home_button2} id="goNext" onClick={() => goToThirdPage(selectedItems)} alt="상품추천으로 이동하는 버튼">
                         <div>다음</div>
                     </button>
                 </div>

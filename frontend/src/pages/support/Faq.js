@@ -404,7 +404,8 @@ const ThirdPage = ({ goToSecondPage }) => {
         // 핫키 설정
         const keyMap_faq3 = {
             space1_key: 'space + 1',
-            space2_key: 'space + 2'
+            space2_key: 'space + 2',
+            space3_key: 'space + 3'
         };
 
         const selectboxFocus = () => {
@@ -414,12 +415,14 @@ const ThirdPage = ({ goToSecondPage }) => {
 
         const uploadFocus = () => {
             console.log('space + 2');
-            document.getElementById("upload").focus();
+            document.getElementById("upload").value("주문/결제").props("selected", true);
         }
+
 
         // 핫키 적용 함수
         const handlers_faq3 = {
             space1_key: selectboxFocus,
+            space2_key: uploadFocus
         };
         return (
             <>

@@ -162,9 +162,9 @@ const Joinstepone = () => {
     const Hotkey_local_2 = () => {
         // 핫키 설정
         const keyMap_2 = {
-            space1_key: '1',
-            space2_key: "2",
-            space3_key: "3"
+            space1_key: 'space+1',
+            space2_key: "space+2",
+            space3_key: "space+3"
         };
 
         const termClick = () => {
@@ -390,7 +390,7 @@ const Joinsteptwo = ({ changeislogn }) => {
 
     const isAllFieldsValid = form.username_val && form.password_val && form.password2_val && form.nickname_val;
         
-    // 핫키 생성
+        // 핫키 생성
     const Hotkey_local_3 = () => {
         // 핫키 설정
         const keyMap_3 = {
