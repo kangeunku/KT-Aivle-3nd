@@ -309,6 +309,11 @@ const SecondPage = ({goToThirdPage, result}) => {
                                                         <strong>Q.</strong> {index.question.replace(/"/g, '').split('\n').map((line, lineIndex) => (
                                                             <div key={lineIndex}>{line}</div>
                                                         ))}
+                                                        {index.img_file && (
+                                                            <div>
+                                                                <a href={index.img_file}>{index.img_file}</a>
+                                                            </div>
+                                                        )}
                                                         <strong>A.</strong> {index.answer.replace(/"/g, '').split('\n').map((line, lineIndex) => (
                                                             <div key={lineIndex}>{line}</div>
                                                         ))}
@@ -509,8 +514,8 @@ const ImageUploadPreview = ({img}) => {
     return (
         <label htmlFor="fileInput" className={styles.fileimgbut}>
             <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleImageUpload} />
-            {renderImageBoxes()}
-            <div style={{ width: '100px', height: '100px', border: '1px solid gray', backgroundColor: 'lightgray' }}></div>
+                    {renderImageBoxes()}
+                    <div style={{ width: '100px', height: '100px', border: '1px solid gray', backgroundColor: 'lightgray' }}></div>
         </label>
     );
 };
