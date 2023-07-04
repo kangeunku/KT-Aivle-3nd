@@ -7,6 +7,7 @@
 
 .faq_container1{
     position:relative;
+    margin-top: 30px;
 }
 
 .faq_main1{
@@ -14,20 +15,33 @@
     font-weight: 700;
     margin-Bottom: 30px;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     margin-left: 50px;
 }
 
+.page2logo2 {
+    position: relative;
+    left: 0%;
+    width: 282px;
+    height: 84px;
+    background-image: url(../assets/img/ohsori_logo2.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    justify-content: flex-end;
+}
+
+
 .faq_box {
     position:relative;
-    width: 850px;
-    height: 500px;
-    overflow-y: auto;
+    width: 65%;
     overflow-x: hidden;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 30px;
+    margin: 5% auto 0;
+
 }
+
+.faqbox11{ font-size: 32px; font-weight: 700; margin-bottom: 12px; margin-left: 10px; color:#191919; }
+
 
 .faq_mybox {
     position:relative;
@@ -52,12 +66,16 @@
     /* display: flex; */
     /* flex-direction: column; */
     align-items:center;
+    min-width:600px;
 }
   
 .faq_container_box {
     text-align: center;
     overflow: hidden;
     width: 100%;
+    background-color: #EDECEC;
+    border-radius: 20px;
+    margin-bottom: 10px;
 }
 
 .faq_container_title {
@@ -67,6 +85,7 @@
     font-size:24px;
     font-weight:500;
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .faq_mycontainer_title {
@@ -82,17 +101,21 @@
 .faq_container_hr {
     width: 100%;
     border: none;
-    border-top: 1px solid rgba(0, 0, 0, 0.4);
-    
+    border-top: 1px solid rgba(0, 0, 0, 0.4); 
 }
   
+.faq_container_hr2 {
+    width: 100%;
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.4);
+    margin-top:20px;
+    margin-bottom:20px;
+}
+
 .faq_container_image {
     margin-top: 10px;
-    background-color: #EDECEC;
     padding-top: 15px;
     padding-bottom: 20px;
-    padding-left: 70px;
-    border-radius: 20px;
     font-weight: 500;
     font-size: 16px;
     line-height:36px;
@@ -101,6 +124,7 @@
 .faq_answer{
     text-align: left;
     overflow: hidden;
+    padding-left: 70px;
 }
 
 .faq_downbutton{
@@ -123,13 +147,17 @@
 
 .myfaq_ans{
     font-weight: 700;
+    color:blue;
+}
+
+.myfaq_noans{
+    font-weight: 700;
     color:red;
 }
 
 .button_faq{
-    position: absolute;
-    right:10%;
-    bottom : 4%;
+    position: fixed;
+    right:4%;
     background-color : #285a43;
     width : 180px;
     height: 40px;
@@ -138,11 +166,11 @@
     color:white;
     font-size:20px;
     font-weight:700;
+    top:90%;
 }
 
 .faq3_container {
-    margin-left:auto;
-    margin-right: auto;
+    margin: 100px auto;
     display: flex;
     flex-direction: column;
     width: 85%;
@@ -167,14 +195,14 @@
 .faq3_row3 {
     display: flex;
     width:100%;
-    height: 100px;
+    height: 60px;
     border-bottom: 2px #191919;
 }
 
 .faq3_row4 {
     display: flex;
     width:100%;
-    flex-grow: 1;
+    height: 300px;
     border-bottom: 2px #191919;
 }
 
@@ -221,4 +249,9 @@
     border-style: 0.5px;
     border-color: #8e8e8e;
     border-radius: 10px;
+}
+
+.fileimgbut{
+    display: flex;
+    flex-direction: row;
 }

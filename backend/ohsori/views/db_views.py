@@ -1,92 +1,152 @@
-from django.http import HttpResponse
-from django.db import connection
-
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
+from django.db import connection
+
 from rest_framework.views import APIView
-from rest_framework.generics import get_object_or_404
+from rest_framework.renderers import JSONRenderer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 
-from ..serializers import UsersSerialize, GoodsSerialize, BasketsSerialize, FaqSerialize, QnaSerialize, SurveySerialize
-from ..models import Users, Goods, Baskets, Faq, Qna, Survey
+import json
 
-# db 사용
-def listFunc():
-    datas = Users.objects.all()
-    data = UsersSerialize(datas, many=True)
-    print("xxxxxxxxxxxxxxxxxxxx")
-    print(data.data)
-    print("xxxxxxxxxxxxxxxxxxxx")
-    return data
+from django.http import JsonResponse
+from django.views import View
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
-def sqljoin():
-    sql = ""
-    # sql = "select * from osori_user"
-    # cursor = connection.cursor()
-    # # sql 반영
-    # cursor.execute(sql)
-    # # 배열 형식으로 받아옴
-    # datas = cursor.fetchall()
-    # data = UserSerialize(datas, many=True)
-    # return data
-    
-class GoodsAPI(APIView): # 상품 정보 API 1
-    def get(self, request, goods_no): # 
-        try:
-            goods = Goods.objects.get(goods_no = goods_no)
-            # good = Good.objects.get(good_no = request.data.get('good_no'))
-            serializer = GoodsSerialize(goods)
-            return Response(serializer.data, status = status.HTTP_200_OK)
-        except Goods.DoesNotExist:
-            goods = Goods()
-            goods.goods_info = "오전 11시455분" # 모델을 통해 넣을 정보들 
-            goods.goods_url = "https://www.235432n142av.com/322534/"
-            goods.goods_name = "졸려어155134541"
-            goods.use_yn = "Y"
-            goods.save()
-            return Response('정보가 없네요, 정보 저장했습니다')
+from ..serializers import GoodsSerialize, BasketsSerialize,QnaSerialize
+from ..models import Goods, Baskets,Qna
+from account.models import Users
 
- # 정참조 users = Users.objects.get(name='뽀삐') /n  Users_basket = users.basket.all()
 class BasketsAPI(APIView):
-    def get(self, request, user_no):
-        users = Users.objects.get(user_no = user_no)
-        user_baskets = users.baskets.filter(basket_yn = 'Y')
-        serializer = BasketsSerialize(user_baskets, many = True)
-        return Response(serializer.data, status = status.HTTP_200_OK)
-
-
-class BasketsAddAPI(APIView): 
-    def post(self, request): # basket_yn True or False // 요청 params : url
-        goods= Goods.objects.get(goods_url = request.data.get('goods_url'))
-        baskets = Baskets()
-        baskets.goods_no = goods
-        baskets.user_no = Users.objects.get(user_no = request.data.get('user_no'))
-        baskets.use_yn = 'Y'
-        serializer = BasketsSerialize(baskets)
-        baskets.save()
-        print(baskets)
-        return Response(serializer.data)
+    '''
+    get으로 요청시 찜목록 모두 조회후 json으로 전달
     
-class BasketsDelAPI(APIView):
-    def get(self, request, basket_no):
-        basket = Baskets.objects.get(basket_no = basket_no)
-        basket.basket_yn = "N"
-        basket.save()
-        return Response(status=status.HTTP_200_OK)
-            
-class SurveyAPI(APIView):
-    def post(self, request):
-        survey = Survey()
-        survey.user_no = Users.objects.get(user_no = request.data.get('user_no')) # 세션에서 유저정보 담아서 어떻게어떻게 하기
-        survey.score = 5      #체크박스로 점수 해두기 ex : 5
-        survey.answer = '도움이 많이 됩니당'               # 건의사항에 대한 답변 받기
-        return Response('감사함늬다')
+    params : X
+    
+    returns : 계정에 해당하는 모든 Basket info
+    '''
+    permission_classes = [IsAuthenticated]
+    def get(self, request): # 장바구니 페이지 GET 요청시 장바구니에 있는 모든 상품 전달
+        cursor = connection.cursor()
 
+        strSql = f"""select ob.reg_date, og.goods_url, og.goods_name, og.goods_star, og.goods_thumb, og.goods_price, gs.whole_summary
+                    from ohsori_basket ob 
+                    INNER join ohsori_good og 
+                    on ob.goods_no = og.goods_no 
+                    INNER join goods_summary gs
+                    on ob.goods_no = gs.goods_no
+                    WHERE ob.username = '{request.user.username}' and ob.use_yn = 'y'""" 
+        result = cursor.execute(strSql)
+        goods = cursor.fetchall()
+        
+        basket = {}
+        num = 1
+        for i in goods:
+            temp = {'date' : i[0], 'goods_url' : i[1], 'goods_name' : i[2], 'goods_star' : i[3], 'goods_thumb' : i[4], 'goods_price' :i[5], 'goods_summary':i[6]}
+            basket[num] = temp
+            num += 1
+        # print(goods)
+        # basket = {'reg_data' :}
+        return Response({"goods" : basket})
+        
+# @method_decorator(csrf_exempt, name = "dispatch")
+class Baskets_Add_DelAPI(View):
+    '''
+    POST로 goods_url 전달시 찜 목록에 상품 추가 
+    PUT으로 goods_url 전달 시 찜 목록에서 상품 제거 <-- 찜 목록에 상품이 추가되어 있어야 함
+    
+    POST
+    Input params : goods_url
+    return : user_basket에 상품 정보 추가
+    
+    PUT
+    Input params : goods_url
+    return : user_basket에서 해당 goods_url의 상품 use_yn = 'n 처리
+    '''    
+    permission_classes = [IsAuthenticated]
+    def post(self, request): # basket_yn True or False // 요청 params : goods_url
+        data = json.loads(request.body)
+        baskets = Baskets()
+        goods_no = Goods.objects.only('goods_no').get(goods_url = data['goods_url'])
+        try:
+            baskets1 = Baskets.objects.get(goods_no = goods_no, username = request.user.username)
+            baskets1.use_yn = 'y'
+            baskets1.save()
+            return JsonResponse({"status" : "이미 존재하는 상품입니다"})
+        except Baskets.DoesNotExist:
+            baskets.goods_no = goods_no
+            baskets.username = Users.objects.get(username = request.user.username)
+            baskets.use_yn = 'y'
+            serializer = BasketsSerialize(baskets)
+            baskets.save()
+            return JsonResponse(serializer.data) # 데이터 회신은 필요없음
+    
+    def put(self, request): # param : goods_url
+        data = json.loads(request.body)
+        goods_no = Goods.objects.only('goods_no').get(goods_url = data['goods_url'])
+        basket = Baskets.objects.get(goods_no = goods_no, username = request.user.username)
+        basket.use_yn = "n"
+        basket.save()
+        serializer = BasketsSerialize(basket)
+        return JsonResponse({"good" : "OK"})
+
+
+@method_decorator(csrf_exempt, name = "dispatch")
 class QnaAPI(APIView):
-    def post(self, request):
+    '''
+    GET으로 요청시 Qna목록 모두 조회후 json으로 전달
+    POST로 type, subject, question, imgfile(선택) 전달 시 개별 Qna 생성
+    PUT으로 qna_no 전달 시 해당 질문의 use_yn을 n으로 변경
+    
+    GET
+    params : X
+    return : 모든 계정에 해당하는 Qna 인포
+     
+    POST
+    param : type, subject, question, imgfile(선택)
+    return : DB에 qna 생성
+    
+    PUT
+    param : qna_no
+    return : qna_no에 해당하는 질문 use_yn = 'n 변경
+    '''
+    permission_classes = [IsAuthenticated]
+    def get(self, request): # 장바구니 페이지 GET 요청시 장바구니에 있는 모든 상품 전달
+        users = Users.objects.get(username = request.user.username)
+        user_qna = users.qna.filter(use_yn = 'y')
+        serializer = QnaSerialize(user_qna, many = True)
+        return Response(serializer.data)
+
+    def post(self, request): # params :     l 
         qna = Qna()
-        qna.user_no = Users.objects.get(user_no = request.data.get('user_no')) # 세션에서 유저정보 담아서 어떻게어떻게 하기
-        qna.question = '집에 가고 싶은데 어떻게 해야 하나요' # 질문 받기
-        # qna.answer = '우리가 답변 하기' # 추후에 관리자가 답변 수정
-        qna.type = '사이트 문의' # 선택으로 type 설정
-        # qna.img_url = 'asdfasdf.jpg'  # if문으로 img가 있으면 넣기 null = True라 공백 가능
-        qna.use_yn = 'Y'
+        qna.username = Users.objects.get(username = request.user.username) # 세션에서 유저정보 담아서 어떻게어떻게 하기
+        qna.type = request.data.get('type') # 선택으로 type 설정
+        qna.subject = request.data.get('subject')
+        qna.question = request.data.get('question') # 질문 받기
+        try:
+            qna.img_url = request.FILES["imgfile"]  # 
+        except:
+            pass
+        qna.use_yn = 'y'
+        qna.save()
+        return Response({'status': 'succes'}, status=status.HTTP_200_OK)
+    
+    def put(self, request): # param : qna_no
+        qna = Qna.objects.get(qna_no = request.data.get('qna_no'))
+        qna.answer = request.data.get('answer')
+        qna.save()
+        return Response({'status': 'succes'}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def CheckQna(request): # param : qna_no
+    '''
+    GET으로 qna_no 전달 시 해당 qna 회신
+    '''
+    qna = Qna.objects.get(qna_no = request.data.get('qna_no'))
+    serializer = QnaSerialize(qna, many = False)
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)

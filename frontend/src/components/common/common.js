@@ -88,16 +88,60 @@ const Hotkey_start = () => {
     );
 };
 
+const GlobalHotkey_start = () => {
+    const [spacePressed, setSpacePressed] = useState(false);
+  
+    const keyMap = {
+        space_down: 'space',
+    };
+  
+    const spacedownClick = () => {
+        console.log('space down');
+    };
+  
+    const handlers = {
+        space_down: spacedownClick,
+    };
+  
+    const handleKeyDown = (event) => {
+        if (event.code === 'Space') {
+            setSpacePressed(true);
+        }
+    };
+  
+    const handleKeyUp = (event) => {
+        if (event.code === 'Space') {
+            setSpacePressed(false);
+        }
+    };
+  
+    return (
+        <>
+            <GlobalHotKeys keyMap={keyMap} handlers={handlers} />
+            <div
+                tabIndex={-1}
+                onKeyDown={handleKeyDown}
+                onKeyUp={handleKeyUp}
+                style={{ outline: 'none' }}
+            >
+            </div>
+        </>
+    );
+};
+
+
+
 // 장고 전송 함수, state  
 const Send_api = (state, data) => {
     const url = "http://127.0.0.1:8000/"
 
     const state_dir = {
-        0 : "main/search1/", // 카테고리 검색
-        1 : "main/search2/", // 상품 검색
-        2 : "goods/test/", // 상품 조회
-        3 : "register/", // 회원가입
-        4 : "login/",  // 로그인
+        0 : "v1/search1/", // 카테고리 검색
+        1 : "v1/search2/", // 상품 검색
+        2 : "v1/detail/", // 상품 조회
+        3 : "v1/register/", // 회원가입
+        4 : "v1/login/",  // 로그인
+        5 : 'v1/stt/',
     }
     const url_fix = url + state_dir[state]
     
@@ -112,7 +156,7 @@ const Send_api = (state, data) => {
     });
 };
 
-export { Send, Stt_common, Hotkey_start, Send_api };
+export { Send, Stt_common, Hotkey_start, GlobalHotkey_start, Send_api };
 
 
 

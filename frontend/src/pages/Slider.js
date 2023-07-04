@@ -1,375 +1,50 @@
-import { useState, useRef, useEffect } from "react";
-import styled from "styled-components";
+import { useState, useRef, useEffect, forwardRef } from "react";
+import styles from "../styles/Slider.module.css";
+import axios from "axios";
 
-const Resultpopup = styled.div`
-    position: fixed;
-    background-color: rgba(255, 255, 255, 1);
-    border-radius: 5px;
-    width:1700px;
-    height:1000px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    border: 1px solid rgba(0, 0, 0, 0.4);
-    border-radius: 5px;
-    overflow:auto;
-`;
-
-const Wrapper = styled.div`
-  margin: 22px 0px;
-  display: flex;
-  overflow-x: hidden;
-  align-items: center;
-`;
-
-const Container = styled.div`
-  background-color: rgba(0, 0, 0, 1);
-  border-radius: 7px;
-  display: flex;
-  align-items: center;
-  margin: 0 12.5px;
-  cursor: pointer;
-  position: relative;
-`;
-
-//preview img 전용
-const Container1 = styled.div`
-  background-color: rgba(0, 0, 0, 1);
-  border-radius: 0px;
-  display: flex;
-  align-items: center;
-  margin-top:15px;
-  margin-right:7px;
-  cursor: pointer;
-  position: relative;
-`;
-
-const Row = styled.div`
-  width: 80vw;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  transition: all 0.5s ease-in-out;
-  height: 400px;
-`;
-
-const Img = styled.img`
-  margin: 0;
-  margin: 0 20px;
-  margin-left:20px;
-  position: relative;
-  cursor: pointer;
-  height:120px;
-  width:85px;
-  transition: all 0.5s linear;
-  border:3px solid #eaeaea; 
-  box-shadow:5px 5px 5px #c0c0c0;
-`
-//border : 테두리, box-shadow : 테두리 그림자
-;
-
-const PrivewImg = styled.img`
-  transition: all 1s linear;
-  height:90px;
-  width:65px;
-`;
-
-const Button = styled.button`
-  display: flex;
-  cursor: pointer;
-  align-items: center;
-  position: absolute;
-  justify-content: center;
-  border: none;
-  font-size: 12px;
-  height: 100px;
-  width: 100px;
-  border-radius: 60px;
-  padding: 25px 10px;
-  opacity: 0.5;
-  z-index: 2;
-  border:5px solid black; 
-`;
-
-const LeftButton = styled(Button)`
-  transition: all 0.5s ease-in-out;
-  margin-top: 250px;
-`;
-
-const RightButton = styled(Button)`
-  transition: all 0.5s ease-in-out;
-  margin-top: 250px;
-`;
-
-const ImgWrapper = styled.div`
-  position: relative;
-`;
-const ImgDes = styled.div`
-  position: absolute;
-  z-index: 5;
-  width: 330px;
-  height: 150px;
-  border-radius: 5px;
-  background-color: white;
-  left: 30px;
-  bottom: 25px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: 27px 0px 20px 0px;
-`;
-
-const Title = styled.span`
-  padding-left: 20px;
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 14px;
-`;
-const Des = styled.span`
-  padding-left: 20px;
-  padding-bottom: 24px;
-  font-size: 14px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-`;
-
-const LinkSpan = styled.span`
-  padding-left: 20px;
-  padding-top: 16px;
-  color: #3366ff;
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  i {
-    margin-left: 5px;
+const select_boxes = {
+  0: {
+    index: 0,
+    placeholder: '텀블러 사이즈&종류 선택하세요',
+    options: ['솔리드 핸들 텀블러', '파스텔 고급 텀블러(차량겸용)', '슬림 차량겸용 텀블러 500ml']
+  },
+  1: {
+    index: 1,
+    placeholder: '컬러 선택하세요',
+    options: [ '아보카도 그린(손잡이 + 빨대+개별박스포장) (+5000원)', '파스텔실버(손잡이 + 빨대+개별박스포장) (+5000원)', '파스텔블랙(손잡이 + 빨대+개별박스포장) (+5000원)' ]
+  },
+  2: {
+    index: 2, placeholder: '각인서비스를원하신다면 20자이내로 입력해주세요', options: [ '' ]
+  },
+  3: { index: 3, placeholder: '옵션 수량 선택', options: ['' ]
   }
-`;
-
-const summarydiv = styled.div`
-  display: flex;
-  position: absolute;
-  flex-direction: column;
-  align-items: center;
-  transition: all 0.1s ease-in-out;
-  margin-top : 50px;
-  margit-bottom: 50px;
-  border:3px solid #eaeaea;
-  align-items: center;
-  border-radius: 20px;
-  background-color: rgba(0, 0, 0, 1);
-  width:300px;
-  height:450px;
-`;
-
-const MiniPics = styled.div`
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    align-items: center;
-    transition: all 0.1s ease-in-out;
-    margin-top : 50px;
-    margit-bottom: 50px;
-    align-items: center;
-    padding: 3px;
-`;
-
-const Justline = styled.div`
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    align-items: center;
-    transition: all 0.1s ease-in-out;
-    margin-top : 50px;
-    margit-bottom: 50px;
-    align-items: center;
-    padding: 3px;
-    width:850px;
-    height:0.5px;
-    background-color: rgba(0, 0, 0, 0.5);
-    left:30%;
-`;
+};
 
 
-const MicroPic = styled.img`
-    display: inline;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 2px;
-    margin-right: 2px;
-    position: relative;
-    height:500px;
-    width:600px;
-    transition: all 0.5s linear;
-    border:3px solid #eaeaea; 
-`;
+const Slider = forwardRef(({goToPage, setPopupState, result, goods_url}) =>{
 
-//recommend box
-const RecommendBox = styled.div`
-    display: flex;
-    position: relative;
-    flex-direction: row;
-    align-items: center;
-    transition: all 0.1s ease-in-out;
-    margin-top : 50px;
-    margit-bottom: 50px;
-    align-items: center;
-    padding: 3px;
-    width:80vw;
-    margin-left: 0vw;
-    justify-content: center;
-`;
-//    border:3px solid #eaeaea; 
+  // console.log('Slider_result', result);
+  // console.log('Slider_result2', typeof(result.img_pathes), result.img_pathes);
+  // console.log('Slider_result3', typeof(result.summary_lst), result.summary_lst);
+  const iData = [];
+  
+  if(result.img_pathes){
+    for (let i = 0; i < result.summary_lst.length; i++){
+      const tmp = {};
+      tmp['image'] = result.img_pathes[i];
+      tmp['answer'] = result.summary_lst[i];
+      iData.push(tmp);
+    }
+  } 
+  const iData_len  = result.img_pathes.length;
+  // console.log(iData);
+
+  // console.log('options', result.detail.necessary_opt);
+  // console.log('goods_url', goods_url);
 
 
+  // const iData_len = result.img_pathes.length;
 
-
-//inside recommend box
-const GoodsBox = styled.div`
-    display: flex;
-    flex-direction:row;
-    position: relative;
-    width: 35vw;
-    height: 300px;
-    border:3px solid black;
-    margin: 10px 10px;
-`;
-
-//recommend goods img
-const GoodsImg = styled.img`
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 10px;
-    margin-right: 2px;
-    position: relative;
-    height:96%;
-    width:40%;
-    transition: all 0.5s linear;
-    border:3px solid #eaeaea; 
-`;
-//recommend goods info
-const GoodsInfo = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 10px;
-    margin-right: 2px;
-    position: relative;
-    height:96%;
-    width:55%;
-    transition: all 0.5s linear;
-`;
-//    border:3px solid #eaeaea;
-
-
-
-//recommend Info1
-const GoodsInfo1 = styled.textarea`
-    margin-top: 20px;
-    margin-left: 10px;
-    margin-right: 2px;
-    position: relative;
-    height:30%;
-    width:95%;
-    transition: all 0.5s linear;
-    text-align: center;
-    font-size: 45px;
-    border: none;
-`;
-//    border:3px solid #eaeaea;
-
-//option small box
-const OptionBox = styled.div`
-  display: flex;
-  flex-direction:column;
-  position: relative;
-  width: 35vw;
-  height: 100px;
-  border:3px solid black;
-  margin: 10px 10px;
-`;
-
-
-
-//summary
-const MiniWrapper = styled.div`
-  display: flex;
-  position: absolute;
-  flex-direction: column;
-  align-items: center;
-  transition: all 0.1s ease-in-out;
-  margin-top : 50px;
-  margit-bottom: 50px;
-  border:3px solid #eaeaea;
-  border-radius: 20px;
-  height: 200px;
-  width: 600px;
-  background-color: #B4E0A0;
-  box-shadow:5px 5px 5px #c0c0c0;
-  margin-left:50px;
-`;
-
-const MiniTitle = styled.span`
-  font-size: 20px;
-  font-weight: 600;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  margin-left: 10px;
-  margin-right: 10px;
-  text-align: center;
-  color: rgba(0, 0, 0, 0.75);
-`;
-
-const MiniDes = styled.span`
-  font-size: 14px;
-  text-align: center;
-  color: rgba(0, 0, 0, 0.6);
-`;
-
-const WantedImg = [
-  "assets/img/apple_info_sample.jpg",
-  "assets/img/apple_info_sample0.jpg",
-  "assets/img/apple_info_sample1.jpg",
-  "assets/img/apple_info_sample2.jpg",
-  "assets/img/apple_info_sample3.jpg",
-  "assets/img/apple_info_sample4.jpg",
-  "assets/img/apple1.jpg",
-  "assets/img/Badger.jpg",
-  "assets/img/LeGOAT.png",
-];
-
-const wantedTitle = [
-  "오전 9시 이전 주문건 당일배송",
-  "2022 한국 소비자 산업평가 사과 부문 우수상 수상!",
-  "사과내부의 당분이 한곳에 모여 꿀처럼 보이는 '밀병'",
-  "상품 수령하신 후 냉장보관 후에 드셔야 더욱 맛있습니다.",
-  "홈골농원의 사과는 산딸기, 송이버섯 등 천연 식품이 자라는 자연환경에서 재배되고 있습니다.",
-  "기스 사과 예시",
-  "apple",
-  "오소리",
-  "농농",
-];
-
-const wantedDes = [
-  "수령하신 상품에 문제가 있을 경우 100% 해결해드립니다.",
-  "한국 소비자 산업평가 식품 분야 우수업체 홈골농원",
-  "사과내부 꿀이 없다는 사유로 반품이 불가합니다.",
-  "사과에 문제가 있을 경우 010-5080-6716 번호로 사진 전송",
-  "일교차가 커 과육과 당도가 뛰어난 사과!",
-  "사과 내부 꿀이 없는 것은 기스에 해당하지 않습니다.",
-  "사과",
-  "발자국",
-  "구구",
-];
-
-// const btnNum = [
-//     "assets/img/leftBtn.jpg",
-//     "assets/img/rightBtn.jpg"
-// ]
-
-function Slider() {
   //슬라이드
   const slideRef = useRef(null);
   const [index, setIndex] = useState(0); // 인덱스를 만들어줍니다.
@@ -381,8 +56,64 @@ function Slider() {
   const [mouseDownClientX, setMouseDownClientX] = useState(0); // 마우스를 클릭한 지점의 x 좌료를 저장합니다
   const [mouseUpClientX, setMouseUpClientX] = useState(0); // 마우스를 땐 지점의 x 좌표를 저장합니다.
 
+  // 팝업
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+
+  // 카운트 증가 감소
+  const [count, setCount] = useState(1);
+
+  // 가격 업데이트
+  const price = result.detail.goods_price.replace(/,/g, "");
+  const [totalPrice, setTotalPrice] = useState(price);
+  useEffect(() => {
+    // console.log('count', count);
+    // console.log('price', typeof(price), price);
+    updatePrice();
+  }, [count])
+
   //반응형 사이트
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // 사용자의 화면크기 정보를 받아 반응형 사이트에 사용합니다.
+  useEffect(()=>{
+    document.addEventListener('mousedown', handleClickOutside);
+    return()=>{
+        document.removeEventListener('mousedown', handleClickOutside);
+    }
+  })
+
+  // 브라우저 크기 감지
+  useEffect(() => {
+    window.addEventListener("resize", resizeWidth);
+    return () => {
+      window.removeEventListener("resize", resizeWidth);
+    };
+  }, []);
+
+  // 슬라이더 자동 전환 
+  useEffect(() => {
+    const autoPage = setTimeout(() => {
+      setX(-5);
+      setIsSlide(true);
+      setTimeout(() => {
+        setIndex((prev) => (prev === iData_len-1 ? 0 : prev + 1));
+        setX(0);
+        setIsSlide(false);
+      }, 300);
+    }, 5000);
+    return () => {
+      clearTimeout(autoPage);
+    };
+  }, [index, isClick]);
+  // console.log(`브라우저 사이즈 : ${windowWidth}`);
+
+  const updatePrice = () => {
+    setTotalPrice(parseInt(price, 10) * count);
+  };
+  const handleClickOutside=(event)=>{
+    if(wrapperRef && !wrapperRef.current.contains(event.target)){
+        setPopupState(false);
+    }
+  }
 
   const increaseClick = async () => {
     if (isSlide) {
@@ -391,7 +122,7 @@ function Slider() {
     setX(-5);
     setIsSlide(true);
     await setTimeout(() => {
-      setIndex((prev) => (prev === 8 ? 0 : prev + 1));
+      setIndex((prev) => (prev === iData_len-1 ? 0 : prev + 1));
       setX(0);
       setIsSlide(false);
     }, 300);
@@ -404,27 +135,16 @@ function Slider() {
     setX(+5);
     setIsSlide(true);
     await setTimeout(() => {
-      setIndex((prev) => (prev === 0 ? 8 : prev - 1));
+      setIndex((prev) => (prev === 0 ? iData_len-1 : prev - 1));
       setX(0);
       setIsSlide(false);
     }, 300);
   };
-  const morePrevImg3 = index === 1 ? 6 : index === 0 ? 5 : index === 2 ? 7 : index === 3?8 :index - 4;
-  const morePrevImg2 = index === 1 ? 7 : index === 0 ? 6 : index === 2 ? 8 : index - 3;
-  const morePrevImg = index === 1 ? 8 : index === 0 ? 7 : index - 2;
-  const PrevImg = index === 0 ? 8 : index - 1;
-  const NextImg = index === 8 ? 0 : index + 1;
-  const NextImg2 = index === 8 ? 1 : index === 7 ? 0 : index + 2;
-  const NextImg3 = index === 8 ? 2 : index === 7 ? 1 : index === 6 ? 0 :index + 3;
-  const NextImg4 = index === 8 ? 3 : index === 7 ? 2 : index === 6 ? 1 : index ===5?0 : index + 4;
-  
-  //console.log(slideRef.current);
-  //console.log(index);
 
   const onMouseDown = (event) => {
     setIsClick(true);
     setMouseDownClientX(event.pageX);
-    console.log(slideRef);
+    // console.log(slideRef);
   };
   const onMouseLeave = (event) => {
     setIsClick(false);
@@ -454,443 +174,190 @@ function Slider() {
     setWindowWidth(window.innerWidth);
   };
 
-  useEffect(() => {
-    window.addEventListener("resize", resizeWidth);
-    return () => {
-      window.removeEventListener("resize", resizeWidth);
-    };
-  }, []);
+  
 
-  useEffect(() => {
-    const autoPage = setTimeout(() => {
-      setX(-5);
-      setIsSlide(true);
-      setTimeout(() => {
-        setIndex((prev) => (prev === 8 ? 0 : prev + 1));
-        setX(0);
-        setIsSlide(false);
-      }, 300);
-    }, 5000);
-    return () => {
-      clearTimeout(autoPage);
-    };
-  }, [index, isClick]);
-  console.log(`브라우저 사이즈 : ${windowWidth}`);
+  const decreaseCount = () => {
+    if(count > 1) {
+      setCount(count-1);
+    }
+  };
+
+  const increaseCount = () => {
+    setCount(count+1)
+  };
+
+
+  const BtnEvent = async () => {
+    //alert('모달창 내부 작업을 해도 모달창이 꺼지지 않습니다.');
+    // setPopupState(false);
+    setPopupMessage("찜하기 목록에 추가했습니다.");
+    setPopupVisible(true);
+    console.log("popup on");
+    try{
+      const url = "http://127.0.0.1:8000/v1/basket_change/";
+      const data = {
+          "goods_url": goods_url,
+      }
+      // setGoods_url(url);
+
+      const response = await axios.post(url, data, {withCredentials:true});
+      // console.log('handleDeleteList', response);
+      setTimeout(()=>{
+        handlePopupClose();
+      }, 5000);
+    } catch (error) {
+        console.log('error', error);
+    }
+  };
+
+  const handlePopupClose = () => {
+    console.log("popup close");
+    setPopupVisible(false);
+  };
+
+
+  function OptionSelect({ value, onChange }) {
+    return (
+      <select value={value} onChange={onChange}>
+        <option value="apple">사과</option>
+        <option value="banana">바나나</option>
+        <option value="pear">배</option>
+      </select>
+    );
+  }
+
+
+  //팝업 열고 닫기
+  let wrapperRef = useRef();
+
   return (
-    <Resultpopup>
-    <><><><><><LeftButton
-      style={{
-        left: windowWidth > 1800
-          ? `15.5%`
-          : windowWidth > 1500
-            ? `10%`
-            : windowWidth > 1300
-              ? `5%`
-              : `5%`,
-        visibility: windowWidth < 1335 ? "visible" : "visible",
-      }}
-      onClick={decreaseClick}
-    >
-      <i class="fas fa-chevron-left"></i>
-    </LeftButton>
-      <RightButton
-        style={{
-          right: windowWidth > 1800
-            ? `15.5%`
-            : windowWidth > 1500
-              ? `10%`
-              : windowWidth > 1200
-                ? `5%`
-                : `5%`,
-          visibility: windowWidth < 1335 ? "visible" : "visible",
-        }}
-        onClick={increaseClick}
-      >
-        <i class="fas fa-chevron-right"></i>
-      </RightButton>
-      <><MiniPics>
-        <MicroPic
-          src={WantedImg[index]} />
-      </MiniPics>
+    <div className={styles.resultpopup} ref={wrapperRef}>
 
-        <Wrapper>
-          <Row
-            key={index}
-            onMouseDown={onMouseDown}
-            onMouseUp={onMouseUp}
-            onMouseLeave={onMouseLeave}
-            onMouseMove={onMouseMove}
-            ref={slideRef}
-            style={{
-              transform: `translateX(${x}vw)`,
-            }}
+      <span className={styles.popuptxt}>이미지 안내</span>
+{/*메인 슬라이드 */}
+      <session className={`${styles.box} ${styles.box1}`}>
+        <img  className={styles.slide1} src={iData[index].image} />
+        <button className={styles.button_left} onClick={decreaseClick} />
+        <button className={styles.button_right} onClick={increaseClick} />
+      </session>
 
-          >
+ {/* 서브 슬라이드 */}
+      <session className={`${styles.box} ${styles.box2}`}>
+        {/* 서브 슬라이드 */}
+        <div className={styles.row}
+          key={index}
+          onMouseDown={onMouseDown}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseLeave}
+          onMouseMove={onMouseMove}
+          ref={slideRef}
+          style={{transform: `translateX(${x}vw)`,}}>
 
-            <ImgWrapper>
-              <Img
-                style={{
-                  opacity: 1,
-                  width: windowWidth > 1200 ? null : `80vw`,
-                  height: windowWidth > 1200
-                    ? null
-                    : windowWidth < 770
-                      ? "185px"
-                      : "250px",
-                }}
-                src={WantedImg[index]} />
+          {/*컨테이너 오른쪽 이미지*/}
+          {[3, 2, 1].map((cnt) => (
+                <nav className={styles.box2container} key={cnt}>
+                  <img className={`${styles.img} ${styles.previewimg}`}
+                    style={{ opacity: 0.5, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
+                    src={iData[(index-cnt >= 0)?index-cnt: iData_len-cnt+index].image}
+                  />
+                </nav>
+              ))}
+          {/* 보여주려는 이미지 */}
+          <nav className={styles.imgwrapper}>
+              <img className={styles.img}
+                style={{ opacity: 1, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
+                src={iData[index].image}
+              />
+          </nav>
+          {/*컨테이너 왼쪽 이미지*/}
+          {[1, 2, 3].map((cnt) => (
+                <nav className={styles.box2container} key={cnt}>
+                  <img className={`${styles.img} ${styles.previewimg}`}
+                    style={{ opacity: 0.5, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
+                    src={iData[(index+cnt <= iData_len-1)?index+cnt:cnt+index-iData_len].image}
+                  />
+                </nav>
+              ))}
+        </div>
+        <span className={styles.slide1order}>({index+1}/{iData_len})</span>
+      </session>
 
+      <span className={styles.popuptxt}>Summary</span>
+      
+{/*대체텍스트 요약 */}
+      <session className={`${styles.box} ${styles.box3}`}>
+            <span className={styles.minititle}>{iData[index].answer}</span>
+            {/* <span className={styles.minides}>{iData[index].answer}</span> */}
+      </session>
 
-              {!isSlide && windowWidth > 1200 ? (
-                <MiniWrapper>
-                  <MiniTitle>{wantedTitle[index]}</MiniTitle>
-                  <MiniDes>{wantedDes[index]}</MiniDes>
-                  {/* <LinkSpan>
-바로가기<i class="fas fa-chevron-right"></i>
-</LinkSpan> */}
-                </MiniWrapper>
-              ) : null}
-              {!isSlide && windowWidth <= 1200 ? (
-                <MiniWrapper>
-                  <MiniTitle>{wantedTitle[index]}</MiniTitle>
-                  <MiniDes>{wantedDes[index]}</MiniDes>
-                  {/* <LinkSpan>
-바로가기<i class="fas fa-chevron-right"></i>
-</LinkSpan> */}
-                </MiniWrapper>
-              ) : null}
-            </ImgWrapper>
-            <Container1>
-              <PrivewImg
-                style={{
-                  opacity: 0.5,
-                  width: windowWidth > 1200 ? null : `80vw`,
-                  height: windowWidth > 1200
-                    ? null
-                    : windowWidth < 770
-                      ? "185px"
-                      : "250px",
-                }}
-                src={WantedImg[NextImg]}
-              ></PrivewImg>
-            </Container1>
-            <Container1>
-              <PrivewImg
-                style={{
-                  opacity: 0.5,
-                  width: windowWidth > 1200 ? null : `80vw`,
-                  height: windowWidth > 1200
-                    ? null
-                    : windowWidth < 770
-                      ? "185px"
-                      : "250px",
-                }}
-                src={WantedImg[NextImg2]}
-              ></PrivewImg>
+      <span className={styles.popuptxt}>Option</span>
 
-            </Container1>
-            <Container1>
-              <PrivewImg
-                style={{
-                  opacity: 0.5,
-                  width: windowWidth > 1200 ? null : `80vw`,
-                  height: windowWidth > 1200
-                    ? null
-                    : windowWidth < 770
-                      ? "185px"
-                      : "250px",
-                }}
-                src={WantedImg[NextImg3]}
-              ></PrivewImg>
+{/* 옵션과 수량 */}
+      <session className={`${styles.box} ${styles.box4}`}>      
+      
+      {result.detail.necessary_opt &&
+      result.detail.necessary_opt.map((item) => {
+        // {console.log(item)}
+        <span className={styles.box4_txt}>필수옵션</span>
+        return (
+          <div className={styles.box4_idx0}>
+            
+              <div className={styles.box4_select}>
+                {item}
+              </div>
+            
+          </div>)
+        
+        })}
+{/*         
+        <div className={styles.box4_idx1}>
+          <span className={styles.box4_txt}>선택옵션</span>
+          <select className={styles.box4_select}>
+            <option value = "연유추가">연유추가</option>
+            <option value = "팥고물도 추가">팥고물도 추가</option>
+            <option value = "다 다 추가">다 다 추가</option>
+          </select>
+        </div>
+        <div className={styles.box4_idx2}>
+          <span className={styles.box4_txt}>입력옵션</span>
+          <textarea className={styles.box4_txtarea}>
+          </textarea>
+        </div> */}
+        <div className={styles.box4_idx3}>
+          <span className={styles.box4_txt}>수량</span>
+          <div className={styles.box4_count}>
+            <button className={styles.box4_countleft} onClick={decreaseCount} ></button>
+            <span>{count}</span>
+            <button className={styles.box4_countright} onClick={increaseCount} ></button>
+          </div>
+        </div>
+        <div className={styles.box4_idx4}>
+          <span className={styles.box4_txt}>가격</span>
+          <span className={styles.box4_txt}>{totalPrice}원</span>
+        </div>
+      </session>
 
-            </Container1>
-
-            <Container1>
-              <PrivewImg
-                style={{
-                  opacity: 0.5,
-                  width: windowWidth > 1200 ? null : `80vw`,
-                  height: windowWidth > 1200
-                    ? null
-                    : windowWidth < 770
-                      ? "185px"
-                      : "250px",
-                }}
-                src={WantedImg[NextImg4]}
-              ></PrivewImg>
-
-            </Container1>
-
-            <Container1>
-              <PrivewImg
-                style={{
-                  opacity: 0.5,
-                  width: windowWidth > 1200 ? null : `80vw`,
-                  height: windowWidth > 1200
-                    ? null
-                    : windowWidth < 770
-                      ? "185px"
-                      : "250px",
-                }}
-                src={WantedImg[morePrevImg3]}
-              ></PrivewImg>
-            </Container1>
-
-            <Container1>
-              <PrivewImg
-                style={{
-                  opacity: 0.5,
-                  width: windowWidth > 1200 ? null : `80vw`,
-                  height: windowWidth > 1200
-                    ? null
-                    : windowWidth < 770
-                      ? "185px"
-                      : "250px",
-                }}
-                src={WantedImg[morePrevImg2]}
-              ></PrivewImg>
-            </Container1>
-            <Container1>
-              <PrivewImg
-                style={{
-                  opacity: 0.5,
-                  width: windowWidth > 1200 ? null : `80vw`,
-                  height: windowWidth > 1200
-                    ? null
-                    : windowWidth < 770
-                      ? "185px"
-                      : "250px",
-                }}
-                src={WantedImg[morePrevImg]}
-              ></PrivewImg>
-            </Container1>
-            <Container1>
-              <PrivewImg
-                style={{
-                  opacity: 0.5,
-                  width: windowWidth > 1200 ? null : `80vw`,
-                  height: windowWidth > 1200
-                    ? null
-                    : windowWidth < 770
-                      ? "185px"
-                      : "250px",
-                }}
-                src={WantedImg[PrevImg]}
-              ></PrivewImg>
-            </Container1>
-
-
-          </Row>
-
-
-        </Wrapper></></>
-
-      <Wrapper
-        style={{
-          overflow: "hidden",
-          marginTop: 100,
-          marginBottom: 100,
-          marginLeft:-90
-        }}
-      >
-        <Justline>
-        </Justline>
-        <h1
-          style={{
-            marginTop: 150,
-            marginLeft: -20,
-            fontSize: 40,
-            fontweight: "bold"
-          }}
-        >
-          추천상품</h1>
-      </Wrapper></>
-
-      <Wrapper>
-        <RecommendBox>
-          <GoodsBox>
-            <GoodsImg
-              src="assets/img/apple_.jpg"
-            >
-            </GoodsImg>
-            <GoodsInfo>
-              <GoodsInfo1
-                style={{
-                  overflow: "hiden",
-                  fontWeight: "bold",
-                }}
-                placeholder="소리소리 오소리"
-              >
-
-              </GoodsInfo1>
-              <GoodsInfo1
-                style={{
-                  overflow: "hiden",
-                  fontSize: 25,
-                }}
-                placeholder="39.99$"
-              >
-              </GoodsInfo1>
-              <h1
-                style={{
-                  textAlign: "center",
-                  fontSize: 20
-                }}
-              >
-                <img
-                  style={{
-                    height: 20,
-                    width: 20
-                  }}
-                  src="assets/img/star.jpg"
-                ></img>
-                &nbsp; 4.99</h1>
-            </GoodsInfo>
-          </GoodsBox>
-
-          <GoodsBox>
-            <GoodsImg
-              src="assets/img/apple_.jpg"
-            >
-            </GoodsImg>
-            <GoodsInfo>
-              <GoodsInfo1
-                style={{
-                  overflow: "hiden",
-                  fontWeight: "bold",
-                }}
-                placeholder="소리소리 오소리"
-              >
-
-              </GoodsInfo1>
-              <GoodsInfo1
-                style={{
-                  overflow: "hiden",
-                  fontSize: 25,
-                }}
-                placeholder="39.99$"
-              >
-              </GoodsInfo1>
-              <h1
-                style={{
-                  textAlign: "center",
-                  fontSize: 20
-                }}
-              >
-                <img
-                  style={{
-                    height: 20,
-                    width: 20
-                  }}
-                  src="assets/img/star.jpg"
-                ></img>
-                &nbsp; 4.99</h1>
-            </GoodsInfo>
-          </GoodsBox>
-
-        </RecommendBox>
-      </Wrapper></>
-      <Wrapper
-        style={{
-          marginTop:300,
-          marginBottom:150,
-          marginLeft:-90
-        }}>
-        <Justline>
-        </Justline>
-      </Wrapper></>
-      <Wrapper>
-        <RecommendBox
-          style={{
-            flexDirection:"column"
-          }}
-        >
-          <OptionBox
-            style={{
-              flexDirection: "row",
-              border:"none"
-            }}
-          >
-            <h1
-              style={{
-                fontSize: 30,
-                marginTop:20,
-                marginLeft:170
-              }}
-            >
-            옵션</h1>
-            <select
-              style={{
-                height:40,
-                marginTop: 10,
-                marginLeft:300,
-                width:70
-              }}
-            >
-              <option value = "금사과">금사과</option>
-              <option value = "은사과">은사과</option>
-              <option value = "동사과">동사과</option>
-            </select>
-          </OptionBox>
-
-          <OptionBox
-            style={{
-              flexDirection: "row",
-              border:"none"
-            }}
-          >
-            <h1
-              style={{
-                fontSize: 30,
-                marginTop:20,
-                marginLeft:170
-              }}
-            >
-            수량</h1>
-            <select
-              style={{
-                height:40,
-                marginTop: 10,
-                marginLeft:300,
-                width: 70,
-                textAlign:"center"
-              }}
-            >
-              <option value = "1">1</option>
-              <option value = "2">2</option>
-              <option value = "3">3</option>
-            </select>
-            {/* <div>
-              <i class="e59e"></i>
-            </div> */}
-          </OptionBox>
-
-          <OptionBox
-            style={{
-              flexDirection: "row",
-              border:"none"
-            }}
-          >
-            <h1
-              style={{
-                fontSize: 30,
-                marginTop:20,
-                marginLeft:120
-              }}
-            >
-            총 상품 가격</h1>
-            <div>
-              <i class="e59e"></i>
-            </div>
-          </OptionBox>
-
-        </RecommendBox>
-      </Wrapper></>
-    </Resultpopup>
+{/* 버튼들 */}
+      <session className={`${styles.box} ${styles.box5}`}>
+        <button className={styles.button}> 구매하기 </button>
+        <button className={styles.button} onClick={goToPage}> 닫기 </button>
+        <button className={styles.button} onClick={BtnEvent}> 찜하기 </button>
+      </session>
+      {popupVisible && (<Popup onClose={handlePopupClose} message={popupMessage} />)}
+    </div>
   );
-}
+});
+
+const Popup = ({ onClose, message }) => {
+  console.log('message', message);
+  return (
+      <div className={styles.popup1}>
+          <div className={styles.popup1_txt}>{message}</div>
+          <div className={styles.popup1_lgimg}></div>
+      </div>
+  );
+};
 
 export default Slider;
-
 
 //Slider.js

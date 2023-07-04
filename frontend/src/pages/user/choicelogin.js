@@ -1,12 +1,80 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Join } from "./join";
 import { Login } from "./login";
 
-const Choicelogin = () => {
+import {useNavigate} from "react-router-dom"
+import { GlobalHotKeys, useHotkeys } from 'react-hotkeys';
+
+import { TextToSpeech } from "../../components";
+
+const Choicelogin = ({ changeislogn }) => {
     const [navState, setnavState] = useState("choicelogin");
 
+    // tts 상태 지정
+    const [starttts, setstarttts] = useState(false);
+    const ref_tts = useRef(starttts);
+
+    const Navigate = useNavigate();
+
+    const ttsStart = () => {
+        ref_tts.current = true;
+    };
+
+    const goJoin = () => {
+        Navigate('/join');
+    }
+
+    const goLogin = () => {
+        Navigate('/login');
+    }
+    // 핫키 생성
+  const Hotkey_choicelogin = () => {
+    // 핫키 설정
+    const keyMap_cl = {
+        space1_key: 'space+1',
+        space2_key: "space+2",
+        need_tts: "space+q",
+        // keypress, keydown, keyup.
+        // space_down: { sequence: "space", action: "keydown" }
+    };
+
+    const joinClick = () => {
+        console.log('space + 1');
+        setnavState("join");
+        goJoin();
+    };
+    const loginClick = () => {
+        console.log('space + 2');
+        setnavState("login");
+        goLogin();
+    };
+    
+    const need_tts = () => {
+        ttsStart();
+        setstarttts(ref_tts.current);
+    }
+    
+    // 핫키 적용 함수
+    const handlers_cl = {
+        space1_key:joinClick,
+        space2_key:loginClick,
+        need_tts:need_tts,
+    };
+    
+    return (
+        <>
+            <GlobalHotKeys keyMap={keyMap_cl} handlers={handlers_cl}>
+            </GlobalHotKeys>
+        </>
+      );
+    };
+    const tts_choice_type =`두번째다 임뫄`
+    
     if(navState == 'choicelogin'){
+        
         return (
+            <>
+            <Hotkey_choicelogin />
             <div className="index_content">
                 <div className="choice_tab">
                     <h2 className="welcome">
@@ -32,12 +100,14 @@ const Choicelogin = () => {
                     </a>
                 </div>
             </div>
+            {starttts && <TextToSpeech value={tts_choice_type} />}
+            </>
         );
     }
     else if(navState == 'join'){
         return(
             <div className="index_content">
-                <Join />
+                <Join changeislogn={changeislogn}/>
             </div>
         )
 
@@ -45,7 +115,7 @@ const Choicelogin = () => {
     else if(navState == 'login'){
         return(
             <div className="index_content">
-                <Login />
+                <Login changeislogn={changeislogn}/>
             </div>
         )
     }
