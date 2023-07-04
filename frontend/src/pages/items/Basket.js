@@ -138,7 +138,7 @@ const FirstPage =({goToSecondPage, handleDeleteList, result}) => {
                                 {content.goods_name}
                             </div>
                             <div className={styles.bklist_txt}>
-                                {content.goods_summary}
+                                {content.goods_summary && (content.goods_summary.slice(0, 70)+'.....')}
                             </div>
                             <div className={styles.bklist_price}>
                                 {content.goods_price}원

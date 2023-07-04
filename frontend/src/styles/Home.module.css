@@ -46,6 +46,10 @@
     cursor: pointer;
 }
 
+.goodsbox:hover {
+    background-color: rgba(154, 200, 143,0.3);
+}
+
 .goodsbox1 {
     display : flex;
     flex: 0 0 35%;
