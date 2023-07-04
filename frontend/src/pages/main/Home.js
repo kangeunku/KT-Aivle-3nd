@@ -177,6 +177,7 @@ const FirstPage = ({ inputValue, handleInputChange, handleButtonClick, popupOn, 
                 <input className={styles.home_overlay_main} id="search_input" placeholder="입력해주세요" value={inputValue} onChange={handleInputChange} />
                 <button className={styles.home_button1} onClick={handleButtonClick} disabled={isInputEmpty} alt="상세검색으로 이동하는 버튼"></button>
             </div>
+            <div className={styles.home1_subbox}></div>
             {popupOn && (<Popup onClose={popupOff} message={message} />)}
         </div>
         </>

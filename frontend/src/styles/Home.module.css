@@ -11,6 +11,7 @@
     position: relative;
     padding:0px 50px;
     height: 879px;
+    overflow-y: auto;
 }
 
 .homebox1{
@@ -317,6 +318,16 @@
     font-weight:700;
     text-align: center;
     padding:10px;
+}
+
+.home1_subbox{
+    position:relative;
+    /* background-color:red; */
+    width:700px;
+    height:400px;
+    transform: translate(-50%, -50%);
+    top:75%;
+    left:75%;
 }
 
 .catebox_body {
