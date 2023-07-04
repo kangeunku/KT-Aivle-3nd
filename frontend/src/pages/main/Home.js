@@ -225,7 +225,7 @@ const SecondPage = ({ inputValue, goToThirdPage, result, popupOn, popupOff, mess
                 <div>
                     {/* <div className={styles.home_mainguide}>상세 검색을 위해 카테고리를 불러오겠습니다.</div> */}
                     <div className={styles.home_search_box3}>
-                        <CategoryBoxes onItemSelect={handleItemClick} selectedItems={selectedItems} result={result} />
+                        <CategoryBoxes onItemSelect={handleItemClick} selectedItems={selectedItems} result={result} inputValue={inputValue}/>
                     </div>
                 </div>
                 <div>
@@ -391,7 +391,7 @@ const StarRating = ({ score }) => {
     return <label className={styles.goodsscore}>{renderStars()}</label>;
 };
 
-function CategoryBoxes({ result, onItemSelect, selectedItems }) {
+function CategoryBoxes({ result, inputValue, onItemSelect, selectedItems }) {
     // 선택된 아이템들을 필터링하여 새로운 배열 생성
     const selectedItemsArray = result
         .map((item) => item.cate_lst.filter((category) => selectedItems.includes(category)))
@@ -409,7 +409,7 @@ function CategoryBoxes({ result, onItemSelect, selectedItems }) {
             {result.map((item, index) => (
                 // {detail_category.map((item, index) => (
                 <div className={styles.catebox_box1} key={item.category}>
-                    <div className={styles.catebox_index1}>사과의 {item.category}를 추천해주세요</div>
+                    <div className={styles.catebox_index1}>{inputValue}의 {item.category}를 추천해주세요</div>
                     <div className={styles.catebox_index2}>
                         {/* <a>선택 안 함 </a> */}
                         {item.cate_lst.map((category, categoryIndex) => (

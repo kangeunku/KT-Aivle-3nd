@@ -10,7 +10,6 @@ const EditInfo = (props) => {
     useEffect(() => {
         props.relanding(false);
         setCurrentPage('first');
-        console.log("choicelogin")
     }, [props.state]);
 
     const goToSecondPage = () => {
@@ -83,8 +82,8 @@ const submitPassword = async (password) => {
         }
     } catch (error) {
         console.error(error);
+        return false;
     }
-    return true
 };
 
 const FirstPage = ({goToSecondPage}) => {
@@ -93,16 +92,25 @@ const FirstPage = ({goToSecondPage}) => {
     const [password, setPassword] = useState("");
 
     const handlePasswordSubmit = async() => {
-        try {
-            const isPasswordCorrect = await submitPassword(password);
+        if (password) {
+            try {
+                const isPasswordCorrect = await submitPassword(password);
+                console.log(isPasswordCorrect);
                 if (isPasswordCorrect) {
                     goToSecondPage();
                 } else {
-                    setPopupMessage('비밀번호가 틀렸습니다.');
+                    setPopupMessage('비밀번호가 일치하지 않습니다.');
                     setPopupVisible(true);
                 }
-        }   catch (error) {
-                console.error(error);
+            } catch (error) {
+                    console.error(error);
+            }
+        } else {
+            setPopupMessage("비밀번호를 입력하세요");
+            setPopupVisible(true);
+            setTimeout(()=>{
+                handlePopupClose();
+            }, 1000);
         }
     };
 
@@ -133,6 +141,9 @@ const FirstPage = ({goToSecondPage}) => {
                     <div>입력</div>
                 </button>
             </div>
+            {popupVisible && (
+                <Popup onClose={handlePopupClose} message={popupMessage} />
+            )}
         </div>
     );};
 
@@ -171,31 +182,44 @@ const ThirdPage = ({goToSecondPage}) => {
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
     const [nicknameval, setNicknameval] = useState("");
+    const [chgPage, setChgPage] = useState(false);
 
     const handleButtonClick = async (message) => {
-        try {
-            const url = "http://127.0.0.1:8000/v1/setnickname/";
-            const data = {
-                'nickname': '"' + nicknameval + '"',
-            };
-            const response = await axios.post(url, data, {withCredentials: true});
-            // console.log(response.statusText);
-
-            if (response.statusText === 'OK'){
-                setPopupMessage(message);
-                setPopupVisible(true);
-                
-            } else {
-                setPopupVisible(false);
+        if (nicknameval) {
+            try {
+                const url = "http://127.0.0.1:8000/v1/setnickname/";
+                const data = {
+                    'nickname': '"' + nicknameval + '"',
+                };
+                const response = await axios.post(url, data, {withCredentials: true});
+                // console.log(response.statusText);
+    
+                if (response.statusText === 'OK'){
+                    setChgPage(true);
+                    setPopupMessage(message);
+                    setPopupVisible(true);
+                    
+                } else {
+                    setPopupVisible(false);
+                }
+            } catch (error) {
+                console.error(error);
             }
-        } catch (error) {
-            console.error(error);
+        } else {
+            setPopupMessage("별명을 입력하세요");
+            setPopupVisible(true);
+            setChgPage(false);
+            setTimeout(()=>{
+                handlePopupClose();
+            }, 1000);
         }
     };
 
     const handlePopupClose = () => {
         setPopupVisible(false);
-        goToSecondPage();
+        if (chgPage){
+            goToSecondPage();
+        }
     };
 
     //닉네임 enteredNickname은 입력된 닉네임으로한다
@@ -230,17 +254,9 @@ const ThirdPage = ({goToSecondPage}) => {
                             placeholder="새로운 별명을 입력해 주세요"
                         />
                         <button className={styles.button_main} onClick={() => handleButtonClick(`별명이 ${nicknameval}로 변경되었습니다`)}
-                            disabled={!isNicknameValid}>
+                        disabled={!isNicknameValid}>
                             <div>변경한다</div>
                         </button>
-                        {/* isNicknameValid가 true일때 밑의 체크박스가 표시됩니다 */}
-                        {isNicknameValid && (
-                            <input
-                                type="checkbox"
-                                // checked={isNicknameValid}
-                                className={styles.edit_form1_checkbox}
-                            />
-                        )}
                     </div>
                     <div>
                         {popupVisible && (
@@ -257,6 +273,7 @@ const FourthPage = ({goToSecondPage, changeislogin}) => {
 
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
+    const [chgPage, setChgPage] = useState(false);
 
     //비밀번호 유효성검사, 비밀번호 1과 2의 값이 같은지 확인할것
     const [password1val, setPassword1val] = useState("");
@@ -264,29 +281,41 @@ const FourthPage = ({goToSecondPage, changeislogin}) => {
     const [password2, setPassword2] = useState("");
     
     const handleButtonClick = async (message) => {
-        try {
-            const url = "http://127.0.0.1:8000/v1/setpassword/";
-            const data = {
-                "new_password": password1,
-            };
-
-            const response = await axios.post(url, data, {withCredentials: true});
-            // console.log(response.statusText);
-
-            if (response.statusText === 'OK'){
-                setPopupMessage(message);
-                setPopupVisible(true);
-            } else {
-                setPopupVisible(false);
+        if(isPasswordValid2 && password1 & password2) {
+            try {
+                const url = "http://127.0.0.1:8000/v1/setpassword/";
+                const data = {
+                    "new_password": password1,
+                };
+    
+                const response = await axios.post(url, data, {withCredentials: true});
+                // console.log(response.statusText);
+    
+                if (response.statusText === 'OK'){
+                    setPopupMessage(message);
+                    setPopupVisible(true);
+                    setChgPage(true);
+                } else {
+                    setPopupVisible(false);
+                }
+            } catch (error) {
+                console.error(error);
             }
-        } catch (error) {
-            console.error(error);
-        } 
+        } else {
+            setPopupMessage("비밀번호를 정확하게 입력하세요");
+            setPopupVisible(true);
+            setChgPage(false);
+            setTimeout(()=>{
+                handlePopupClose();
+            }, 1000);
+        }
     };
 
     const handlePopupClose = () => {
         setPopupVisible(false);
-        goToSecondPage();
+        if (chgPage){
+            goToSecondPage();
+        }
     };
 
     const [isBVisible, setIsBVisible] = useState(false);
@@ -323,7 +352,7 @@ const FourthPage = ({goToSecondPage, changeislogin}) => {
                         />
                     </div>
                     <div>
-                        <button className={styles.button_main} onClick= {handleButtonClick2}>입력</button>
+                        <button className={styles.button_main} onClick= {handleButtonClick2} disabled={!password1}>입력</button>
                     </div>
                 </div>
 
@@ -340,8 +369,7 @@ const FourthPage = ({goToSecondPage, changeislogin}) => {
                         />
                     </div>
                         <div>
-                            <button className={styles.button_main} onClick={() => handleButtonClick("비밀번호가 변경되었습니다")}
-                            disabled={!isPasswordValid2}>
+                            <button className={styles.button_main} onClick={() => handleButtonClick("비밀번호가 변경되었습니다")}>
                                 <div>변경한다</div>
                             </button>
                             {popupVisible && (
@@ -356,39 +384,53 @@ const FourthPage = ({goToSecondPage, changeislogin}) => {
 };
 
 const FifthPage = ({changeislogin}) => {
-
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
     const [password, setPassword] = useState("");
+    
+    const [chgPage, setChgPage] = useState(false);
 
     const navigate = useNavigate();
 
     const handleButtonClick = async (message) => {
-        try {
-            const url = "http://127.0.0.1:8000/v1/deleteuser/";
-            const data = {
-                'password': password,
-            };
-
-            const response = await axios.post(url, data, {withCredentials: true});
-            // console.log(response.statusText);
-
-            if (response.statusText === 'OK') {
-                setPopupMessage(message);
-                setPopupVisible(true);
-                
-            } else {
-                setPopupVisible(false);
+        if (password) {
+            try {
+                const url = "http://127.0.0.1:8000/v1/deleteuser/";
+                const data = {
+                    'password': password,
+                };
+    
+                const response = await axios.post(url, data, {withCredentials: true});
+                // console.log(response.statusText);
+    
+                if (response.statusText === 'OK') {
+                    setPopupMessage(message);
+                    setPopupVisible(true);
+                    setChgPage(true);
+                    
+                } else {
+                    setPopupVisible(false);
+                }
+            } catch (error) {
+                console.error(error);
             }
-        } catch (error) {
-            console.error(error);
+        } else {
+            setPopupMessage("비밀번호를 입력하세요");
+            setPopupVisible(true);
+            setChgPage(false);
+            setTimeout(()=>{
+                handlePopupClose();
+            }, 1000);
         }
+        
     };
 
     const handlePopupClose = () => {
         setPopupVisible(false);
-        navigate('/home'); 
-        changeislogin(false);
+        if (chgPage){
+            navigate('/home'); 
+            changeislogin(false);
+        }
     };
 
     return(
