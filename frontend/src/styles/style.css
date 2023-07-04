@@ -27,7 +27,7 @@
 li.active_list {background: url(../assets/img/nav_selected_li.svg); background-size: 400px 295px; background-position: 27px;}
 li.active_list > a {color: var(--background-green); font-weight: 700;}
 
-.header {flex-grow: 0; width: 100%; height: 80px;}
+.header {flex-grow: 0; width: 100%; height: 80px; z-index:400}
 .header::after {display: block; clear: both; content: '';}
 .header .welcome_txt {float: right; font-weight: bold; line-height: 90px;}
 .header .head_btn_box {float: right; padding: 25px 30px 0 70px;}

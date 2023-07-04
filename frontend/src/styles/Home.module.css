@@ -1,16 +1,23 @@
 .home_container {
     position: relative;
-    padding:30px 50px 0px;
+    padding:0px 50px;
     height: 879px;
 }
 
 .homebox1{
+    border-top: 50px solid white;
+    background-color: white;
+    position:fixed;
     display: flex;
+    z-index: 100;
+    width: 100%;
     align-items: center;
     align-items: flex-end;
+    top:60px;
 }
 
 .homebox2{
+    top:90px;
     position: relative;
     bottom : 0px;
     width: 75%;
@@ -28,6 +35,7 @@
     border: #285A43 solid 1.5px;
     border-radius: 20px;
     box-shadow: 8px 8px 8px rgba(40, 90, 67, 0.25);
+    cursor: pointer;
 }
 
 .goodsbox1 {
@@ -181,7 +189,7 @@
         width:65%;
         height: 70px;
         left:150px;
-        top: 50px;
+        top: 150px;
     }
 
 .home_button1 {
@@ -208,13 +216,14 @@
     }
 
 .home_search_contained{
-        display:flex;
-        flex-direction: column;
-        position: relative;
-        width:80%;
-        height:100px;
-        left:70px;
-        top:50px;
+    position: relative;
+    position: fixed;
+    width: 100%;
+    height: 70px;
+    background-color: white;
+    border-Radius: 12px;
+    top: 150px;
+    z-index: 100;
     }
 
 .home_main_guide {
@@ -225,21 +234,19 @@
     }
 
 .home_search_box2{
-    display:flex;
-    flex-direction: row;
+    display: flex;
+    place-items: center start;
+    font-Size: 24px;
+    border: 3px solid rgba(25, 25, 25, 0.5);
     position: relative;
-    width: 100%;
-    height:100%;
-    bottom:0px;
-    border: 5px solid #285A43;
-    border-Radius: 20px;
+    width: 60%;
+    height: 100%;
+    border-Radius: 12px;
+    left:70px;
     }
     
 .home_img2 {
     display: absolute;
-    top: 50%;
-    left: 4%;
-    transform: translate(-50%, -50%);
     flex-direction: column;
     position: relative;
     width:40px;
@@ -252,11 +259,14 @@
 
 .home_search_box2_txt {
     position:relative;
-    margin-Top:4px;
-    flex:1;
+    width:600px;
+    height:50px;
+    background-color: white;
     font-size: 32px;
     font-weight: 800;
     left:3%;
+    align-items: center;
+    display: flex;
 }
 
 .home_mainguide{
@@ -279,27 +289,56 @@
 
 .home_button2 {
     position: absolute;
-    left:80%;
-    top:666px;
+    left:75%;
+    top:85%;
     background-color : #285a43;
-    width : 180px;
-    height: 40px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    width : 360px;
+    height: 80px;
+    box-shadow: 8px 8px 8px rgba(40, 90, 67, 0.25);
     border-radius: 10px;
     color:white;
-    font-size:20px;
+    font-size:32px;
     font-weight:700;
     text-align: center;
     padding:10px;
 }
 
 .catebox_body {
-    overflow-y: auto;
-    max-height: 350px;
+    display:flex;
+    position:relative;
+    top:150px;
+    flex-wrap:wrap;
 }
 
 .catebox_box1{
-    margin-bottom: "30px"
+    margin-bottom: "30px";
+    width:100%;
+}
+
+.selected_items_box{
+    position:fixed;
+    margin:auto;
+    width:70%;
+    min-height: 80px;
+    border-radius: 10px;
+    background-color: rgba(249, 249, 249);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 250%;
+    margin-bottom:20px;
+    text-decoration: underline;
+    top:220px;
+}
+
+.selected_items_opt{
+    display: inline-block;
+    padding: 0 30px;
+    border-radius: 2px;
+    font-size: 24px;
+    cursor: pointer;
 }
 
 .catebox_index1{
@@ -310,21 +349,23 @@
 
 .catebox_index2 {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    font-size: 16px;
+    font-size: 24px;
+    line-height: 200%;
     width: 95%;
-    height: 50px;
-    margin-left: 30px;
-    margin-top: 10px;
-    margin-bottom: 20px;
+    height: auto;
+    margin: 10px 0 20px 30px;
+    padding: 20px;
     background-color: rgb(225, 243, 217);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
 }
 
 .catebox_index3 {
-    margin: 0 5px;
+    margin: 0 20px;
     margin-left: 20px;
+    display: inline-block;
 }
 
 .selected { 
