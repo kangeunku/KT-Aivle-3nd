@@ -4,8 +4,6 @@ import styles from "../../styles/Home.module.css";
 import Slider from "../Slider";
 import axios from "axios";
 import { GlobalHotKeys } from "react-hotkeys";
-import { TextToSpeech } from "../../components";
-import { getCookie } from '../../components/common/csrftoken';
 
 const Home = (props) => {
     const [currentPage, setCurrentPage] = useState('first');
@@ -73,14 +71,14 @@ const Home = (props) => {
 
             const response = await axios.post(url, data);
             // console.log('goods_detail', response);
-            setResult(response.data);
+            setResult(response?.data);
             // console.log("detail", response.data.img_pathes);
             // setResult(response.data.img_pathes);
             setInputUrl(goods_url);
             // console.log("goods_url", goods_url);
 
 
-            if (response.data.img_pathes.length > 1){
+            if (response?.data?.img_pathes.length > 1){
                 setCurrentPage('forth');
                 setPopupVisible(false);
             } else {
@@ -225,6 +223,7 @@ const FirstPage = ({ inputValue, handleInputChange, handleButtonClick, popupOn, 
                 <input className={styles.home_overlay_main} id="search_input" placeholder="입력해주세요" value={inputValue} onChange={handleInputChange} />
                 <button className={styles.home_button1} onClick={handleButtonClick} disabled={isInputEmpty} alt="상세검색으로 이동하는 버튼"></button>
             </div>
+            <div className={styles.home1_subbox}></div>
             {popupOn && (<Popup onClose={popupOff} message={message} />)}
         </div>
         </>
@@ -381,7 +380,7 @@ const ThirdPage = ({goToForthPage, result, popupOn, popupOff, message}) => {
     let ttsthrdsearch = "3가지 상품을 추천드립니다."
 
     for( let i in result){
-        ttsthrdsearch += `${parseInt(i)+1}번째 상품은 ${result[i].title} 입니다. 가격은 ${result[i].lprice} 원 입니다.`
+        ttsthrdsearch += `${i+1}번째 상품은 ${result[i].title} 입니다. 가격은 ${result[i].lprice} 입니다.`
     }
     ttsthrdsearch += `상품 선택을 원하시면 스페이스바와 원하시는 상품의 번째를 동시에 눌러주십시오.`
 
@@ -397,10 +396,10 @@ const ThirdPage = ({goToForthPage, result, popupOn, popupOff, message}) => {
             </div>
             <div className={styles.homebox2}>
                 {result.map((item) => (
-                    <div className={styles.goodsbox} onClick={() => { goToForthPage(item.link) }}>
+                    <div className={styles.goodsbox} onClick={() => { goToForthPage(item?.link) }}>
                         <div className={styles.goodsbox1} key={item.productId}>
                             {/* <img className={styles.goodsimage} src={"https://shop-phinf.pstatic.net/20221021_183/1666336371323nsBJM_JPEG/67472269985761665_608306589.jpg?type=m510"} alt="추천 상품 이미지1"/> */}
-                            <img className={styles.goodsimage} src={item.image} />
+                            <img className={styles.goodsimage} src={item?.image} />
                         </div>
                         <div className={styles.goodsbox2}>
                             <label className={styles.goodsname}>
