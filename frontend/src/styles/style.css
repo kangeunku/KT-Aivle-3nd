@@ -132,8 +132,9 @@ li.active_list > a {color: var(--background-green); font-weight: 700;}
 
 
 /* about us-------------------------------------------------------- */
+.aboutus_container {width: 100%; height: 100%;}
 
-.container_about {
+.aboutus_container .container_about {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -254,7 +255,7 @@ li.active_list > a {color: var(--background-green); font-weight: 700;}
 
 
 /* =========================================== */
-.second_section .container{
+.second_section .container_type2{
     height: 100%;
     width: 100%;
     max-height: 800px;
@@ -265,6 +266,9 @@ li.active_list > a {color: var(--background-green); font-weight: 700;}
     justify-content: space-evenly;
     align-items: center;
     margin: 0 auto;
+    background: url(../assets/img/store/space.jpg) no-repeat;
+    overflow: auto;
+    flex-grow: 1; 
 
 }
 
