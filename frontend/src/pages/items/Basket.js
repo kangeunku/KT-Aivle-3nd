@@ -77,103 +77,110 @@ const Basket = (props) => {
 
 const FirstPage =({goToSecondPage, handleDeleteList, result}) => {
     // console.log("찜 목록 리스트")
-    // console.log(result);
+    console.log(result);
     const dataArray = result ? Object.values(result) : [];
 
     if(!dataArray){
         console.log()
         return
-    }    
+    }   
     
-    const Hotkey_basket = () => {
+    {dataArray &&
+    console.log(dataArray)}
+    
+    const Hotkey_bs = () => {
         // 핫키 설정
-        const keyMap_b1 = {
+        const keyMap_bs = {
             space1_key: 'space+1',
-            space2_key: "space+2"
+            space2_key: 'space+2',
+            space3_key: 'space+3',
+        };
+        const FirstClick = () => {
+            console.log('space + 1');
+            goToSecondPage(dataArray[0].goods_url);
         };
 
-        const moreClick = () => {
-            console.log('space+1');
-            document.getElementById('more').focus();
-        };
-        const deleteClick = () => {
+        const SecondClick = async () => {
             console.log('space + 2');
-            document.getElementById('delete').focus(); 
-            //모두 동의로 포커스 이동 후 space로 check -> tab 눌러 다음 버튼으로 이동 -> enter
+
+            // await new Promise(resolve => setTimeout(resolve, 30));
+            const secondGoodsUrl = dataArray && dataArray.length > 1 ? dataArray[1].goods_url : 0;
+            console.log(secondGoodsUrl);
+            goToSecondPage(secondGoodsUrl);
+        };
+        const ThirdClick = () => {
+            console.log('space + 3');
+            goToSecondPage(dataArray[2].goods_url);
         };
 
         // 핫키 적용 함수
-        const handlers_b1 = {
-            space1_key: moreClick,
-            space2_key: deleteClick,
+        const handlers_bs = {
+            space1_key: FirstClick,
+            space2_key: SecondClick,
+            space3_key: ThirdClick,
         };
-        
         return (
             <>
-                <GlobalHotKeys keyMap={keyMap_b1} handlers={handlers_b1}>
+                <GlobalHotKeys keyMap={keyMap_bs} handlers={handlers_bs}>
                 </GlobalHotKeys>
             </>
         );
     };
 
     return (
+        <>
+        <Hotkey_bs/>
         <div>
             <div className={styles.bkboxes}>
                 <div className={styles.page2logo2} ></div>
                 <div className={styles.bkboxes1}>찜 목록</div>
             </div>
             <div className={styles.bk_body}>
-                {dataArray &&
-                dataArray.map((item) => {
-                    const DArray = item ? Object.values(item) : [];
-                    return DArray.map((content) => {
+            {dataArray &&
+                dataArray.map((content) => {
                     return (
-                        <div className={styles.bklist}>
-                        <img
-                            className={styles.bklist_img}
-                            src={content.goods_thumb}
-                        />
+                    <div className={styles.bklist}>
+                        <img className={styles.bklist_img} src={content.goods_thumb} />
                         <div className={styles.bklist_com}>
-                            <div className={styles.bklist_name}>
-                                {content.goods_name}
-                            </div>
-                            <div className={styles.bklist_txt}>
-                                {content.goods_summary && (content.goods_summary.slice(0, 70)+'.....')}
-                            </div>
-                            <div className={styles.bklist_price}>
-                                {content.goods_price}원
-                            </div>
+                        <div className={styles.bklist_name}>{content.goods_name}</div>
+                        <div className={styles.bklist_txt}>
+                            {content.goods_summary && content.goods_summary.slice(0, 70) + "....."}
+                        </div>
+                        <div className={styles.bklist_price}>{content.goods_price}원</div>
                         </div>
 
                         <div className={styles.bklist_btbox}>
-                            <button
-                                className={styles.bklist_bt1}
-                                id="more"
-                                onClick={() => {
-                                    goToSecondPage(content.goods_url)
-                                }}>
-                                <div className={styles.bklist_btfont} style={{ color: "#b4e0a0" }}>
-                                    더 보기
-                                </div>
-                            </button>
-                            <button
-                                className={styles.bklist_bt2}
-                                id="delete"
-                                onClick={() => {
-                                    handleDeleteList(content.goods_url)
-                                }}>
-                                <div className={styles.bklist_btfont} style={{ color: "#dd7878" }}>
-                                    삭제
-                                </div>
-                            </button>
+                        <button
+                            className={styles.bklist_bt1}
+                            id="more"
+                            onClick={() => {
+                            goToSecondPage(content.goods_url);
+                            }}
+                        >
+                            <div className={styles.bklist_btfont} style={{ color: "#b4e0a0" }}>
+                            더 보기
+                            </div>
+                        </button>
+                        <button
+                            className={styles.bklist_bt2}
+                            id="delete"
+                            onClick={() => {
+                            handleDeleteList(content.goods_url);
+                            }}
+                        >
+                            <div className={styles.bklist_btfont} style={{ color: "#dd7878" }}>
+                            삭제
+                            </div>
+                        </button>
                         </div>
-                        </div>
+                    </div>
                     );
-                    });
                 })}
+
 
             </div>   
         </div>
+        </>
     )
 }
 

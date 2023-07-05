@@ -49,6 +49,7 @@
 
 
 .bk_body {
+    min-width:1000px;
     display: flex;
     flex-direction: column;
     width: 80%;
@@ -90,17 +91,26 @@
 .bklist_name {
     margin-top:10px;
     margin-bottom:10px;
-    height: 30px;
     font-weight: 700;
     font-size: 24px;
     font-style: normal;
 }
 
-.bklist_txt, .bklist_price  {
-    height: 30px;
+.bklist_txt  {
     margin-left:30px;
     font-style: normal;
     color: #8b8b8b;
+    line-height:200%;
+  }
+
+.bklist_price  {
+    position:absolute;
+    left:75%;
+    top:70%;
+    margin-left:30px;
+    line-height:200%;
+    font-weight:700;
+    font-size:24px;
   }
 
 .bklist_btbox{
@@ -113,8 +123,7 @@
     background-color: white;
     width: 150px;
     height: 45px;
-    top: 15px;
-    left: 775px;
+    margin:auto;
     padding: 8px 24px;
     border-radius: 10px;
     border:3px solid #b4e0a0;

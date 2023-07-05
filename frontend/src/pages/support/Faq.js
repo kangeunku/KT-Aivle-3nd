@@ -320,7 +320,7 @@ const SecondPage = ({ goToThirdPage, result }) => {
                                                         ))}
                                                         {index.img_file && (
                                                             <div>
-                                                                <img src={`http://127.0.0.1:8000/${index.img_file}`} style={{ maxWidth: "300px", maxHeight: "300px" }} />
+                                                                <img src={`http://127.0.0.1:8000/${index.img_file}`} style={{maxWidth: "300px", maxHeight: "300px"}}/>
                                                             </div>
                                                         )}
                                                         {index.answer && (
@@ -440,114 +440,114 @@ const ThirdPage = ({ goToSecondPage }) => {
                     {/* <div className={styles.faq3_row1}>
                     <div className={styles.faq3_c1}>상세 항목 입력</div>
                 </div> */}
-                    <div className={styles.faq3_row2}>
-                        <div className={styles.faq_row11}>문의 유형</div>
-                        <select className={styles.faq_selectbox}
-                            id="sbox"
-                            value={category}
-                            onChange={handleCategoryChange}
-                        >
-                            <option value="" disabled hidden>
-                                문의 유형
+                <div className={styles.faq3_row2}>
+                    <div className={styles.faq_row11}>문의 유형</div>
+                    <select className={styles.faq_selectbox}
+                        id="sbox"
+                        value={category}
+                        onChange={handleCategoryChange}
+                    >
+                        <option value="" disabled hidden>
+                            문의 유형
+                        </option>
+                        {categories.map((category, index) => (
+                            <option className={styles.faq_selectbox} id={index} key={index} value={category}>
+                                {category}
                             </option>
-                            {categories.map((category, index) => (
-                                <option className={styles.faq_selectbox} id={index} key={index} value={category}>
-                                    {category}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className={styles.faq3_row3}>
-                        <div className={styles.faq_row11}>제목</div>
-                        <input className={styles.faq_row12}
-                            type="text"
-                            value={title}
-                            onChange={handleTitleChange}
-                            placeholder="제목을 입력하세요"
-                        />
-                    </div>
-                    <div className={styles.faq3_row4}>
-                        <div className={styles.faq_row11}>내용</div>
-                        <textarea className={styles.faq_row12}
-                            type="content"
-                            value={content}
-                            onChange={handleContentChange}
-                            placeholder="우선 접수된 문의 건부터 순차적으로 답변을 드리고 있습니다.
-                        문의 유형과 문의 내용을 상세히 기재해 주시면 더욱 신속히 답변 드릴 수 있습니다."
-                        />
-                    </div>
-                    <div className={styles.faq3_row5}>
-                        <div className={styles.faq_row11}>파일 첨부</div>
-                        <ImageUploadPreview id="upload" img={handleImageUpload} />
-                    </div>
-                    <button className={styles.button_faq} onClick={handleSaveData}>등록하기</button>
+                        ))}
+                    </select>
                 </div>
+                <div className={styles.faq3_row3}>
+                    <div className={styles.faq_row11}>제목</div>
+                    <input className={styles.faq_row12}
+                        type="text"
+                        value={title}
+                        onChange={handleTitleChange}
+                        placeholder="제목을 입력하세요"
+                    />
+                </div>
+                <div className={styles.faq3_row4}>
+                    <div className={styles.faq_row11}>내용</div>
+                    <textarea className={styles.faq_row12}
+                        type="content"
+                        value={content}
+                        onChange={handleContentChange}
+                        placeholder="우선 접수된 문의 건부터 순차적으로 답변을 드리고 있습니다.
+                        문의 유형과 문의 내용을 상세히 기재해 주시면 더욱 신속히 답변 드릴 수 있습니다."
+                    />
+                </div>
+                <div className={styles.faq3_row5}>
+                    <div className={styles.faq_row11}>파일 첨부</div>
+                    <ImageUploadPreview id="upload" img={handleImageUpload}/>
+                </div>
+                <button className={styles.button_faq} onClick={handleSaveData}>등록하기</button>
             </div>
+        </div>
         </>
     );
 };
 
-
 const ImageUploadPreview = ({ img }) => {
     const [image, setImage] = useState(null);
-
+  
     useEffect(() => {
-        img(image);
+      img(image);
     }, [image]);
-
+  
     const handleImageUpload = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const newImage = {
-                    id: Date.now(),
-                    src: reader.result,
-                };
-                setImage(newImage);
-            };
-            reader.readAsDataURL(file);
-        }
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const newImage = {
+            id: Date.now(),
+            src: reader.result,
+          };
+          setImage(newImage);
+        };
+        reader.readAsDataURL(file);
+      }
     };
-
+  
     const renderImageBox = () => {
-        if (image) {
-            return (
-                <div
-                    key={image.id}
-                    style={{
-                        width: "100px",
-                        height: "100px",
-                        border: "1px solid gray",
-                        marginRight: "30px",
-                    }}
-                >
-                    <img
-                        src={image.src}
-                        alt="Preview"
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                    />
-                </div>
-            );
-        }
+      if (image) {
         return (
-            <div
-                style={{
-                    width: "100px",
-                    height: "100px",
-                    border: "1px solid gray",
-                    backgroundColor: "lightgray",
-                }}
-            ></div>
+          <div
+            key={image.id}
+            style={{
+              width: "100px",
+              height: "100px",
+              border: "1px solid gray",
+              marginRight: "30px",
+            }}
+          >
+            <img
+              src={image.src}
+              alt="Preview"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          </div>
         );
+      }
+      return (
+        <div
+          style={{
+            width: "100px",
+            height: "100px",
+            border: "1px solid gray",
+            backgroundColor: "lightgray",
+          }}
+        ></div>
+      );
     };
-
+  
     return (
-        <label htmlFor="fileInput" className={styles.fileimgbut}>
-            <input type="file" id="fileInput" style={{ display: "none" }} onChange={handleImageUpload} />
-            {renderImageBox()}
-        </label>
+      <label htmlFor="fileInput" className={styles.fileimgbut}>
+        <input type="file" id="fileInput" style={{ display: "none" }} onChange={handleImageUpload} />
+        {renderImageBox()}
+      </label>
     );
-};
+  };
+
 
 export { Support };
