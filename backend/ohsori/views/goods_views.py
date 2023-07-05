@@ -386,15 +386,15 @@ def ocr2summary(product_id):
     with ThreadPoolExecutor(max_workers=8) as pool:
         summary_lst = list(pool.map(summarization, sentence_lst))
         
-    is_show = [1 if summary!='' else 0 for summary in summary_lst]
+    is_show = [len(summary) if summary!='' else 0 for summary in summary_lst]
     
     end_time = time.time()
     print(f'텍스트 요약 작업 완료 : {end_time - start_time}')
     
     # 전체 텍스트 요약
-    whole_summary = ' '.join([summary_lst[idx] for idx, value in enumerate(is_show) if value == 1])
+    whole_summary = ' '.join([summary_lst[idx] for idx, value in enumerate(is_show) if value != 0])
     print(whole_summary)
-    final_summary = request_summary(whole_summary, 3)
+    final_summary = document_split2summary(summary_lst, is_show)
     
     return {
             'img_pathes' : img_pathes, # 상품 상세 이미지가 저장된 경로가 담긴 리스트
@@ -428,12 +428,67 @@ def get_img_content(filepath):
     return content
 
 
-def summarization(sentence):
+def summarization(sentence, output=1):
     if sentence:
-        summary = request_summary(sentence.replace('\n', ' '), 1)
+        summary = request_summary(sentence.replace('\n', ' '), output)
 
     else:
         summary = sentence
     
     return summary
     
+    
+def document_split2summary(document, length_lst):
+    # document : summary_lst, length_lst : is_show
+    
+    print('분할 요약 시작!')
+    # 2000자가 넘는 문서를 받았을때, 분할하기 위한 길이 기준 세우기
+    total_length = sum(length_lst)
+    print(total_length)
+    if total_length == 0:
+        print('Exception! : 어떠한 텍스트 데이터도 이미지에서 추출되지 않았습니다.')
+        return ''
+    split = 1
+    while total_length // split >= 2000:
+        print('while문 작동')
+        split += 1
+    
+    # 쌓아둔 문장들을 요약할 때의 기준 길이
+    standard = total_length // split
+    # 현재 문장들의 총 길이, 현재 쌓여진 문장들
+    current, sentences= 0, ''
+    # 합쳐진 문장들을 담은 리스트
+    temp = []
+    for idx, length in enumerate(length_lst):
+        if length > 0:
+            current += length
+            sentences += document[idx]
+            
+        
+        if current >= standard:
+            # 요약 할 문장들을 저장하고 값들 초기화하기
+            temp.append(sentences)
+            current = 0
+            sentences = ''
+            
+    # 쌓인 문장들이 남아있을 경우 저장하고 초기화
+    if current > 0:
+        temp.append(sentences)
+        current = 0
+        sentences = ''
+    
+    # split이 1보다 커서 문단이 2개 이상 생겼을 경우
+    if len(temp) > 1:
+        params = [{'sentence':paragraph, 'output':2} for paragraph in temp]
+        # 2000자 이하로 쌓인 문단들을 요약
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            temp_summary_lst = list(pool.map(lambda params : summarization(**params), params))
+        
+        nxt_length_lst = [len(summary) if summary!='' else 0 for summary in temp_summary_lst]
+        
+        return document_split2summary(temp_summary_lst, nxt_length_lst)
+        
+    # split이 1이라 문단이 하나만 존재하는 경우
+    else:
+        final_summary = request_summary(temp[0], 3)
+        return final_summary
