@@ -386,7 +386,7 @@ const ThirdPage = ({ goToSecondPage }) => {
                     "question": '"' + content + '"',
                     "img_url": img,
                 };
-                console.log('data', data);
+                // console.log('data', data);
                 // setJsonData(JSON.stringify(data));
 
                 const response = await axios.post(url, data, { withCredentials: true });
