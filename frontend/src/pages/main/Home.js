@@ -4,6 +4,8 @@ import styles from "../../styles/Home.module.css";
 import Slider from "../Slider";
 import axios from "axios";
 import { GlobalHotKeys } from "react-hotkeys";
+import { TextToSpeech } from "../../components";
+import { getCookie } from '../../components/common/csrftoken';
 
 const Home = (props) => {
     const [currentPage, setCurrentPage] = useState('first');
