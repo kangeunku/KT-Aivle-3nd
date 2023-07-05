@@ -93,7 +93,7 @@ const App = () => {
               <Link to="/support" onClick={() => navState === "support" ? relanding(true) : setnavState("support")}>고객센터</Link>
             </li>
             <li className={navState === "test" ? "active_list" : null}>
-              <Link to="/test" onClick={() => setnavState("test")}>테스트섹션</Link>
+              <Link to="/test" onClick={() => setnavState("test")}>팀 소개</Link>
             </li>
           </ul>
         </nav>
@@ -233,7 +233,7 @@ const Popup = ({ handleClose }) => {
     // 핫키 설정
     const keyMap_modal = {
       enter_key: 'enter',
-      tts_stop: 'space+s',
+      tts_stop: 'shift+d',
     };
 
     const closeClick = () => {
@@ -283,11 +283,13 @@ const Popup = ({ handleClose }) => {
   }, []);
 
   const tts_content =`
-  음성 기반 온라인 쇼핑 안내 도우미 오~소리입니다!
-  복잡한 온라인 쇼핑 과정을 간단하게 바꾸고 싶다면?  ARS를 통한 음성인식 쇼핑 도우미인 오소리를 이용해보세요
-  상품 이미지 정보에 대한 대체 텍스트 제공과 요약으로 쇼핑에 꼭 필요한 정보를 전달드립니다! 상품 검색부터 
-  상품 상세 옵션 선택까지 모든 서비스를 음성으로 이용해보세요! 음성 ARS는 안내 음성 마지막에 제공됩니다. 
-  a 키를 누르면 현재 페이지를 알 수 있습니다. 다시 듣고 싶으면 1번을, 오소리를 이용하시려면 2번을 눌러주세요.
+  음성 기반 온라인 쇼핑 안내 도우미 오소리입니다!
+  복잡한 온라인 쇼핑 과정을 간단하게 바꾸고 싶다면? ARS를 통한 음성인식 쇼핑 도우미인 오소리를 이용해보세요.
+  상품 이미지 정보에 대한 대체 텍스트 제공과 요약으로 쇼핑에 꼭 필요한 정보를 전달드립니다. 
+  상품 검색부터 상품 상세 옵션 선택까지 모든 서비스를 음성으로 이용해보세요.
+  진입한 페이지에서 쉬프트 버튼과 큐버튼을 동시에 누르면 음성 서비스를 제공합니다.
+  음성 서비스를 중단하고 싶으시면 쉬프트버튼과 디버튼을 동시에 눌러주세요.
+  음성 서비스를 다시듣고싶으시면 쉬프트버튼과 디버튼은 동시에 누른후 쉬프트버튼과 큐버튼을 동시에 눌러주세요.
   `
 
   return (

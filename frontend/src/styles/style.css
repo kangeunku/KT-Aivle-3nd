@@ -23,6 +23,7 @@
 .nav_lsit > li:nth-child(2)::after {background: url(../assets/img/nav_basket_off.png) no-repeat; background-size: 32px;}
 .nav_lsit > li:nth-child(3)::after {background: url(../assets/img/nav_user_off.png)  no-repeat; background-size: 32px;}
 .nav_lsit > li:nth-child(4)::after {background: url(../assets/img/nav_support_off.png)  no-repeat; background-size: 32px;}
+.nav_lsit > li:nth-child(5)::after {background: url(../assets/img/nav_payment_on.png)  no-repeat; background-size: 32px;}
 .nav_lsit > li > a {font-size: 2rem; color: #fff; line-height: 1.5;}
 li.active_list {background: url(../assets/img/nav_selected_li.svg); background-size: 400px 295px; background-position: 27px;}
 li.active_list > a {color: var(--background-green); font-weight: 700;}
@@ -126,3 +127,205 @@ li.active_list > a {color: var(--background-green); font-weight: 700;}
         opacity: 1;
     }
 } 
+
+
+
+/* about us-------------------------------------------------------- */
+.aboutus_container {width: 100%; height: 100%;}
+
+.aboutus_container .container_about {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 50%;
+  background: #111;
+  text-shadow: #000 0 0 10px;
+  
+  @media (min-width: 1024px) {
+    flex-direction: row;
+  }
+}
+.container_about .item {
+  position: relative;
+  flex: calc(100% / 6) 1 1;
+  background-size: cover;
+  overflow: hidden;
+  filter: saturate(90%);
+  transition: 1s;
+}
+
+.item:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(25deg, rgba(0,0,0,.9), rgba(0,0,0,0));
+}
+
+.item:not(:last-child) {
+  border-bottom: 1px solid #ccc;
+  animation: borderPulse 5s infinite;
+  
+  @media (min-width: 800px) {
+    border-right: 1px solid #ccc;
+    border-bottom: none;
+  }
+}
+
+.item:hover {
+  flex-basis: 40%;
+  filter: saturate(120%);
+  
+  @media (min-width: 800px) {
+    flex-basis: 75%;
+  }
+  
+  .quote {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.item:nth-child(1) {
+  background-image: url(../assets/img/store/groot.png);
+  background-position: 72% 35%;
+}
+
+.item:nth-child(2) {
+  background-image: url(../assets/img/store/spider.png);
+  background-position: 60% 8%;
+}
+
+.item:nth-child(3) {
+  background-image: url(../assets/img/store/captain.png);
+  background-position: 52% 8%;
+}
+
+.item:nth-child(4) {
+  background-image: url(../assets/img/store/tanos.png);
+  background-position: 45% 8%;
+}
+
+.item:nth-child(5) {
+  background-image: url(../assets/img/store/iron.png);
+  background-position: 45% 25%;
+}
+
+.item:nth-child(6) {
+  background-image: url(../assets/img/store/sun.png);
+  background-position: 65% 2%;
+}
+
+.quote {
+  position: absolute;
+  color: #fff;
+  bottom: 35%;
+  left: 5rem;
+  width: calc(100% - 10rem);
+  opacity: 0;
+  font-size: 30px;
+  transition: 1s;
+  transform: translateX(50%);
+  
+  @media (min-width: 512px) {
+    left: 15%;
+    bottom: 35%;
+    width: 20vw;
+  }
+  @media (min-width: 1024px) {
+    left: 15%;
+    bottom: 35%;
+    width: 30vw;
+  }
+}
+
+.quote .name{
+    display: block;
+    position: absolute;
+    right: 20%;
+    font-size: 30px;
+}
+
+@keyframes borderPulse{
+  0%, 100% { border-color: rgba(204, 204, 204, 1); }
+  25%, 75% { border-color: rgba(204, 204, 255, 0.9); }
+  50% { border-color: rgba(204, 204, 255, 0.5); }
+}
+
+
+
+/* =========================================== */
+.second_section .container_type2{
+    height: 100%;
+    width: 100%;
+    max-height: 800px;
+    max-width: 1280px;
+    min-height: 600px;
+    min-width: 1000px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 0 auto;
+    background: url(../assets/img/store/space.jpg) no-repeat;
+    overflow: auto;
+    flex-grow: 1; 
+
+}
+
+.border{
+    height: 369px;
+    width: 290px;
+    background: transparent;
+    border-radius: 10px;
+    transition: border 1s;
+    position: relative;
+
+}
+
+.card:hover{
+    border: 1px solid white
+}
+
+.card{
+    height: 379px;
+    width: 300px;
+    background: grey;
+    border-radius: 10px;
+    transition: background 0.8s;
+    overflow: hidden;
+    background: black;
+    box-shadow: 0 70px 63px -60px #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+}
+
+.card0{
+    background: url(../assets/img/store/gwangho.png) center center no-repeat;
+    background-size: 300px
+
+}
+
+.card0:hover{
+    background: url(../assets/img/store/gwangho.png) left center no-repeat;
+    background-size: 600px
+}
+
+.card0:hover h2{
+    opacity: 1;
+    color: #fff
+}
+
+.card0:hover .fa{
+    opacity: 1
+}
+.card0:hover .icons{
+    opacity: 1;
+    position: absolute;
+    fill: #fff;
+    color: #fff;
+    height: 130px;
+    top: 226px;
+    font-size: 30px;
+}

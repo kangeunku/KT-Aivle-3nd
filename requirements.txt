@@ -25,3 +25,5 @@ django-rest-knox
 Pillow
 symspellpy-ko
 jamo
+grpcio
+cygrpc

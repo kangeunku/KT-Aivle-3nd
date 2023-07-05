@@ -4,6 +4,7 @@ import styles from "../../styles/Home.module.css";
 import Slider from "../Slider";
 import axios from "axios";
 import { GlobalHotKeys } from "react-hotkeys";
+
 import { TextToSpeech } from "../../components";
 import { getCookie } from '../../components/common/csrftoken';
 
@@ -52,7 +53,6 @@ const Home = (props) => {
         await axios.post(url, data)
             .then(function (response) {
                 setRes(response.data);
-                setResult(response.data);
                 setPopupVisible(false);
             })
             .catch(function (error) {
@@ -212,8 +212,6 @@ const FirstPage = ({ inputValue, handleInputChange, handleButtonClick, popupOn, 
     `
 
     return (
-        <>
-        <Hotkey_h1/>
         <div className={styles.home_container}>
             <Hotkey_h1 />
             {serchtts && <TextToSpeech value={searchtts} />} 
@@ -228,7 +226,6 @@ const FirstPage = ({ inputValue, handleInputChange, handleButtonClick, popupOn, 
             <div className={styles.home1_subbox}></div>
             {popupOn && (<Popup onClose={popupOff} message={message} />)}
         </div>
-        </>
     );
 };
 
@@ -382,13 +379,11 @@ const ThirdPage = ({goToForthPage, result, popupOn, popupOff, message}) => {
     let ttsthrdsearch = "3가지 상품을 추천드립니다."
 
     for( let i in result){
-        ttsthrdsearch += `${i+1}번째 상품은 ${result[i].title} 입니다. 가격은 ${result[i].lprice} 입니다.`
+        ttsthrdsearch += `${i+1}번째 상품은 ${result[i].title} 입니다. 가격은 ${result[i].lprice} 원입니다.`
     }
     ttsthrdsearch += `상품 선택을 원하시면 스페이스바와 원하시는 상품의 번째를 동시에 눌러주십시오.`
 
     return(
-        <>
-        <Hotkey_h3/>
         <div className={styles.home_container}>
             <Hotkey_h3 />
             {thrdtts && <TextToSpeech value={ttsthrdsearch} />}
@@ -417,12 +412,17 @@ const ThirdPage = ({goToForthPage, result, popupOn, popupOff, message}) => {
                                 구매하기
                             </button>
                             {popupOn && (<Popup onClose={popupOff} message={message} />)}
+                            {/* <button onClick={() => handleButtonClick("선택")}>
+                                    <div>구매하기</div>
+                                </button>
+                                {popupVisible && (
+                                <Popup onClose={handlePopupClose} message={popupMessage} />
+                                )} */}
                         </div>
                     </div>
                 ))}
             </div>
         </div>
-        </>
     )
 }
 
@@ -532,7 +532,7 @@ const StarRating = ({ score }) => {
     return <label className={styles.goodsscore}>{renderStars()}</label>;
 };
 
-function CategoryBoxes({ result, inputValue, onItemSelect, selectedItems }) {
+function CategoryBoxes({ result, onItemSelect, selectedItems }) {
     // 선택된 아이템들을 필터링하여 새로운 배열 생성
     const selectedItemsArray = result
         .map((item) => item.cate_lst.filter((category) => selectedItems.includes(category)))
@@ -550,15 +550,15 @@ function CategoryBoxes({ result, inputValue, onItemSelect, selectedItems }) {
             {result.map((item, index) => (
                 // {detail_category.map((item, index) => (
                 <div className={styles.catebox_box1} key={item.category}>
-                    <div className={styles.catebox_index1}>{inputValue}의 {item.category}를 추천해주세요</div>
+                    <div className={styles.catebox_index1}>사과의 {item.category}를 추천해주세요</div>
                     <div className={styles.catebox_index2}>
                         {/* <a>선택 안 함 </a> */}
                         {item.cate_lst.map((category, categoryIndex) => (
-                            <div className={`${styles.catebox_index3} 
+                            <a className={`${styles.catebox_index3} 
                                 ${selectedItems.includes(category) ? styles.selected : styles.unselected}`}
-                                key={categoryIndex} onClick={() => onItemSelect(category)}>
+                                key={categoryIndex} onClick={() => onItemSelect(category)} tabIndex={index}>
                                 {category}
-                            </div>
+                            </a>
                         ))}
                     </div>
                 </div>

@@ -14,11 +14,15 @@ const Choicelogin = ({ changeislogn }) => {
     const [starttts, setstarttts] = useState(false);
     const ref_tts = useRef(starttts);
 
-    const Navigate = useNavigate();
-
     const ttsStart = () => {
         ref_tts.current = true;
     };
+    const handleAudio = () => {
+        const audioElement = document.querySelector("audio");
+        audioElement.pause();
+    };
+
+    const Navigate = useNavigate();
 
     const goJoin = () => {
         Navigate('/join');
@@ -33,7 +37,8 @@ const Choicelogin = ({ changeislogn }) => {
     const keyMap_cl = {
         space1_key: 'space+1',
         space2_key: "space+2",
-        need_tts: "space+q",
+        need_tts: "shift+q",
+        stop_tts: "shift+d",
         // keypress, keydown, keyup.
         // space_down: { sequence: "space", action: "keydown" }
     };
@@ -48,10 +53,15 @@ const Choicelogin = ({ changeislogn }) => {
         setnavState("login");
         goLogin();
     };
-    
+    // tts 실행
     const need_tts = () => {
         ttsStart();
         setstarttts(ref_tts.current);
+    }
+    // tts 중단
+    const stop_tts = () => {
+        console.log("111111")
+        handleAudio();
     }
     
     // 핫키 적용 함수
@@ -59,6 +69,7 @@ const Choicelogin = ({ changeislogn }) => {
         space1_key:joinClick,
         space2_key:loginClick,
         need_tts:need_tts,
+        stop_tts:stop_tts,
     };
     
     return (
@@ -68,7 +79,11 @@ const Choicelogin = ({ changeislogn }) => {
         </>
       );
     };
-    const tts_choice_type =`두번째다 임뫄`
+    const tts_choice_type =`
+    오소리는 가입된 회원에게 서비스를 제공하고 있습니다.
+    계정이 없으시면 스페이스바와 1번을 동시에 눌러 회원가입을 진행해주세요.
+    계정이 있으시면  스페이스바와 2번을 동시에 눌러 로그인을 진행해주세요.
+    `
     
     if(navState == 'choicelogin'){
         
