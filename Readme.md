@@ -28,6 +28,7 @@ ___부제: 시각장애인을 위한 쇼핑몰   ___
  - (linux 일 때) sudo apt-get install xdg-utils
  // 실행
  - npm start
+ - 주소변경 localhost:3000 -> 127.0.0.1:3000 
 
 # 장고 세팅
  - cd backend
