@@ -31,9 +31,16 @@ const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
 
   const [selected_opt, setSelected_opt] = useState("");
 
-  const onItemSelect = (item) => {
+  const onItemSelect = (item, itemPrice) => {
     setSelected_opt((prevSelectedOpt) => (prevSelectedOpt === item ? "" : item));
-  }
+    setTotalPrice((prevtotalPrice) => {
+      if (selected_opt === item) {
+        return prevtotalPrice - itemPrice;
+      } else {
+        return prevtotalPrice + itemPrice;
+      }
+    });
+  };
 
   if (result.img_pathes) {
     for (let i = 0; i < result.summary_lst.length; i++) {
@@ -339,12 +346,16 @@ const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
         <div className={styles.box4_idx0}>
           <span className={styles.box4_txt}>필수옵션</span>
           <div className={styles.box4_select}>
-            {result.detail.necessary_opt.map((item, index) => (
+            {result.detail.necessary_opt.map((item, index) => {
+              const priceMatch = item.match(/(-?\d+)원/);
+              const price = priceMatch? parseInt(priceMatch[1]) : 0;
+              return(
               <div key={index}>
-                <div className={`${styles.box4_opttxt} ${selected_opt === item ? styles.selected_opt : styles.unselected_opt}`} onClick={() => onItemSelect(item)}>{item}</div>
+                <div className={`${styles.box4_opttxt} ${selected_opt === item ? styles.selected_opt : styles.unselected_opt}`} onClick={() => onItemSelect(item, price)}>{item}</div>
                 <hr></hr>
               </div>
-            ))}
+            );
+            })}
           </div>
         </div>
       )}
