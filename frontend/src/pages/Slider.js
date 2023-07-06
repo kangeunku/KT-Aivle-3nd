@@ -3,44 +3,9 @@ import styles from "../styles/Slider.module.css";
 import axios from "axios";
 import { GlobalHotKeys } from "react-hotkeys";
 
-const select_boxes = {
-  0: {
-    index: 0,
-    placeholder: '텀블러 사이즈&종류 선택하세요',
-    options: ['솔리드 핸들 텀블러', '파스텔 고급 텀블러(차량겸용)', '슬림 차량겸용 텀블러 500ml']
-  },
-  1: {
-    index: 1,
-    placeholder: '컬러 선택하세요',
-    options: ['아보카도 그린(손잡이 + 빨대+개별박스포장) (+5000원)', '파스텔실버(손잡이 + 빨대+개별박스포장) (+5000원)', '파스텔블랙(손잡이 + 빨대+개별박스포장) (+5000원)']
-  },
-  2: {
-    index: 2, placeholder: '각인서비스를원하신다면 20자이내로 입력해주세요', options: ['']
-  },
-  3: {
-    index: 3, placeholder: '옵션 수량 선택', options: ['']
-  }
-};
-
 const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
 
-  // console.log('Slider_result', result);
-  // console.log('Slider_result2', typeof(result.img_pathes), result.img_pathes);
-  // console.log('Slider_result3', typeof(result.summary_lst), result.summary_lst);
   const iData = [];
-
-  const [selected_opt, setSelected_opt] = useState("");
-
-  const onItemSelect = (item, itemPrice) => {
-    setSelected_opt((prevSelectedOpt) => (prevSelectedOpt === item ? "" : item));
-    setTotalPrice((prevtotalPrice) => {
-      if (selected_opt === item) {
-        return prevtotalPrice - itemPrice;
-      } else {
-        return prevtotalPrice + itemPrice;
-      }
-    });
-  };
 
   if (result.img_pathes) {
     for (let i = 0; i < result.summary_lst.length; i++) {
@@ -51,13 +16,6 @@ const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
     }
   }
   const iData_len = result.img_pathes.length;
-  // console.log(iData);
-
-  // console.log('options', result.detail.necessary_opt);
-  // console.log('goods_url', goods_url);
-
-
-  // const iData_len = result.img_pathes.length;
 
   //슬라이드
   const slideRef = useRef(null);
@@ -78,13 +36,36 @@ const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
   const [count, setCount] = useState(1);
 
   // 가격 업데이트
-  const price = result.detail.goods_price.replace(/,/g, "");
-  const [totalPrice, setTotalPrice] = useState(price);
+
+  const [selected_opt, setSelected_opt] = useState("");
+
+  const onItemSelect = (item, itemPrice) => {
+    setSelected_opt((prevSelectedOpt) => (prevSelectedOpt === item ? "" : item));
+    setTotalPrice((prevtotalPrice) => {
+      if (selected_opt === item) {
+        return prevtotalPrice - itemPrice * count;
+      } else {
+        return prevtotalPrice + itemPrice * count;
+      }
+    });
+  };
+
+  const [totalPrice, setTotalPrice] = useState(0);
+ 
+  const priceMatch = result.detail.goods_price.replace(/,/g, "");
+  const basePrice = priceMatch ? parseInt(priceMatch) : 0;
+  console.log('PriceMatch', priceMatch)
+  console.log('basePrice', basePrice)
+  const updatePrice = () => {
+    const optPriceMatch = selected_opt.match(/(-?\d+)원/);
+    const addPrice = optPriceMatch ? parseInt(optPriceMatch[1]) : 0;
+    const updatedPrice = (basePrice + addPrice) * count;
+    setTotalPrice(updatedPrice);
+  };
+
   useEffect(() => {
-    // console.log('count', count);
-    // console.log('price', typeof(price), price);
     updatePrice();
-  }, [count])
+  }, [count, selected_opt]);
 
   //반응형 사이트
   const [windowWidth, setWindowWidth] = useState(window.innerWidth); // 사용자의 화면크기 정보를 받아 반응형 사이트에 사용합니다.
@@ -120,9 +101,6 @@ const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
   }, [index, isClick]);
   // console.log(`브라우저 사이즈 : ${windowWidth}`);
 
-  const updatePrice = () => {
-    setTotalPrice(parseInt(price, 10) * count);
-  };
   const handleClickOutside = (event) => {
     if (wrapperRef && !wrapperRef.current.contains(event.target)) {
       setPopupState(false);
@@ -247,41 +225,41 @@ const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
   const Hotkey_s = () => {
     // 핫키 설정
     const keyMap_s = {
-        space1_key: 'space+1',
-        space2_key: 'space+2',
-        space3_key: 'space+3',
+      space1_key: 'space+1',
+      space2_key: 'space+2',
+      space3_key: 'space+3',
     };
     const buyClick = () => {
-        console.log('space + 1');
-        document.getElementById("buy").focus();
-      };
+      console.log('space + 1');
+      document.getElementById("buy").focus();
+    };
 
     const closeClick = () => {
-        console.log('space + 2');
-        document.getElementById("close").focus();
+      console.log('space + 2');
+      document.getElementById("close").focus();
     };
     const cartClick = () => {
-        console.log('space + 3');
-        document.getElementById("cart").focus();
+      console.log('space + 3');
+      document.getElementById("cart").focus();
     };
 
     // 핫키 적용 함수
     const handlers_s = {
-        space1_key: buyClick,
-        space2_key: closeClick,
-        space3_key: cartClick,
+      space1_key: buyClick,
+      space2_key: closeClick,
+      space3_key: cartClick,
     };
     return (
-        <>
-            <GlobalHotKeys keyMap={keyMap_s} handlers={handlers_s}>
-            </GlobalHotKeys>
-        </>
+      <>
+        <GlobalHotKeys keyMap={keyMap_s} handlers={handlers_s}>
+        </GlobalHotKeys>
+      </>
     );
-  };  
+  };
   return (
 
     <div className={styles.resultpopup} ref={wrapperRef}>
-      <Hotkey_s/>
+      <Hotkey_s />
       <span className={styles.popuptxt}>이미지 안내</span>
       {/*메인 슬라이드 */}
       <session className={`${styles.box} ${styles.box1}`}>
@@ -347,18 +325,19 @@ const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
           <span className={styles.box4_txt}>필수옵션</span>
           <div className={styles.box4_select}>
             {result.detail.necessary_opt.map((item, index) => {
-              const priceMatch = item.match(/(-?\d+)원/);
-              const price = priceMatch? parseInt(priceMatch[1]) : 0;
-              return(
-              <div key={index}>
-                <div className={`${styles.box4_opttxt} ${selected_opt === item ? styles.selected_opt : styles.unselected_opt}`} onClick={() => onItemSelect(item, price)}>{item}</div>
-                <hr></hr>
-              </div>
-            );
+              const isSoldOut = item.includes('(품절)');
+
+              return (
+                <div key={index}>
+                  <div className={`${styles.box4_opttxt} ${selected_opt === item ? styles.selected_opt : styles.unselected_opt} ${isSoldOut ? styles.sold_out : ''}`} onClick={() => onItemSelect(item, item.itemPrice)}>{item}</div>
+                  <hr></hr>
+                </div>
+              );
             })}
           </div>
         </div>
       )}
+
       {/* 수량 */}
       <session className={`${styles.box} ${styles.box4}`}>
         <div className={styles.box4_idx3}>

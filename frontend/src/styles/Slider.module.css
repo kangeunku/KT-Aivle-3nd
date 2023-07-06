@@ -26,7 +26,7 @@
 
 .row { width: 80vw; display: flex; align-items: center; justify-content: center; transition: all 0.5s ease-in-out; height: 100%; }
 
-.img { margin: 0; margin: 0 20px; margin-left: 0vw; position: relative; cursor: pointer; height: 120px; width: 85px; transition: all 0.5s linear; border: 3px solid #eaeaea; box-shadow: 5px 5px 5px #c0c0c0; }
+.img { margin: 0; margin: 0 0px; margin-left: 0vw; position: relative; cursor: pointer; height: 120px; width: 85px; transition: all 0.5s linear; border: 3px solid #eaeaea; box-shadow: 5px 5px 5px #c0c0c0; }
 
 .privewimg { transition: all 1s linear; height: 90px; width: 65px; opacity: 0.5; }
 
@@ -85,3 +85,5 @@
 .selected_opt {color: red; font-weight: 700;}
 
 .unselected_opt {color: gray;}
+
+.sold_out {text-decoration: line-through;}
