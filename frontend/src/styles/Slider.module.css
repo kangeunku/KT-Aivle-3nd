@@ -85,3 +85,5 @@
 .selected_opt {color: red; font-weight: 700;}
 
 .unselected_opt {color: gray;}
+
+.sold_out {text-decoration: line-through;}

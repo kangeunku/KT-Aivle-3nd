@@ -349,9 +349,11 @@ const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
             {result.detail.necessary_opt.map((item, index) => {
               const priceMatch = item.match(/(-?\d+)원/);
               const price = priceMatch? parseInt(priceMatch[1]) : 0;
+              const isSoldOut = item.includes('(품절)');
+
               return(
               <div key={index}>
-                <div className={`${styles.box4_opttxt} ${selected_opt === item ? styles.selected_opt : styles.unselected_opt}`} onClick={() => onItemSelect(item, price)}>{item}</div>
+                <div className={`${styles.box4_opttxt} ${selected_opt === item ? styles.selected_opt : styles.unselected_opt} ${isSoldOut ? styles.sold_out : ''}`} onClick={() => onItemSelect(item, price)}>{item}</div>
                 <hr></hr>
               </div>
             );
@@ -359,6 +361,7 @@ const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
           </div>
         </div>
       )}
+
       {/* 수량 */}
       <session className={`${styles.box} ${styles.box4}`}>
         <div className={styles.box4_idx3}>
