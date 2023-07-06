@@ -26,8 +26,8 @@ const Header = ({ changeislogn }) => {
     };
     const logoutClick = () => {
         console.log('ctrl+esc');
-        // logout();
-        document.getElementById("logout").focus();
+        logout();
+        // document.getElementById("logout").focus();
       };
     // 핫키 적용 함수
     const handlers_head = {
