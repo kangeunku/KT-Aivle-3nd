@@ -386,7 +386,7 @@ const ThirdPage = ({ goToSecondPage }) => {
                     "question": '"' + content + '"',
                     "img_url": img,
                 };
-                console.log('data', data);
+                // console.log('data', data);
                 // setJsonData(JSON.stringify(data));
 
                 const response = await axios.post(url, data, { withCredentials: true });
@@ -404,7 +404,8 @@ const ThirdPage = ({ goToSecondPage }) => {
         // 핫키 설정
         const keyMap_faq3 = {
             space1_key: 'space + 1',
-            space2_key: 'space + 2'
+            space2_key: 'space + 2',
+            space3_key: 'space + 3'
         };
 
         const selectboxFocus = () => {
@@ -414,12 +415,14 @@ const ThirdPage = ({ goToSecondPage }) => {
 
         const uploadFocus = () => {
             console.log('space + 2');
-            document.getElementById("upload").focus();
+            document.getElementById("upload").value("주문/결제").props("selected", true);
         }
+
 
         // 핫키 적용 함수
         const handlers_faq3 = {
             space1_key: selectboxFocus,
+            space2_key: uploadFocus
         };
         return (
             <>
@@ -487,48 +490,67 @@ const ThirdPage = ({ goToSecondPage }) => {
     );
 };
 
-
 const ImageUploadPreview = ({ img }) => {
-    const [images, setImages] = useState([]);
-
+    const [image, setImage] = useState(null);
+  
     useEffect(() => {
-        img(images);
-    }, [images])
-
+      img(image);
+    }, [image]);
+  
     const handleImageUpload = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-
-            reader.onload = () => {
-                const newImage = {
-                    id: Date.now(),
-                    src: reader.result,
-                };
-
-            setImages((prevImages) => [...prevImages, newImage]);
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const newImage = {
+            id: Date.now(),
+            src: reader.result,
+          };
+          setImage(newImage);
         };
-
-            reader.readAsDataURL(file);
-            // console.log(reader);
-        }
+        reader.readAsDataURL(file);
+      }
     };
-
-    const renderImageBoxes = () => {
-        return images.map((image) => (
-            <div key={image.id} style={{ width: '100px', height: '100px', border: '1px solid gray', marginRight: '30px' }}>
-                <img src={image.src} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            </div>
-        ))
+  
+    const renderImageBox = () => {
+      if (image) {
+        return (
+          <div
+            key={image.id}
+            style={{
+              width: "100px",
+              height: "100px",
+              border: "1px solid gray",
+              marginRight: "30px",
+            }}
+          >
+            <img
+              src={image.src}
+              alt="Preview"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          </div>
+        );
+      }
+      return (
+        <div
+          style={{
+            width: "100px",
+            height: "100px",
+            border: "1px solid gray",
+            backgroundColor: "lightgray",
+          }}
+        ></div>
+      );
     };
-
+  
     return (
-        <label htmlFor="fileInput" className={styles.fileimgbut}>
-            <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleImageUpload} />
-            {renderImageBoxes()}
-            <div style={{ width: '100px', height: '100px', border: '1px solid gray', backgroundColor: 'lightgray' }}></div>
-        </label>
+      <label htmlFor="fileInput" className={styles.fileimgbut}>
+        <input type="file" id="fileInput" style={{ display: "none" }} onChange={handleImageUpload} />
+        {renderImageBox()}
+      </label>
     );
-};
+  };
+
 
 export { Support };

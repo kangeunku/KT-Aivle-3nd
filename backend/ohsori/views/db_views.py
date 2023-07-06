@@ -130,7 +130,7 @@ class QnaAPI(APIView):
         qna.subject = request.data.get('subject')
         qna.question = request.data.get('question') # 질문 받기
         try:
-            image_string = request.data.get('img_url')[0]['src']
+            image_string = request.data.get('img_url')['src']
             header, data = image_string.split(';base64,')
             data_format, ext = header.split('/')
             

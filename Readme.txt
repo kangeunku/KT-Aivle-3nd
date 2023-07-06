@@ -1,18 +1,20 @@
-# 우리조 주소록
-
-https://docs.google.com/spreadsheets/d/1-I0aIXAd2Wye8K-R6XHoq3Aj18zZheTxx-nDMknlu9A/edit?usp=sharing
-
+#####################################################################
+## 환경세팅
 
 # 아나콘다 세팅
 // 파이썬 3.9.16의 big_project 환경 세팅
  - conda create -n big_project python=3.9.16
+
 // 환경 실행
  - conda activate big_project
-// 설치해야할것 설치
+
+// 설치해야할것 설치 
  - pip install -r requirements.txt
  - (linux의 경우) 패키지 설치 안 될 시 수동으로 설치
 
-
+# env 파일및 필요 파일 설치 위치에
+ - backend 폴더에 .env, big-05-19-417a99505603.json 파일 저장
+ - BIGPROJECT_5_19폴더에 .env 파일 저장
 
 # 리액트 세팅
  - nodeenv --node=18.16.0 --npm=9.6.6 -p
@@ -25,12 +27,17 @@ https://docs.google.com/spreadsheets/d/1-I0aIXAd2Wye8K-R6XHoq3Aj18zZheTxx-nDMknl
 
 # 장고 세팅
  - cd backend
+ - python manage.py makemigrations account
+ - python manage.py migrate account
+ - python manage.py makemigrations ohsori
+ - python manage.py migrate ohsori
  - python manage.py makemigrations
  - python manage.py migrate
  - python manage.py createsuperuser
  - python manage.py runserver
 db 관리자에 등록 admin.py
 
+#####################################################################
 # 보안 유지
     # .gitignore를 만들어 .git의 관리를 받지 않는 파일및 폴더들을 설정 했습니다.
     # API키 같은 보안을 요구하는 정보들을 따로 담아두는 파일을 만들었습니다.
