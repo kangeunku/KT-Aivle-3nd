@@ -532,11 +532,7 @@ const StarRating = ({ score }) => {
     return <label className={styles.goodsscore}>{renderStars()}</label>;
 };
 
-<<<<<<< HEAD
 function CategoryBoxes({ result, inputValue, onItemSelect, selectedItems }) {
-=======
-function CategoryBoxes({ result, onItemSelect, selectedItems, inputValue }) {
->>>>>>> origin/suzie
     // 선택된 아이템들을 필터링하여 새로운 배열 생성
 
     const selectedItemsArray = result

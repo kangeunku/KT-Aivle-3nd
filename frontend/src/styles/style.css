@@ -329,3 +329,27 @@ li.active_list > a {color: var(--background-green); font-weight: 700;}
     top: 226px;
     font-size: 30px;
 }
+
+.card .sparkle {
+  position: absolute;
+  top: 26%;
+  right: 8%;
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 10px;
+  background-color: transparent;
+}
+
+.card0:hover .sparkle {
+  background-color: red;
+  opacity: 0.5;
+  transition-delay: 1s;
+  animation: blink-effect 1s step-end infinite;
+}
+
+@keyframes blink-effect {
+  50% {
+    opacity: 0;
+  }
+}
