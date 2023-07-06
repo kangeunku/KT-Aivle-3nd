@@ -31,9 +31,16 @@ const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
 
   const [selected_opt, setSelected_opt] = useState("");
 
-  const onItemSelect = (item) => {
+  const onItemSelect = (item, itemPrice) => {
     setSelected_opt((prevSelectedOpt) => (prevSelectedOpt === item ? "" : item));
-  }
+    setTotalPrice((prevtotalPrice) => {
+      if (selected_opt === item) {
+        return prevtotalPrice - itemPrice;
+      } else {
+        return prevtotalPrice + itemPrice;
+      }
+    });
+  };
 
   if (result.img_pathes) {
     for (let i = 0; i < result.summary_lst.length; i++) {
@@ -278,7 +285,7 @@ const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
       <span className={styles.popuptxt}>이미지 안내</span>
       {/*메인 슬라이드 */}
       <session className={`${styles.box} ${styles.box1}`}>
-        <img className={styles.slide1} src={iData[index].image} />
+        <img className={styles.slide1} src={iData[index]?.image} />
         <button className={styles.button_left} onClick={decreaseClick} />
         <button className={styles.button_right} onClick={increaseClick} />
       </session>
@@ -300,7 +307,7 @@ const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
             <nav className={styles.box2container} key={cnt}>
               <img className={`${styles.img} ${styles.previewimg}`}
                 style={{ opacity: 0.5, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
-                src={iData[(index - cnt >= 0) ? index - cnt : iData_len - cnt + index].image}
+                src={iData[(index - cnt >= 0) ? index - cnt : iData_len - cnt + index]?.image}
               />
             </nav>
           ))}
@@ -308,7 +315,7 @@ const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
           <nav className={styles.imgwrapper}>
             <img className={styles.img}
               style={{ opacity: 1, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
-              src={iData[index].image}
+              src={iData[index]?.image}
             />
           </nav>
           {/*컨테이너 왼쪽 이미지*/}
@@ -316,7 +323,7 @@ const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
             <nav className={styles.box2container} key={cnt}>
               <img className={`${styles.img} ${styles.previewimg}`}
                 style={{ opacity: 0.5, width: windowWidth > 1200 ? null : `80vw`, height: windowWidth > 1200 ? null : windowWidth < 770 ? "185px" : "250px", }}
-                src={iData[(index + cnt <= iData_len - 1) ? index + cnt : cnt + index - iData_len].image}
+                src={iData[(index + cnt <= iData_len - 1) ? index + cnt : cnt + index - iData_len]?.image}
               />
             </nav>
           ))}
@@ -339,12 +346,16 @@ const Slider = forwardRef(({ goToPage, setPopupState, result, goods_url }) => {
         <div className={styles.box4_idx0}>
           <span className={styles.box4_txt}>필수옵션</span>
           <div className={styles.box4_select}>
-            {result.detail.necessary_opt.map((item, index) => (
+            {result.detail.necessary_opt.map((item, index) => {
+              const priceMatch = item.match(/(-?\d+)원/);
+              const price = priceMatch? parseInt(priceMatch[1]) : 0;
+              return(
               <div key={index}>
-                <div className={`${styles.box4_opttxt} ${selected_opt === item ? styles.selected_opt : styles.unselected_opt}`} onClick={() => onItemSelect(item)}>{item}</div>
+                <div className={`${styles.box4_opttxt} ${selected_opt === item ? styles.selected_opt : styles.unselected_opt}`} onClick={() => onItemSelect(item, price)}>{item}</div>
                 <hr></hr>
               </div>
-            ))}
+            );
+            })}
           </div>
         </div>
       )}

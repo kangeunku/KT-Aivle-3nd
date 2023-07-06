@@ -162,9 +162,9 @@ const Joinstepone = () => {
     const Hotkey_local_2 = () => {
         // 핫키 설정
         const keyMap_2 = {
-            space1_key: '1',
-            space2_key: "2",
-            space3_key: "3"
+            space1_key: 'space+1',
+            space2_key: "space+2",
+            space3_key: "space+3"
         };
 
         const termClick = () => {
@@ -263,14 +263,18 @@ const Joinstepone = () => {
                                 onChange={(e) => onCheckedElement(e.target.checked, list)}
                                 checked={checkedList.includes(list.id) ? true : false}
                             />
-                            <button className="terms_show_btn" onClick={OnOffModal}>전문 보기</button>
-                            {ModalState === true && (
-                                <Modal
-                                    title={list.id === 1 ? "서비스 이용약관" : "개인정보 수집 및 이용에 대한 동의 안내"}
-                                    termsData={list.id === 1 ? termsData1 : termsData2}
-                                    setModalState={setModalState}
-                                />
-                            )}
+                            {list.id === 1?
+                            (<>
+                                <button className="terms_show_btn" onClick={OnOffModal}>전문 보기</button>
+                                    {ModalState === true ? //모달 상태가 true면 1번, false면 2번이 작동합니다.
+                                    <Modal setModalState={setModalState}/> : ""}
+                                </>)
+                            :(<>
+                                <button className="terms_show_btn" onClick={OnOffModal_}>전문 보기</button>
+                                    {Modal_State === true ? //모달 상태가 true면 1번, false면 2번이 작동합니다.
+                                    <Modal_ setModal_State={setModal_State}/> : ""}
+                            </>)}
+                            
                         </div>
 
                     ))
@@ -390,7 +394,7 @@ const Joinsteptwo = ({ changeislogn }) => {
 
     const isAllFieldsValid = form.username_val && form.password_val && form.password2_val && form.nickname_val;
         
-    // 핫키 생성
+        // 핫키 생성
     const Hotkey_local_3 = () => {
         // 핫키 설정
         const keyMap_3 = {
