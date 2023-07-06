@@ -4,6 +4,7 @@ import styles from "../../styles/Home.module.css";
 import Slider from "../Slider";
 import axios from "axios";
 import { GlobalHotKeys } from "react-hotkeys";
+
 import { TextToSpeech } from "../../components";
 import { getCookie } from '../../components/common/csrftoken';
 
@@ -72,14 +73,14 @@ const Home = (props) => {
 
             const response = await axios.post(url, data);
             // console.log('goods_detail', response);
-            setResult(response.data);
+            setResult(response?.data);
             // console.log("detail", response.data.img_pathes);
             // setResult(response.data.img_pathes);
             setInputUrl(goods_url);
             // console.log("goods_url", goods_url);
 
 
-            if (response.data.img_pathes.length > 1){
+            if (response?.data?.img_pathes.length > 1){
                 setCurrentPage('forth');
                 setPopupVisible(false);
             } else {
@@ -222,6 +223,7 @@ const FirstPage = ({ inputValue, handleInputChange, handleButtonClick, popupOn, 
                 <input className={styles.home_overlay_main} id="search_input" placeholder="입력해주세요" value={inputValue} onChange={handleInputChange} />
                 <button className={styles.home_button1} onClick={handleButtonClick} disabled={isInputEmpty} alt="상세검색으로 이동하는 버튼"></button>
             </div>
+            <div className={styles.home1_subbox}></div>
             {popupOn && (<Popup onClose={popupOff} message={message} />)}
         </div>
     );
@@ -302,7 +304,7 @@ const SecondPage = ({ inputValue, goToThirdPage, result, popupOn, popupOff, mess
                     </div>
                 </div>
                 <div>
-                    <button className={styles.home_button2} id="next" onClick={() => goToThirdPage(selectedItems)} alt="상품추천으로 이동하는 버튼">
+                    <button className={styles.home_button2} id="goNext" onClick={() => goToThirdPage(selectedItems)} alt="상품추천으로 이동하는 버튼">
                         <div>다음</div>
                     </button>
                 </div>
@@ -391,10 +393,10 @@ const ThirdPage = ({goToForthPage, result, popupOn, popupOff, message}) => {
             </div>
             <div className={styles.homebox2}>
                 {result.map((item) => (
-                    <div className={styles.goodsbox} onClick={() => { goToForthPage(item.link) }}>
+                    <div className={styles.goodsbox} onClick={() => { goToForthPage(item?.link) }}>
                         <div className={styles.goodsbox1} key={item.productId}>
                             {/* <img className={styles.goodsimage} src={"https://shop-phinf.pstatic.net/20221021_183/1666336371323nsBJM_JPEG/67472269985761665_608306589.jpg?type=m510"} alt="추천 상품 이미지1"/> */}
-                            <img className={styles.goodsimage} src={item.image} />
+                            <img className={styles.goodsimage} src={item?.image} />
                         </div>
                         <div className={styles.goodsbox2}>
                             <label className={styles.goodsname}>
