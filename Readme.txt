@@ -61,3 +61,6 @@ db 관리자에 등록 admin.py
     # 항상 .env 파일에 존재하는 DB_NAME과 동일한 DB가 pgAdmin4에 존재하는지 확인해야 합니다.
     # 없다면, 직접 만들어 주시고
     # python manage.py makemigrations 와 python manage.py migrate 를 각각 실행 해주세요.
+
+
+###############################################################################
