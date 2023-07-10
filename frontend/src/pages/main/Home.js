@@ -534,9 +534,11 @@ const StarRating = ({ score }) => {
 
 function CategoryBoxes({ result, inputValue, onItemSelect, selectedItems }) {
     // 선택된 아이템들을 필터링하여 새로운 배열 생성
+
     const selectedItemsArray = result
         .map((item) => item.cate_lst.filter((category) => selectedItems.includes(category)))
         .flat();
+
 
     return (
         <div className={styles.catebox_body}>
