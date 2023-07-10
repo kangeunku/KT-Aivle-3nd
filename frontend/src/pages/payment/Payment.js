@@ -44,10 +44,11 @@ const Test = () => {
                 </div>
             </section>
             <section className="second_section">
-                <div class="container_type2">
-                    <div class="card card0">
-                        <div class="border">
+                <div className="container_type2">
+                    <div className="card card0">
+                        <div className="border">
                         <h2>김광호</h2>
+                        <span className="sparkle"></span>
                         <div class="icons">
                            BOSS <br/>
                            백엔드<br/>
